@@ -191,7 +191,7 @@
 \begin{document}
 
 %----------------------------------------------------------------------------------
-\section{Introduction\label{sec:Introduction}}
+\section{Introduction}\label{sec:Introduction}
 %----------------------------------------------------------------------------------
 
 \subsection{Experimental tests and data}
@@ -203,15 +203,15 @@ To build the experimental database, 30 compression tests were conducted for 5 te
 All strain/stress data is composed of 701 equidistant strain values from $\varepsilon=0.0$ to $\varepsilon=0.7$ in $0.001$ increments.
 
 %----------------------------------------------------------------------------------
-\section{Artificial Neural Network flow law\label{sec:ANN}}
+\section{Artificial Neural Network flow law}\label{sec:ANN}
 %----------------------------------------------------------------------------------
 As already proposed in Pantalé \eal \cite{Pantale-2021-EIN, Pantale-2023-DIA}, the approach used here is to implement the constitutive flow law defined by a trained ANN as a Fortran 77 subroutine into the Abaqus finite element code. 
 The ANN is trained on the basis of the Gleeble experiments as already introduced in section \ref{sec:Introduction} and is used to compute the value of the flow stress $\sigma$ as a function of the strain $\varepsilon$, the strain rate $\mdot{\varepsilon}$ and the temperature $T$.
 After the training phase, the weights and biases of the ANN are transcoded into a Fortran 77 subroutine wich is compiled and linked with lthe libraries of the Abaqus FE code to include the thermomechanical behavior and compute the flow tress and its three derivatives $\partial\sigma/\partial\varepsilon$, $\partial\sigma/\partial\mdot{\varepsilon}$ and $\partial\sigma/\partial T$ needed by the radial-return algorithm of the FE code.
 
-\subsection{ANN governing equations\label{subsec:ANN-eqn}}
+\subsection{ANN governing equations}\label{subsec:ANN-eqn}
 
-\subsubsection{Network architecture\label{subsubsec:ANN-arch}}
+\subsubsection{Network architecture}\label{subsubsec:ANN-arch}
 According to Figure \ref{fig:ANN-2HL}, the Artificial Neural Network used for computing the flow stress $\sigma$ from the strain $\varepsilon$, the strain rate $\mdot{\varepsilon}$ and the temperature $T$ is a two hidden layers network as already proposed by Pantalé \eal \cite{Pantale-2021-EIN, Pantale-2023-DIA}.
 \begin{figure}[h]
 \centering
@@ -239,7 +239,7 @@ s = \overrightarrow{w}^T \dotp \overrightarrow{\hat{y}}\lay{2} + b\label{eq:ANN-
 where $\overrightarrow{w}$ is the vector of the output weights of the ANN and $b$ is the bias associated to the output neuron.
 As usually done in a regression approach, there is no activation function associated to the output neuron of the network (or some authors consider here a linear activation function).
 
-\subsubsection{Activation functions\label{subsubsec:ANN-act}}
+\subsubsection{Activation functions}\label{subsubsec:ANN-act}
 
 At the heart of ANNs lies the concept of activation functions, pivotal elements that determine how information is transformed within the network's neurons.
 The choice of activation functions is a critical design decision, as these functions greatly influence the network's capacity to learn and represent complex patterns in data.
@@ -317,7 +317,7 @@ This will reduce the CPU cost since we need to compute both the function and its
 
 In order to compare the different activation functions, all six activations functions will be used in the rest of this paper and results will be compared in terms of efficiency, and precision of the models.
 
-\subsubsection{Pre and post processing architecture\label{subsubsec:ANN-pre}}
+\subsubsection{Pre and post processing architecture}\label{subsubsec:ANN-pre}
 As we are using activations functions enhancing vanishing gradients for large values, the three inputs as well as the output must be normalized within the range $[0,1]$ to avoid ill-conditioning of the neural network.
 This range has been chosen because we will use the Sigmoid activation function as one of the six proposed formulations, while this later squashed the output to the lowest range $[0,1]$.
 
@@ -344,7 +344,7 @@ The output of the model, \ie the flow stress, enhances the same behavior with $\
 \sigma =  \left([\sigma]_{max}-[\sigma]_{min}\right)s + [\sigma]_{min}.\label{eq:ANN-output}
 \end{equation}
 
-\subsubsection{Derivatives of the Neural Network\label{subsubsec:ANN-der}}
+\subsubsection{Derivatives of the Neural Network}\label{subsubsec:ANN-der}
 
 As introduced earlier, in order to implement the ANN as a Fortran 77 subroutine in the Abaqus FE code, we need to compute the three derivatives of the flow stress $\sigma$ with respect to the strain $\varepsilon$, the strain rate $\mdot{\varepsilon}$ and the temperature $T$.
 
@@ -367,7 +367,7 @@ where $s'_i$ is one of the three components of the vector $\overrightarrow{s}'$ 
 
 Finally, Equations (\ref{eq:ANN-y}-\ref{eq:ANN-s}), (\ref{eq:ANN-input}-\ref{eq:ANN-der2}) and the requested activation function defined by one of the Equations (\ref{eq:act-sig}-\ref{eq:act-exp}) will be used to implement the ANN as a Fortran 77 subroutine for the Abaqus FE software as it will be presented in Section \ref{subsec:Num-impl}.
 
-\subsection{Training of the ANN on experimental data\label{subsec:train}}
+\subsection{Training of the ANN on experimental data}\label{subsec:train}
 
 The Python program used for training the neural network was created with the dedicated Python library, Tensorflow \cite{Tensorflow-2015}.
 The training phase employed the Adaptive Moment Estimation (ADAM) optimizer \cite{Kingma-2015-AMS}.
@@ -422,12 +422,12 @@ Softplus & 5:25 & 0.394 & 1.151 & 1.070 & 1.485\\
 %\subsection{Translating of the ANN into a Fortran 77 subroutine\label{subsec:F77}}
 
 %----------------------------------------------------------------------------------
-\section{Numerical simulations using the ANN flow law\label{sec:Numerical}}
+\section{Numerical simulations using the ANN flow law}\label{sec:Numerical}
 %----------------------------------------------------------------------------------
 
-\subsection{Numerical implementation of the ANN flow law\label{subsec:Num-impl}}
+\subsection{Numerical implementation of the ANN flow law}\label{subsec:Num-impl}
 
-\subsection{Numerical simulations and comparisons\label{subsec:Num-sim}}
+\subsection{Numerical simulations and comparisons}\label{subsec:Num-sim}
 
 The average strain rate during the compression for the center element of the specimen is around $\mdot{\overline{\varepsilon}^p}=0.8~\ps$.
 
@@ -460,7 +460,7 @@ Softplus & 1795 & 1245146 & 694 & 0.783 & 125.2 & 1070.2 \\
 \label{fig:Num-misesTH}
 \end{figure}
 %----------------------------------------------------------------------------------
-\section{Conclusions and future work\label{sec:Conclusions}}
+\section{Conclusions and future work}\label{sec:Conclusions}
 %----------------------------------------------------------------------------------
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -539,9 +539,9 @@ ANN & Artificial neural network
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optional
 \appendixtitles{no} % Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
-\appendixstart
-\appendix
-\section[\appendixname~\thesection]{}\label{sec:Appendix}
+%\appendixstart
+%\appendix
+%\section[\appendixname~\thesection]{}\label{sec:Appendix}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{adjustwidth}{-\extralength}{0cm}
