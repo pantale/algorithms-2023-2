@@ -65,6 +65,48 @@
 \usepackage{gensymb}
 \usepackage{accents}
 \usepackage{xspace}
+
+%Definition des mises en page
+\definecolor{gray75}{gray}{0.75}
+\definecolor{gray95}{gray}{0.95}
+%\definecolor{gray50}{gray}{0.50}
+\definecolor{gray40}{gray}{0.40}
+\definecolor{redcolor}{rgb}{0.6,0.0,0.0}
+\definecolor{greencolor}{rgb}{0.0,0.6,0.0}  % Green color
+
+% Definition des listings avec langage par défaut Python
+\usepackage{listings}
+
+%\lstnewenvironment{CppListing}[1][]
+%    {\lstset{language=C++,
+%        #1}%
+%        \noindent\begin{minipage}{\textwidth}\csname\@lst @SetFirstNumber\endcsname\end{minipage}}
+%        {\csname\@lst @SaveFirstNumber\endcsname}
+
+\lstnewenvironment{FortranListing}[1][]
+    {\lstset{language=[77]Fortran,#1}}{}
+
+\lstnewenvironment{PythonListing}[1][]
+    {\lstset{language=Python,morekeywords={as,assert,with,yield},#1}}{}
+
+
+\lstset{language=Python,
+keywordstyle=\color{redcolor},
+numberstyle=\footnotesize\color{gray40},
+numbers=left,
+%frame=single,xleftmargin=5.0ex,xrightmargin=1.0ex,
+literate={-} {\textrm{-}}{1},
+showstringspaces=false,
+commentstyle=\color{gray50},
+stringstyle=\color{greencolor},
+basicstyle=\sffamily\small\upshape,
+%escapeinside={<@}{@>},
+backgroundcolor=\color{gray95},
+%breaklines=true,
+%postbreak=\usebox\mypostbreak,
+%rulecolor=\color{gray50}
+}
+
 \usepackage[labelformat=simple]{subcaption}
 \renewcommand\thesubfigure{\alph{subfigure}}
 \DeclareCaptionLabelFormat{subcaptionlabel}{\normalfont(\textbf{#2}\normalfont)}
@@ -87,7 +129,8 @@
 \DeclareRobustCommand{\ps}{\text{s}^{-1}}
 \DeclareRobustCommand{\mr}[2]{\multirow{#1}{*}{#2}}
 \DeclareRobustCommand{\MPa}{\text{MPa}}
-\DeclareRobustCommand{\ccirc}{\kern0.5ex\vcenter{\hbox{$\scriptstyle\circ$}}\kern0.5ex}
+\DeclareRobustCommand{\Sig}{\mbox{\large\ensuremath{\boldsymbol{\sigma}}}}
+\DeclareRobustCommand{\Eps}{\mbox{\large\ensuremath{\boldsymbol{\varepsilon}}}}
 
 % This is used to add comments into the text
 %
@@ -207,9 +250,9 @@ Thermomechanical behavior laws within numerical integration algorithms~\cite{Pon
 The validity of these flow laws is limited to a certain range of deformations, strain rates and temperatures.
 For the implementation of a thermomechanical simulation of a forming process, the behavior laws define the dependence of the material's flow stress on three input variables: the strain, the strain rate, and the temperature, so that the general form of the flow law can be expressed with the following equation:
 \begin{equation}
-\sigma = f\left(\varepsilon, \mdot\varepsilon, T\right),\label{eq:GenFlow}
+\sigma = f\left(\varepsilon, \mdot{\varepsilon}, T\right),\label{eq:GenFlow}
 \end{equation}
-where~$\sigma$ is the flow stress of the material, $\varepsilon$ is the strain, $\mdot{\varepsilon}$ is the strain rate, $T$ is the temperature and~$f()$ represents the flow law that expresses the non-linear relationship between the stress and the thermomechanical variables ($\varepsilon$, $\mdot\varepsilon$ and~$T$).
+where~$\sigma$ is the flow stress of the material, $\varepsilon$ is the strain, $\mdot{\varepsilon}$ is the strain rate, $T$ is the temperature and~$f()$ represents the flow law that expresses the non-linear relationship between the stress and the thermomechanical variables ($\varepsilon$, $\mdot{\varepsilon}$ and~$T$).
 
 Historically, the first mathematical formulations for the simulation of hot forming processes appeared in the 1950s.
 The flow laws used were essentially power laws, describing the relationship between stress and strain.
@@ -267,7 +310,7 @@ Figure \ref{fig:RawData} reports a plot of all 30 stress/strain curves extracted
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\columnwidth]{Figures/3Cr2Mo-raw}
-\caption{Stress/strain curves of P20 alloy extracted from the Gleeble device for the five temperatures ($T$) and six strain rates ($\mdot\varepsilon$).}
+\caption{Stress/strain curves of P20 alloy extracted from the Gleeble device for the five temperatures ($T$) and six strain rates ($\mdot{\varepsilon}$).}
 \label{fig:RawData}
 \end{figure}
 The experimental database is composed of all strain/stress data for all 30 couples of strain rate and temperature. Each strain/stress curve is composed of 701 equidistant strain values from~$\varepsilon=0.0$ to~$\varepsilon=0.7$ in~$\Delta\varepsilon=0.001$ increments.
@@ -303,7 +346,7 @@ According to Figure \ref{fig:ANN-2HL}, the ANN used for computing the flow stres
 The input of the neural network is a three component vector noted~$\overrightarrow{x}$.
 Any hidden layer~\Lay{k}, containing~$n$ neurons, takes a weighted sum of the outputs~$\overrightarrow{\hat{y}}\lay{k-1}$ of the previous layer~\Lay{k-1}, containing~$m$ neurons, given by the following equation:
 \begin{equation}
-\overrightarrow{y}\lay{k} = \w\lay{k} \overrightarrow{\hat{y}}\lay{k-1}+ \overrightarrow{b}\lay{k}\label{eq:ANN-y},
+\overrightarrow{y}\lay{k} = \w\lay{k} \cdot \overrightarrow{\hat{y}}\lay{k-1}+ \overrightarrow{b}\lay{k}\label{eq:ANN-y},
 \end{equation}
 where~$\overrightarrow{y}\lay{k}$ contains the internal values of the neurons from summation at the layer level~\Lay{k}, $\w\lay{k}$ is the weight parameter matrix~$[n\times m]$ between layer~\Lay{k} and layer~\Lay{k-1}, $\overrightarrow{b}\lay{k}$ is the bias vector of the layer~\Lay{k} and~$\overrightarrow{\hat{y}}\lay{k-1}$ is the output vector of the layer~\Lay{k-1} after the application of the activation function defined here-after.
 The total number of learning parameters~$N$ for any hidden layer~\Lay{k} is the sum of the number of weights and the number of biases in the layer~\Lay{k}, i.e. $N=n(m+1)$.
@@ -440,9 +483,9 @@ We can compute those derivatives using differentiation of the output of the netw
 As illustrated in Figure \ref{fig:ANN-2HL}, we are using here a two hidden layers neural network.
 Therefore, as Equations (\ref{eq:ANN-y}-\ref{eq:ANN-s}) are used to compute~$\overrightarrow{y}\lay{k}$ and~$\overrightarrow{\hat{y}}\lay{k}$ for each hidden layer and the output~$s$ from the input vector~$\overrightarrow{x}$ of the ANN we can write the derivative~$\overrightarrow{s}'$ of a two hidden layers network as follow:
 \begin{equation}
-\overrightarrow{s}' = \w\lay{1}^T \dotp\left[\left(\w\lay{2}^T \dotp \left(\overrightarrow{w}^T \ccirc f'(\overrightarrow{y}\lay{2})\right)\right) \ccirc f'(\overrightarrow{y}\lay{1})\right] \label{eq:ANN-der},
+\overrightarrow{s}' = \w\lay{1}^T \dotp\left[\left(\w\lay{2}^T \dotp \left(\overrightarrow{w}^T \circ f'(\overrightarrow{y}\lay{2})\right)\right) \circ f'(\overrightarrow{y}\lay{1})\right] \label{eq:ANN-der},
 \end{equation}
-where~$f'\left(\square\right)$ is the derivative of the activation function defined by Equations (\ref{eq:act-sig}-\ref{eq:act-exp}) and~$\ccirc$ is the Hadamard product (also known as the element-wise product).
+where~$f'\left(\square\right)$ is the derivative of the activation function defined by Equations (\ref{eq:act-sig}-\ref{eq:act-exp}) and~$\circ$ is the Hadamard product (also known as the element-wise product).
 Because of the pre and post processing of the values introduced in Section \ref{subsubsec:ANN-pre}, the derivative of the flow stress~$\sigma$ with respect to the inputs~$\varepsilon$, $\mdot{\varepsilon}$ and~$T$ is then given by:
 \begin{equation}
 \begin{cases}
@@ -531,13 +574,73 @@ In terms of global performance of the 3-17-9-1-exp ANN, Figure~\ref{fig:ANN-ExpF
 \end{figure}
 We can see that over the whole range of temperatures~$T$ and strain rates~$\mdot{\varepsilon}$, the performance of the model based on an exponential function is very good overall. This model will therefore be retained for the remainder of the comparative study.
 
-Now that the flow stress models have been defined, trained and the results analyzed in terms of their relative performance in reproducing the experimental behavior recorded during compression tests on Gleeble, we will now numerically implement these models in the Abaqus FE code in the form of user routines in Fortran in order to perform numerical simulations.
-
 %----------------------------------------------------------------------------------
 \section{Numerical simulations using the ANN flow law}\label{sec:Numerical}
 %----------------------------------------------------------------------------------
+Now that the flow stress models have been defined, trained and the results analyzed in terms of their relative performance in reproducing the experimental behavior recorded during compression tests on Gleeble, we will now numerically implement these models in the Abaqus FE code in the form of user routines in Fortran in order to perform numerical simulations.
+After training phase, all optimized internal parameters of the ANN are stored in HDF5~\cite{Koranne-2011-HDF} files which are read by a Python program in charge to write the Fortran 77 subroutine for the Abaqus FE code.
+Implementation of the flow law in the Abaqus FE code can be done using either a VUMAT (we will use the Explicit version of the Abaqus code for simulating our examples), where one have to program the computation of the stress tensor $\Sig_1$ at the end of the increment from the value of the stress tensor at the beginning of the increment $\Sig_0$ and the increment of strain $\Delta\Eps$.
+This is usually done using a predictor/corrector algorithm based for example on the radial--return integration scheme~\cite{Ponthot-2002-USU}, and the curious reader can refer for example to Ming \eal~\cite{Ming-2018-ERV} for the details concerning this implementation using the Safe--Newton integration scheme or Liang \eal~\cite{Liang-2022} for a dedicated application concerning the Arrhenius flow law.
+During the corrector phase, one have to evaluate the flow stress~$\sigma$ of the material as a function of the strain~$\varepsilon$, the strain rate~$\mdot{\varepsilon}$ and the temperature~$T$ at the current integration point of the element, and to solve a non-linear equation defining the plastic corrector expression and involving the computation of the three derivatives of the flow stress ~$\partial\sigma/\partial\varepsilon$, $\partial\sigma/\partial\mdot{\varepsilon}$ and~$\partial\sigma/\partial T$.
+The computation of those four quantities is usually done in a subroutine called VUHARD for the Abaqus explicit FE code.
+This is the function we have to implement depending on the structure and the activation functions of the ANN flow law.
 
 \subsection{Numerical implementation of the ANN flow law}\label{subsec:Num-impl}
+
+In order to have a better understanding of the implementation of the VUHARD subroutine, we are going to detail the procedure used to compute the flow stress and the three derivatives in one step as a function of the triplet of input values~$\varepsilon$, $\mdot{\varepsilon}$, $T$.
+We suppose that the current input is stored in a three components vector $\overrightarrow{\xi}$, with $\xi_1=\varepsilon$, $\xi_2=\log(\mdot{\varepsilon}/\mdot{\varepsilon}_0)$ and~$\xi_3=T$.
+We also suppose that the minimum and maximum values of the inputs, used during the learning phase, are stored in two vectors $\overrightarrow{\xi}_{min}$ and $\overrightarrow{\xi}_{max}$ respectively. The minimum and maximum values of the stress are also stored in two variables $\sigma_{min}$ and $\sigma_{max}$ respectively.
+\begin{itemize}
+\item We first use Equation (\ref{eq:ANN-input}) to compute the vector $\overrightarrow{x}$ where all components of $\overrightarrow{\xi}$ will be remapped within the range $[0,1]$. 
+\begin{equation}
+\overrightarrow{x}=\left(\overrightarrow{\xi}-\overrightarrow{\xi}_{min}\right)\oslash\Delta\overrightarrow{\xi},
+\end{equation}
+where $\oslash$ is the Hadamard division operator and $\Delta\overrightarrow{\xi}=\overrightarrow{\xi}_{max}-\overrightarrow{\xi}_{min}$.
+\item Conforming to Equation (\ref{eq:ANN-y}), we compute the vector:
+\begin{equation}
+\overrightarrow{y}\lay{1}=\w\lay{1}\cdot\overrightarrow{x}+\overrightarrow{b}\lay{1}.
+\end{equation} 
+\item Then, from Equation (\ref{eq:ANN-f}) and the expression of the activation function used for the first layer of the ANN and defined by one of the Equations (\ref{eq:act-sig}-\ref{eq:act-exp}), we compute the vector:
+\begin{equation}
+\overrightarrow{\hat{y}}\lay{1}=f\lay{1}(\overrightarrow{y}\lay{1}).
+\end{equation} 
+\item We repeat the process for the second layer, so that we compute the vectors: \begin{equation}
+\overrightarrow{y}\lay{2}=\w\lay{2}\cdot\overrightarrow{\hat{y}}\lay{1}+\overrightarrow{b}\lay{2},
+\end{equation} 
+and:
+\begin{equation}
+\overrightarrow{\hat{y}}\lay{2}=f\lay{2}(\overrightarrow{y}\lay{2}).
+\end{equation} 
+\item From Equations (\ref{eq:ANN-s}) and (\ref{eq:ANN-output}), we compute the flow stress $\sigma$ using the following equation:
+\begin{equation}
+s = \Delta\sigma.\left(\overrightarrow{w}^T \dotp \overrightarrow{\hat{y}}\lay{2} + b\right) + \sigma_{min}
+\end{equation} 
+with $\Delta\sigma = \sigma_{max}-\sigma_{min}$.
+\item Then we can compute in a single step the three derivatives $\overrightarrow{\sigma}'$ from Equation (\ref{eq:ANN-der}) with the following expression:
+\begin{equation}
+\overrightarrow{\sigma}' = \Delta\sigma.\w\lay{1}^T \dotp\left[\left(\w\lay{2}^T \dotp \left(\overrightarrow{w}^T \circ f'(\overrightarrow{y}\lay{2})\right)\right) \circ f'(\overrightarrow{y}\lay{1})\right] \oslash \left(\Delta\overrightarrow{\xi} \circ \overrightarrow{u}\right),
+\end{equation}
+where $\overrightarrow{u}^T=[1,\mdot{\varepsilon},1]$.
+\end{itemize}
+
+\begin{figure}[H]
+\begin{PythonListing}%[float,floatplacement=H]
+def AnnFunctionWithDerivatives(xi, act, dact):
+    xi[1,:] = np.log(xi[1,:] / deps0)
+    x = (xi - xi_min) / delta_xi
+    y1 = w1.dot(x) + b1
+    h1 = act(y1)
+    y2 = w2.dot(h1) + b2
+    h2 = act(y2)
+    sigma = (w3.dot(h2) + b3) * delta_sig + sig_min
+    dsigma = (w1.T).dot((w2.T).dot(w3.T * dact(y2)) 
+    	* dact(y1)) * delta_sig / delta_xi
+    dsigma[1,:] = dsigma[1,:] / xi[1,:]
+    return sigma, dsigma 
+\end{PythonListing}
+\caption{L}
+\end{figure}
+
 
 \subsection{Numerical simulations and comparisons}\label{subsec:Num-sim}
 
