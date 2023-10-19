@@ -588,10 +588,10 @@ This is the function we have to implement depending on the structure and the act
 \subsection{Numerical implementation of the ANN flow law}\label{subsec:Num-impl}
 
 In order to have a better understanding of the implementation of the VUHARD subroutine, we are going to detail the procedure used to compute the flow stress and the three derivatives in one step as a function of the triplet of input values~$\varepsilon$, $\mdot{\varepsilon}$, $T$.
-We suppose that the current input is stored in a three components vector $\overrightarrow{\xi}$, with $\xi_1=\varepsilon$, $\xi_2=\log(\mdot{\varepsilon}/\mdot{\varepsilon}_0)$ and~$\xi_3=T$.
+We suppose that the current input is stored in a three components vector $\overrightarrow{\xi}^T=\left[\varepsilon, \log(\mdot{\varepsilon}/\mdot{\varepsilon}_0), T\right]$.
 We also suppose that the minimum and maximum values of the inputs, used during the learning phase, are stored in two vectors $\overrightarrow{\xi}_{min}$ and $\overrightarrow{\xi}_{max}$ respectively. The minimum and maximum values of the stress are also stored in two variables $\sigma_{min}$ and $\sigma_{max}$ respectively.
 \begin{itemize}
-\item We first use Equation (\ref{eq:ANN-input}) to compute the vector $\overrightarrow{x}$ where all components of $\overrightarrow{\xi}$ will be remapped within the range $[0,1]$. 
+\item We first use Equation (\ref{eq:ANN-input}) to compute the vector $\overrightarrow{x}$ where all components of $\overrightarrow{\xi}$ will be remapped within the range $[0,1]$:
 \begin{equation}
 \overrightarrow{x}=\left(\overrightarrow{\xi}-\overrightarrow{\xi}_{min}\right)\oslash\Delta\overrightarrow{\xi},
 \end{equation}
@@ -618,25 +618,29 @@ s = \Delta\sigma.\left(\overrightarrow{w}^T \dotp \overrightarrow{\hat{y}}\lay{2
 with $\Delta\sigma = \sigma_{max}-\sigma_{min}$.
 \item Then we can compute in a single step the three derivatives $\overrightarrow{\sigma}'$ from Equation (\ref{eq:ANN-der}) with the following expression:
 \begin{equation}
-\overrightarrow{\sigma}' = \Delta\sigma.\w\lay{1}^T \dotp\left[\left(\w\lay{2}^T \dotp \left(\overrightarrow{w}^T \circ f'(\overrightarrow{y}\lay{2})\right)\right) \circ f'(\overrightarrow{y}\lay{1})\right] \oslash \left(\Delta\overrightarrow{\xi} \circ \overrightarrow{u}\right),
+\begin{array}{l}
+\overrightarrow{\Sig}' = \Delta\sigma.\w\lay{1}^T \dotp\left[\left(\w\lay{2}^T \dotp \left(\overrightarrow{w}^T \circ f'(\overrightarrow{y}\lay{2})\right)\right) \circ f'(\overrightarrow{y}\lay{1})\right] \oslash \Delta\overrightarrow{\xi}\\
+\Sig_2' := \Sig_2' / \mdot{\varepsilon}
+\end{array},
 \end{equation}
-where $\overrightarrow{u}^T=[1,\mdot{\varepsilon},1]$.
+where the expression used for $f'()$ changes depending on the activation function used.
 \end{itemize}
 
 \begin{figure}[H]
-\begin{PythonListing}%[float,floatplacement=H]
-def AnnFunctionWithDerivatives(xi, act, dact):
-    xi[1,:] = np.log(xi[1,:] / deps0)
-    x = (xi - xi_min) / delta_xi
-    y1 = w1.dot(x) + b1
-    h1 = act(y1)
-    y2 = w2.dot(h1) + b2
-    h2 = act(y2)
-    sigma = (w3.dot(h2) + b3) * delta_sig + sig_min
-    dsigma = (w1.T).dot((w2.T).dot(w3.T * dact(y2)) 
-    	* dact(y1)) * delta_sig / delta_xi
-    dsigma[1,:] = dsigma[1,:] / xi[1,:]
-    return sigma, dsigma 
+\begin{PythonListing}
+def stressAndDerivatives(xi, act, dact):
+  x = xi
+  x[1] = log(x[1] / deps0)
+  x = (x - xi_min) / delta_xi
+  y1 = w1.dot(x) + b1
+  yh1 = act(y1)
+  y2 = w2.dot(yh1) + b2
+  yh2 = act(y2)
+  stress = delta_sig * (w3.dot(yh2) + b3) + sig_min
+  dstress = delta_sig * ((w1.T).dot((w2.T).dot(w3.T * dact(y2)) 
+  	* dact(y1))) / delta_xi
+  dstress[1] = dstress[1] / xi[1]
+  return stress, dstress 
 \end{PythonListing}
 \caption{L}
 \end{figure}
