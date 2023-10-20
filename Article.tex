@@ -69,7 +69,7 @@
 %Definition des mises en page
 \definecolor{gray75}{gray}{0.75}
 \definecolor{gray95}{gray}{0.95}
-%\definecolor{gray50}{gray}{0.50}
+\definecolor{gray50}{gray}{0.50}
 \definecolor{gray40}{gray}{0.40}
 \definecolor{redcolor}{rgb}{0.6,0.0,0.0}
 \definecolor{greencolor}{rgb}{0.0,0.6,0.0}  % Green color
@@ -129,8 +129,10 @@ backgroundcolor=\color{gray95},
 \DeclareRobustCommand{\ps}{\text{s}^{-1}}
 \DeclareRobustCommand{\mr}[2]{\multirow{#1}{*}{#2}}
 \DeclareRobustCommand{\MPa}{\text{MPa}}
+\DeclareRobustCommand{\GPa}{\text{GPa}}
 \DeclareRobustCommand{\Sig}{\mbox{\large\ensuremath{\boldsymbol{\sigma}}}}
 \DeclareRobustCommand{\Eps}{\mbox{\large\ensuremath{\boldsymbol{\varepsilon}}}}
+\DeclareRobustCommand{\var}[1]{\textsf{#1}}
 
 % This is used to add comments into the text
 %
@@ -307,13 +309,14 @@ In order to have a more complete knowledge about the compression tests conducted
 The imposed displacement was set to~$d=9$~mm, resulting in a reduction of~$60\%$ of the initial height.
 Hot compression tests were performed for five temperature levels, namely~$1050~\celsius$, $1100~\celsius$, $1150~\celsius$, $1200~\celsius$, and~$1250~\celsius$, with the six strain rates of~$0.001~\ps$, $0.01~\ps$, $0.1~\ps$, $1~\ps$, $2.0~\ps$, and~$5~\ps$.
 Figure \ref{fig:RawData} reports a plot of all 30 stress/strain curves extracted from the compression tests experiments.
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
 \includegraphics[width=0.9\columnwidth]{Figures/3Cr2Mo-raw}
 \caption{Stress/strain curves of P20 alloy extracted from the Gleeble device for the five temperatures ($T$) and six strain rates ($\mdot{\varepsilon}$).}
 \label{fig:RawData}
 \end{figure}
-The experimental database is composed of all strain/stress data for all 30 couples of strain rate and temperature. Each strain/stress curve is composed of 701 equidistant strain values from~$\varepsilon=0.0$ to~$\varepsilon=0.7$ in~$\Delta\varepsilon=0.001$ increments.
+The experimental database is composed of all strain/stress data for all 30 couples of strain rate and temperature.
+Each strain/stress curve is composed of 701 equidistant strain values from~$\varepsilon=0.0$ to~$\varepsilon=0.7$ in~$\Delta\varepsilon=0.001$ increments.
 The complete database is therefore composed of~$21~030$ quadruplets ($\varepsilon$, $\mdot{\varepsilon}$, $T$ and~$\sigma$).
 This dataset will be used in the next Section to identify the ANN flow law parameters depending on the selected hyperparameters of the networks.
 
@@ -434,16 +437,17 @@ f(x) = \frac{x}{1+\e{-x}}\qquad \text{and}\qquad f'(x) = f(x) + \frac{1 - f(x)}{
 Swish has shown improved performance in some network architectures, especially when used as an activation function in deep learning models.
 The simplicity of Swish and its similarity to ReLU make it easy for practitioners to replace ReLUs with Swish units in any neural network.
 Even if the expression of the Swish function and its derivative seems more complex that the Softplus function presented earlier, the CPU time is lower.
- 
+
 Looking at the shape of the ReLU and Swish functions, apart from those classic activations functions already widely used in ANNs, we propose here-after to add an extra one, based on the exponential function and simply defined by:
 \begin{equation}
 f(x) = \e{x}\qquad \text{and}\qquad f'(x) = f(x).\label{eq:act-exp}
 \end{equation}
-We found very few literature papers about the use of the exponential activation function in ANN, but it has been reported that in specific domains and mathematical modeling tasks, exponential activations can be highly relevant and effective. 
+We found very few literature papers about the use of the exponential activation function in ANN, but it has been reported that in specific domains and mathematical modeling tasks, exponential activations can be highly relevant and effective.
 The idea here is to use the property so that the derivative of the activation function is defined only by the activation function itself, as well as for the Sigmoid and Tanh, but with the simplest formulation.
 This will reduce the CPU cost since we need to compute both the function and its derivative for our implementation in the FE code into a very CPU intensive subroutine
 
-Of course there is no limitation to the use of alternative activation functions in ANNs and there exist some much more complicated such as the one proposed by Shen \eal~\cite{Shen-2021-NNA} which is a combination of a floor, an exponential and a step function. Those authors have proved that a three hidden layer with this activation function can approximate any Hölder continuous function with an exponential approximation rate.
+Of course there is no limitation to the use of alternative activation functions in ANNs and there exist some much more complicated such as the one proposed by Shen \eal~\cite{Shen-2021-NNA} which is a combination of a floor, an exponential and a step function.
+Those authors have proved that a three hidden layer with this activation function can approximate any Hölder continuous function with an exponential approximation rate.
 
 In order to compare the different activation functions, all six activations functions presented earlier will be used in the rest of this paper and results will be compared in terms of efficiency,  precision of the models and computational cost.
 
@@ -452,28 +456,28 @@ In order to compare the different activation functions, all six activations func
 As we are using activations functions enhancing vanishing gradients for large values, the three inputs as well as the output must be normalized within the range~$[0,1]$ to avoid ill-conditioning of the neural network.
 This range has been chosen because we will use the Sigmoid activation function as one of the six proposed formulations, while this later squashed the output to the lowest range~$[0,1]$.
 
-Concerning the inputs, the range and mean values of the input quantities are very different according to the data presented in Section \ref{sec:Introduction}.
-In our case, the amplitude~$\Delta\varepsilon$ and mean value~$\overline\varepsilon$ of the strain are~$\Delta\varepsilon=0.7$ and~$\overline\varepsilon=0.35$ respectively.
-Concerning the strain rate~$\Delta\mdot{\varepsilon}=4.999~\ps$ and~$\overline{\mdot{\varepsilon}}=2.5005~\ps$ and concerning the temperature~$\Delta T=200~\celsius$ and~$\overline T=1150~\celsius$.
+Concerning the inputs, the range $\Delta[~]$ and minimum $[~]_{0}$ values of the input quantities are very different according to the data presented in Section \ref{sec:Introduction}.
+In our case, the range and minimum values of the strain are~$\Delta\varepsilon=0.7$ and~$\varepsilon_{0}=0$ respectively.
+Concerning the strain rate~$\Delta\mdot{\varepsilon}=4.999~\ps$ and~$\mdot{\varepsilon}_{0}=0.001~\ps$ and concerning the temperature~$\Delta T=200~\celsius$ and~$T_{0}=1050~\celsius$.
 
-As proposed in Pantalé \eal~\cite{Pantale-2021-EIN}, and with regard to considerations concerning the effect of the strain rate over the evolution of the flow stress, we first substitute~$\ln(\mdot{\varepsilon}/\mdot{\varepsilon}_0)$, with~$\mdot{\varepsilon}_0$ equal to the lowest strain rate, for the value of~$\mdot{\varepsilon}$.
+As proposed in Pantalé \eal~\cite{Pantale-2021-EIN}, and with regard to considerations concerning the effect of the strain rate over the evolution of the flow stress, we first substitute~$\log(\mdot{\varepsilon}/\mdot{\varepsilon}_0)$ for the value of~$\mdot{\varepsilon}$.
 Then in a second time, we remap the strain, strain rate and temperature within the range~$[0,1]$.
 Therefore, the three components of the input vector~$\overrightarrow{x}$ are calculated from the strain~$\varepsilon$, the strain rate~$\mdot{\varepsilon}$ and the temperature~$T$ using the following expressions:
 \begin{equation}
 \overrightarrow{x}=
 \begin{cases}
-x_1 = \dfrac{\varepsilon - [\varepsilon]_{min}}{[\varepsilon]_{max} - [\varepsilon]_{min}}\\
-x_2 = \dfrac{\ln(\mdot{\varepsilon}/\mdot{\varepsilon}_0)-[\ln(\mdot{\varepsilon}/\mdot{\varepsilon}_0)]_{min}}{[\ln(\mdot{\varepsilon}/\mdot{\varepsilon}_0)]_{max}-[\ln(\mdot{\varepsilon}/\mdot{\varepsilon}_0)]_{min}}\\
-x_3 = \dfrac{T-[T]_{min}}{[T]_{max}-[T]_{min}}
-\end{cases},
+x_1 = \left(\varepsilon - \varepsilon_{0}\right)/\Delta\varepsilon \\
+x_2 = \left(\log(\mdot{\varepsilon}/\mdot{\varepsilon}_0)-[\log(\mdot{\varepsilon}/\mdot{\varepsilon}_0)]_{0}\right)/\Delta[\log(\mdot{\varepsilon}/\mdot{\varepsilon}_0)]\\
+x_3 = \left(T-T_{0}\right)/\Delta T
+\end{cases}.
 \label{eq:ANN-input}
 \end{equation}
-where~$[~]_{min}$ and~$[~]_{max}$ are the maximum and minimum values of the corresponding field.
+where~$[~]_{0}$ and~$\Delta[~]$ are the minimum and range values of the corresponding field.
 
-The output of the model, \ie the flow stress~$\sigma$, enhances the same kind of behavior with~$\Delta\sigma=153.7~\MPa$ and~$\overline\sigma=63.6~\MPa$.
+The output of the model, \ie the flow stress~$\sigma$, enhances the same kind of behavior with~$\Delta\sigma=153.7~\MPa$ and~$\sigma_{0}=0~\MPa$.
 Therefore, we apply the same procedure as previously presented and the flow stress~$\sigma$ is related to the output~$s$ of the ANN according to the following relation:
 \begin{equation}
-\sigma = \left([\sigma]_{max}-[\sigma]_{min}\right)s + [\sigma]_{min}.\label{eq:ANN-output}
+\sigma = \Delta\sigma.s + \sigma_{0}.\label{eq:ANN-output}
 \end{equation}
 
 \subsubsection{Derivatives of the Neural Network}\label{subsubsec:ANN-der}
@@ -489,9 +493,9 @@ where~$f'\left(\square\right)$ is the derivative of the activation function defi
 Because of the pre and post processing of the values introduced in Section \ref{subsubsec:ANN-pre}, the derivative of the flow stress~$\sigma$ with respect to the inputs~$\varepsilon$, $\mdot{\varepsilon}$ and~$T$ is then given by:
 \begin{equation}
 \begin{cases}
-\partial \sigma/\partial \varepsilon = s'_1 \dfrac{[\sigma]_{max} -[\sigma]_{min}}{[\varepsilon]_{max} -[\varepsilon]_{min}}\\
-\partial \sigma/\partial\mdot{\varepsilon} = \dfrac{s'_2}{\mdot{\varepsilon}} \dfrac{[\sigma]_{max} -[\sigma]_{min}}{[\mdot{\varepsilon}]_{max} -[\mdot{\varepsilon}]_{min}} \\
-\partial \sigma/\partial T = s'_3 \dfrac{[\sigma]_{max} -[\sigma]_{min}}{[T]_{max} -[T]_{min}}
+\partial \sigma/\partial \varepsilon = s'_1.\Delta\sigma / \Delta\varepsilon\\
+\partial \sigma/\partial\mdot{\varepsilon} = s'_2.\Delta\sigma / (\mdot{\varepsilon}.\Delta\mdot{\varepsilon})\\
+\partial \sigma/\partial T = s'_3.\Delta\sigma / \Delta T
 \end{cases}
 \label{eq:ANN-der2},
 \end{equation}
@@ -531,7 +535,7 @@ As expected, the ReLU activation function gives the worst results with a final v
 The other five activation functions enhance more or less the same behavior, and the final value of the $\MSE$ is pretty much the same for all of them, and around $\MSE=6\times10^{-6}$.
 
 Table~\ref{tab:Training} shows the main results from the training phase of the ANNs.
-\begin{table}[H]
+\begin{table}[h]
 \caption{Comparison of the models' error depending on the activation function used.\label{tab:Training}}
 \begin{tabular}{lcccccc}
 \toprule
@@ -546,8 +550,10 @@ Exp & 5:18 & 6.861 & 0.420 & 1.227 & 1.302 & 1.808\\
 \bottomrule
 \end{tabular}
 \end{table}
-We can see from this later that all models need more or less the same training time to complete the requested number of iterations. We can see that the complexity of the activation functions has an influence on the training time, since it is greater for the Swish and Softplus functions than for the ReLU one.
-We also reported in this table the real values of the~$\RMSE$ and~$\MARE$ concerning the flow stress~$\sigma$. From this later we can see that the~$\RMSE$ is about~$0.3$ to~$0.4~\MPa$ for all activation functions except the ReLU one where the value is above~$1.1~\MPa$.
+We can see from this later that all models need more or less the same training time to complete the requested number of iterations.
+We can see that the complexity of the activation functions has an influence on the training time, since it is greater for the Swish and Softplus functions than for the ReLU one.
+We also reported in this table the real values of the~$\RMSE$ and~$\MARE$ concerning the flow stress~$\sigma$.
+From this later we can see that the~$\RMSE$ is about~$0.3$ to~$0.4~\MPa$ for all activation functions except the ReLU one where the value is above~$1.1~\MPa$.
 Concerning the $\MARE$, the value of all models is around~$1\%$ while it is more than~$6\%$ for the ReLU function.
 Of the six activation functions used in this study, the Swish function gives the best results in terms of solution quality, while the ReLU function gives the worst.
 From another point of view, the Swish activation function requires the most training time, but the difference is not discriminatory given the performance at this stage of the study.
@@ -572,7 +578,8 @@ In terms of global performance of the 3-17-9-1-exp ANN, Figure~\ref{fig:ANN-ExpF
 \caption{Comparison of experimental (dots) and the flow stress~$\sigma$ predicted by the ANN (continuous line) using the Exponential activation function.}
 \label{fig:ANN-ExpFit}
 \end{figure}
-We can see that over the whole range of temperatures~$T$ and strain rates~$\mdot{\varepsilon}$, the performance of the model based on an exponential function is very good overall. This model will therefore be retained for the remainder of the comparative study.
+We can see that over the whole range of temperatures~$T$ and strain rates~$\mdot{\varepsilon}$, the performance of the model based on an exponential function is very good overall.
+This model will therefore be retained for the remainder of the comparative study.
 
 %----------------------------------------------------------------------------------
 \section{Numerical simulations using the ANN flow law}\label{sec:Numerical}
@@ -589,33 +596,33 @@ This is the function we have to implement depending on the structure and the act
 
 In order to have a better understanding of the implementation of the VUHARD subroutine, we are going to detail the procedure used to compute the flow stress and the three derivatives in one step as a function of the triplet of input values~$\varepsilon$, $\mdot{\varepsilon}$, $T$.
 We suppose that the current input is stored in a three components vector $\overrightarrow{\xi}^T=\left[\varepsilon, \log(\mdot{\varepsilon}/\mdot{\varepsilon}_0), T\right]$.
-We also suppose that the minimum and maximum values of the inputs, used during the learning phase, are stored in two vectors $\overrightarrow{\xi}_{min}$ and $\overrightarrow{\xi}_{max}$ respectively. The minimum and maximum values of the stress are also stored in two variables $\sigma_{min}$ and $\sigma_{max}$ respectively.
+We also suppose that the minimum and range values of the inputs, used during the learning phase, are stored in two vectors $\overrightarrow{\xi}_{0}$ and $\Delta\overrightarrow{\xi}$ respectively.
+% The minimum and ran values of the stress are also stored in two variables $\sigma_{0}$ and $\sigma_{max}$ respectively.
 \begin{itemize}
 \item We first use Equation (\ref{eq:ANN-input}) to compute the vector $\overrightarrow{x}$ where all components of $\overrightarrow{\xi}$ will be remapped within the range $[0,1]$:
 \begin{equation}
-\overrightarrow{x}=\left(\overrightarrow{\xi}-\overrightarrow{\xi}_{min}\right)\oslash\Delta\overrightarrow{\xi},
+\overrightarrow{x}=\left(\overrightarrow{\xi}-\overrightarrow{\xi}_{0}\right)\oslash\Delta\overrightarrow{\xi},
 \end{equation}
-where $\oslash$ is the Hadamard division operator and $\Delta\overrightarrow{\xi}=\overrightarrow{\xi}_{max}-\overrightarrow{\xi}_{min}$.
+where $\oslash$ is the Hadamard division operator.
 \item Conforming to Equation (\ref{eq:ANN-y}), we compute the vector:
 \begin{equation}
 \overrightarrow{y}\lay{1}=\w\lay{1}\cdot\overrightarrow{x}+\overrightarrow{b}\lay{1}.
-\end{equation} 
+\end{equation}
 \item Then, from Equation (\ref{eq:ANN-f}) and the expression of the activation function used for the first layer of the ANN and defined by one of the Equations (\ref{eq:act-sig}-\ref{eq:act-exp}), we compute the vector:
 \begin{equation}
 \overrightarrow{\hat{y}}\lay{1}=f\lay{1}(\overrightarrow{y}\lay{1}).
-\end{equation} 
+\end{equation}
 \item We repeat the process for the second layer, so that we compute the vectors: \begin{equation}
 \overrightarrow{y}\lay{2}=\w\lay{2}\cdot\overrightarrow{\hat{y}}\lay{1}+\overrightarrow{b}\lay{2},
-\end{equation} 
+\end{equation}
 and:
 \begin{equation}
 \overrightarrow{\hat{y}}\lay{2}=f\lay{2}(\overrightarrow{y}\lay{2}).
-\end{equation} 
+\end{equation}
 \item From Equations (\ref{eq:ANN-s}) and (\ref{eq:ANN-output}), we compute the flow stress $\sigma$ using the following equation:
 \begin{equation}
-s = \Delta\sigma.\left(\overrightarrow{w}^T \dotp \overrightarrow{\hat{y}}\lay{2} + b\right) + \sigma_{min}
-\end{equation} 
-with $\Delta\sigma = \sigma_{max}-\sigma_{min}$.
+s = \Delta\sigma.\left(\overrightarrow{w}^T \dotp \overrightarrow{\hat{y}}\lay{2} + b\right) + \sigma_{0}.
+\end{equation}
 \item Then we can compute in a single step the three derivatives $\overrightarrow{\sigma}'$ from Equation (\ref{eq:ANN-der}) with the following expression:
 \begin{equation}
 \begin{array}{l}
@@ -625,32 +632,130 @@ with $\Delta\sigma = \sigma_{max}-\sigma_{min}$.
 \end{equation}
 where the expression used for $f'()$ changes depending on the activation function used.
 \end{itemize}
-
-\begin{figure}[H]
+As an illustration the corresponding implementation using Python of those equations is proposed in Figure~\ref{fig:PythonStress}, where the arguments of the functions are \var{xi} for the $\overrightarrow{\xi}$ vector, \var{deps} for $\mdot{\varepsilon}$, \var{Act} for the activation function and \var{dAct} for the derivative of the activation function.
+The network architecture is defined by the numpy arrays \var{w1}, \var{w2}, \var{w}, \var{b1}, \var{b2} and \var{b}.
+The other variables \var{xi0}, \var{Dxi}, \var{sig0} and \var{Dsig} correspond to the quantities $\overrightarrow{\xi}_{0}$, $\Delta\overrightarrow{\xi}$, $\sigma_{0}$ and $\Delta\sigma$ respectively.
+\begin{figure}[h]
 \begin{PythonListing}
-def stressAndDerivatives(xi, act, dact):
-  x = xi
-  x[1] = log(x[1] / deps0)
-  x = (x - xi_min) / delta_xi
+def stressAndDerivatives(xi, deps, Act, dAct):
+  x = (xi - xi0) / Dxi
   y1 = w1.dot(x) + b1
-  yh1 = act(y1)
+  yh1 = Act(y1)
   y2 = w2.dot(yh1) + b2
-  yh2 = act(y2)
-  stress = delta_sig * (w3.dot(yh2) + b3) + sig_min
-  dstress = delta_sig * ((w1.T).dot((w2.T).dot(w3.T * dact(y2)) 
-  	* dact(y1))) / delta_xi
-  dstress[1] = dstress[1] / xi[1]
-  return stress, dstress 
+  yh2 = Act(y2)
+  Sig = Dsig*(w.dot(yh2) + b) + sig0
+  dSig = Dsig*((w1.T).dot((w2.T).dot(w.T*dAct(y2))*dAct(y1))) / Dxi
+  dSig[1] = dSig[1] / deps
+  return Sig, dSig
 \end{PythonListing}
-\caption{L}
+\caption{Python function to compute the flow stress and the derivative vector.\label{fig:PythonStress}}
+\end{figure}
+
+A Python program is used to analyze the code reported in Figure~\ref{fig:PythonStress} and translate it into a Fortran 77 subroutine.
+During the translation phase, all functions corresponding to array operators, as matrix--matrix multiplications or element-wise operations, are converted into unrolled loops (explicitly written), all values of the ANNs parameters are explicitly written as data at the beginning of the subroutine, so that the a 3-17-9-1-exp Fortran routine consist of more than 400 lines of code.
+A small extract of the corresponding VUHARD subroutine is presented in Figure \ref{fig:FortranStress}.
+\begin{figure}[h]
+\begin{FortranListing}
+      subroutine vuhard (... Heading of VUHARD routine ...)
+      ...
+c Block of Data
+      double precision w1(17, 3)
+      data w1/-18.005151041D0, -2.1260391826D0, -2.150871965D0,
+     + -0.8321546516D0,...
+      ...
+c Preprocessing of the variables
+      xeps = (eqps(k) - xmI(1))/xrI(1)
+      xdeps = (log(eqpsRate(k)/xdeps0) - xmI(2))/xrI(2)
+      xtemp = (tempNew(k) - xmI(3))/xrI(3)
+c Hidden layer #1 (y10 to y116)
+      y10 = w1(1,1)*xeps + w1(1,2)*xdeps + w1(1,3)*xtemp + b1(1)
+      ...
+c exponential activation function (yh10 to yh116)
+      yh10 = exp(y10)
+      ...
+c Hidden layer #2 (y20 to y28)
+      y20 = w2(1,1)*yh10 + w2(1,2)*yh11 + w2(1,3)*yh12
+     + +w2(1,4)*yh13 + ... + b2(1)
+      ...
+c exponential activation function (yh20 to yh28)
+      yh20 = exp(y20)
+      ...
+c Derivatives terms (xa0 to xa8), (xb0 to xb16)
+      xa0 = w3(1)*yh20
+      ...
+      xb0 = (w2(1,1)*xa0 + w2(2,1)*xa1 + w2(3,1)*xa2
+     + +w2(4,1)*xa3 + ... + w2(9,1)*xa8)*yh10
+      ...
+c Outputs of the subroutine
+      Yield(k) = xrO*(w3(1)*yh20 + w3(2)*yh21
+     + +w3(3)*yh22 + ... +b3) + xmO
+      dyieldDeqps(k,1) = xrO*(w1(1,1)*xb0 + w1(2,1)*xb1
+     + +w1(3,1)*xb2 + ... + w1(17,1)*xb16) / xrI(1)
+      dyieldDeqps(k,2) = xrO*(w1(1,2)*xb0 + w1(2,2)*xb1
+     + +w1(3,2)*xb2 + ... + w1(17,2)*xb16)/(xrI(2)*eqpsRate(k))
+      dyieldDtemp(k) = xrO*(w1(1,3)*xb0 + w1(2,3)*xb1
+     + +w1(3,3)*xb2 + ... + w1(17,3)*xb16) / xrI(3)
+c Return from the VUHARD subroutine
+      return
+      end
+\end{FortranListing}
+\caption{Part of the VUHARD Fortran 77 subroutine for the ANN flow law and the exponential activation function.\label{fig:FortranStress}}
+\end{figure}
+Depending on the kind of activation function used, some lines differ from one version to the other one, such as the definitions of the activation functions (see line 16 in Figure~\ref{fig:FortranStress}) and the expressions of the internal variables \var{xa} and \var{xb} (see lines 26 and 28 in Figure~\ref{fig:FortranStress}). Figure~\ref{fig:FortranSigmoid} show the declaration of the Sigmoid activation function and its derivative, while Figure~\ref{fig:FortranSoftplus} show the same part of the code with the use of the Softplus activation function.
+\begin{figure}[h]
+\begin{FortranListing}
+c sigmoid activation function (yh10 to yh116)
+      yh10 = 1/(1 + exp(-y10))
+      ...
+c Derivatives terms (xa0 to xa8), (xb0 to xb16)
+      xa0 = w3(1)*(yh20*(1 - yh20))
+      ...
+      xb0 = (w2(1,1)*xa0 + w2(2,1)*xa1 + w2(3,1)*xa2
+     + +w2(4,1)*xa3 + ... + w2(9,1)*xa8)*(yh10*(1 - yh10))
+      ...
+\end{FortranListing}
+\caption{Part of the VUHARD Fortran 77 subroutine with the Sigmoid activation function.\label{fig:FortranSigmoid}}
+\end{figure}
+\begin{figure}[h]
+\begin{FortranListing}
+c softplus activation function (yh10 to yh116)
+      yh10 = log(1 + exp(y10))
+      ...
+c Derivatives terms (xa0 to xa8), (xb0 to xb16)
+      xa0 = w3(1)*(1/(1 + exp(-y20)))
+      ...
+      xb0 = (w2(1,1)*xa0 + w2(2,1)*xa1 + w2(3,1)*xa2
+     + +w2(4,1)*xa3 + ... + w2(9,1)*xa8)*(1/(1 + exp(-y10)))
+      ...
+\end{FortranListing}
+\caption{Part of the VUHARD Fortran 77 subroutine with the Softplus activation function.\label{fig:FortranSoftplus}}
 \end{figure}
 
 
+The Fortran subroutine is compiled with double precision directive using the Intel Fortran 14.0.2 compiler on a Ubuntu 22.04 server and linked to the main Abaqus explicit executable.
+
 \subsection{Numerical simulations and comparisons}\label{subsec:Num-sim}
+
+To compare the influence of choosing different type of activation functions on the numerical results using the Abaqus explicit software, we have made the choice to simulate the compression test presented in Section \ref{subsec:ExpTests}.
+We consider therefore a medium-carbon steel, type P20 cylinder in compression with an initial diameter of~$d=10$~mm and a height of~$h_0=15$~mm as reported in Figure~\ref{fig:Num-model}.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.65\columnwidth]{Figures/CyCompression}
+\caption{Axis-symmetric model for the numerical simulation of the compression of a cylinder.}
+\label{fig:Num-model}
+\end{figure}
+At the end of the compression process, the final height of the cylinder is~$h_f=6$~mm, so that the reduction is $60\%$. 
+The displacement is applied with a constant speed and the simulation time is fixed to $t=1$~s, so that the strain rate is around $1~\ps$ during the simulation at the center of the specimen.
+%The six ANN flow laws will be compared here-after.
+The mesh consists of $850$ axis-symmetric quadrilateral finite elements with 4 nodes and reduced integration (CAX4R) with 50 elements along the axis direction and 17 elements along the radial direction.
+The cylinder is between two rigid surfaces and a Coulomb friction law with a friction coefficient $\mu=0.15$ is used.
+A global mass scaling with a value of $M_s=1000$ is used to reduce the computing time by a factor of $31.6$.
+The initial temperature of the material is set to $T_0=1050\celsius$ and we use an explicit adiabatic solver for the simulation of the compression process. 
+%The elastic properties of the material are fixed to a Young modulus $E=207~\GPa$ and a Poisson ration $\nu=0.285$.
 
 The average strain rate during the compression for the center element of the specimen is around~$\mdot{\overline{\varepsilon}^p}=0.8~\ps$.
 
-\begin{table}[H]
+\begin{table}[h]
 \caption{Table}
 \begin{tabular}{lcccccc}
 \toprule
@@ -761,7 +866,129 @@ FE & Finite Element \\
 \appendixtitles{no} % Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
 %\appendixstart
 %\appendix
-%\section[\appendixname~\thesection]{}\label{sec:Appendix}
+%%----------------------------------------------------------------------------------
+%\section[\appendixname~\thesection]{ANN Flow Law Coefficients\label{sec:Appendix}}
+%%----------------------------------------------------------------------------------
+%
+%In order to complete this paper, we report here after the computing process and the $240$~coefficients of the artificial neural network ANN-3-17-9-1-exp model.
+%The weight matrix for the first hidden layer $\w_1$ is a $17\times3$ matrix:
+%\begin{equation*}
+%\w_1 = \left[
+%\begin{array}{rrr}
+%-18.005 & 1.250 & -1.342\\
+%-2.126 & 0.829 & -4.838\\
+%-2.151 & 4.882 & -1.110\\
+%-0.832 & -4.702 & 0.888\\
+%1.348 & 1.259 & -1.429\\
+%-0.397 & 2.798 & 0.710\\
+%-8.646 & -5.529 & -3.916\\
+%0.835 & 3.751 & -37.522\\
+%0.362 & 0.118 & 8.211\\
+%-6.782 & 1.091 & 0.319\\
+%-0.386 & 0.794 & -1.934\\
+%-0.030 & -4.024 & 0.773\\
+%1.488 & -2.371 & 4.147\\
+%-10.993 & -8.295 & -12.164\\
+%-2.439 & -0.757 & -0.323\\
+%-280.787 & 1.176 & -0.090\\
+%-3.538 & -2.779 & -19.796\\
+%\end{array}\right]
+%\end{equation*}
+%
+%The biases of the first hidden layer $\overrightarrow{b_1}$ is a $17$-component vector:
+%\begin{equation*}
+%\overrightarrow{b}_1 = \left[
+%\begin{array}{r}
+%-0.610\\
+%-2.237\\
+%-4.040\\
+%1.134\\
+%-3.054\\
+%-3.478\\
+%1.501\\
+%-5.838\\
+%-8.602\\
+%-1.245\\
+%-1.556\\
+%0.738\\
+%-5.335\\
+%2.208\\
+%-0.629\\
+%-1.619\\
+%-0.080\\
+%\end{array}\right]
+%\end{equation*}
+%
+%The weight matrix for the second hidden layer $\w_2$ is a $9\times17$ matrix:
+%\begin{equation*}
+%\w_2^T = \left[
+%\begin{array}{rrrrrrrrr}
+%0.133 & -86.946 & -1.051 & 1.803 & -1.850 & -0.440 & -7.127 & 0.174 & -0.340\\
+%7.083 & -20.359 & 4.734 & 2.643 & 1.095 & -0.023 & -27.715 & -0.822 & -0.648\\
+%-4.270 & -42.833 & -1.828 & -0.537 & 0.706 & 0.311 & -52.811 & 0.850 & -0.099\\
+%-4.290 & 2.243 & -30.375 & 0.054 & 1.164 & -1.643 & -1.862 & 0.987 & -1.024\\
+%-9.379 & -2.773 & 0.583 & -3.396 & -7.241 & -1.776 & -13.472 & 0.536 & -2.769\\
+%-8.435 & -8.215 & 1.744 & 0.019 & 2.242 & 0.089 & -15.298 & -2.382 & -6.080\\
+%8.050 & -3.032 & -10.094 & 0.164 & -3.551 & -0.090 & 4.431 & -1.937 & 3.075\\
+%-33.193 & -1.846 & -2.293 & -2.618 & 16.397 & -1.025 & -2.828 & 1.294 & 6.319\\
+%2.114 & 1.389 & -0.987 & -0.090 & -1.819 & -0.097 & 2.508 & 0.687 & 0.878\\
+%-2.214 & -14.317 & -2.055 & 0.387 & 1.097 & -0.712 & 8.227 & -3.942 & -1.930\\
+%-13.351 & 1.743 & 3.924 & -5.355 & -6.500 & 1.088 & 3.149 & -1.526 & -0.613\\
+%-2.844 & -3.412 & -11.884 & 0.033 & -2.475 & -1.387 & 2.261 & -1.787 & -0.300\\
+%-13.599 & -5.833 & 8.660 & 0.092 & -4.317 & 1.483 & -14.671 & -5.869 & 1.144\\
+%-23.598 & 0.261 & 18.128 & -0.031 & -2.716 & -0.374 & -72.263 & 0.565 & -1.063\\
+%2.988 & -3.510 & 5.437 & -1.166 & -7.761 & 2.746 & 3.329 & -2.348 & -0.459\\
+%-0.526 & -14.870 & 6.458 & 0.036 & 8.939 & -0.659 & -12.182 & -37.338 & 13.056\\
+%11.909 & 4.178 & -9.257 & -0.170 & 6.748 & 0.415 & 3.328 & 1.992 & -1.880\\
+%\end{array}\right]
+%\end{equation*}
+%
+%The biases of the second hidden layer $\overrightarrow{b_2}$ are a $9$-component vector:
+%\begin{equation*}
+%\overrightarrow{b}_2 = \left[
+%\begin{array}{r}
+%1.870\\
+%-0.240\\
+%-2.207\\
+%-2.724\\
+%-6.895\\
+%-2.259\\
+%-4.667\\
+%-1.252\\
+%-5.038\\
+%\end{array}\right]
+%\end{equation*}
+%
+%The weight vector for the output layer $\overrightarrow{w}$ is a $9$-component vector:
+%\begin{equation*}
+%\overrightarrow{w} = \left[
+%\begin{array}{r}
+%-4.128\\
+%-3.015\\
+%1.521\\
+%-2.322\\
+%-1.324\\
+%1.633\\
+%-3.175\\
+%2.454\\
+%-3.135\\
+%\end{array}\right]
+%\end{equation*}
+%
+%The bias of the output layer $b$ is a scalar:
+%\begin{equation*}
+%b = 0.242
+%\end{equation*}
+
+%The boundaries of the range of the corresponding field~are as follows:
+%\begin{itemize}
+%\item $\varepsilon^p\!\in\!\left[0.0,0.7\right]$
+%\item $\mdot{\varepsilon}\!\in\!\left[0.001~\ps,0.1~\ps\right]$
+%\item $T\!\in\!\left[750~\celsius,1300~\celsius\right]$
+%\item $\sigma\!\in\!\left[3.052~\MPa,306.096~\MPa\right]$.
+%\end{itemize}
+%
+%The reference strain rate is $\mdot{\varepsilon_0} = 0.001~\ps$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{adjustwidth}{-\extralength}{0cm}
