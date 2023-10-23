@@ -150,10 +150,10 @@ backgroundcolor=\color{gray95},
 
 %=================================================================
 % Full title of the paper (Capitalized)
-\Title{Title}
+\Title{\textcolor{red}{Title}}
 
 % MDPI internal command: Title for citation in the left column
-\TitleCitation{Title}
+\TitleCitation{\textcolor{red}{Title}}
 
 % Author Orchid ID: enter ID or remove command
 \newcommand{\orcidauthorA}{0000-0001-7367-5453} % Add \orcidA{} behind the author's name
@@ -184,7 +184,7 @@ backgroundcolor=\color{gray95},
 %\conference{} % An extended version of a conference paper
 
 % Abstract (Do not insert blank lines, i.e. \\)
-\abstract{A single paragraph of about 200 words maximum. For research articles, abstracts should give a pertinent overview of the work. We strongly encourage authors to use the following style of structured abstracts, but without headings: (1) Background: place the question addressed in a broad context and highlight the purpose of the study; (2) Methods: describe briefly the main methods or treatments applied; (3) Results: summarize the article's main findings; (4) Conclusions: indicate the main conclusions or interpretations. The abstract should be an objective representation of the article, it must not contain results which are not presented and substantiated in the main text and should not exaggerate the main conclusions.}
+\abstract{\textcolor{red}{Abstract}.}
 
 % Keywords
 \keyword{ANN flow law; Constitutive Behavior; Numerical Implementation; VUHARD ; Activation Functions; Abaqus Explicit}
@@ -306,7 +306,7 @@ The material used for this study is a medium-carbon steel, type P20.
 The experimental tests used for this work are identical to those previously published by Tize Mha \eal~\cite{Tize-2023-IEP} and concern hot compression tests, on a Gleeble-3800 thermomechanical simulator, of P20 steel cylinders with an initial diameter of~$d=10$~mm and a height of~$h_0=15$~mm.
 Only the most relevant information about those experiments is reported here after.
 In order to have a more complete knowledge about the compression tests conducted during this study, the interested reader can refer to Tize Mha \eal~\cite{Tize-2023-IEP}.
-The imposed displacement was set to~$d=9$~mm, resulting in a reduction of~$60\%$ of the initial height.
+The imposed displacement was set to~$d=7.5$~mm, resulting in a reduction of~$50\%$ of the initial height.
 Hot compression tests were performed for five temperature levels, namely~$1050~\celsius$, $1100~\celsius$, $1150~\celsius$, $1200~\celsius$, and~$1250~\celsius$, with the six strain rates of~$0.001~\ps$, $0.01~\ps$, $0.1~\ps$, $1~\ps$, $2.0~\ps$, and~$5~\ps$.
 Figure \ref{fig:RawData} reports a plot of all 30 stress/strain curves extracted from the compression tests experiments.
 \begin{figure}[h]
@@ -667,65 +667,66 @@ c Preprocessing of the variables
       xeps = (eqps(k) - xmI(1))/xrI(1)
       xdeps = (log(eqpsRate(k)/xdeps0) - xmI(2))/xrI(2)
       xtemp = (tempNew(k) - xmI(3))/xrI(3)
-c Hidden layer #1 (y10 to y116)
-      y10 = w1(1,1)*xeps + w1(1,2)*xdeps + w1(1,3)*xtemp + b1(1)
+c Hidden layer #1 (y11 to y116)
+      y11 = w1(1,1)*xeps + w1(1,2)*xdeps + w1(1,3)*xtemp + b1(1)
       ...
-c exponential activation function (yh10 to yh116)
-      yh10 = exp(y10)
+c exponential activation function (yh11 to yh117)
+      yh11 = exp(y11)
       ...
-c Hidden layer #2 (y20 to y28)
-      y20 = w2(1,1)*yh10 + w2(1,2)*yh11 + w2(1,3)*yh12
-     + +w2(1,4)*yh13 + ... + b2(1)
+c Hidden layer #2 (y21 to y28)
+      y21 = w2(1,1)*yh11 + w2(1,2)*yh12 + w2(1,3)*yh13
+     + +w2(1,4)*yh14 + ... + b2(1)
       ...
-c exponential activation function (yh20 to yh28)
-      yh20 = exp(y20)
+c exponential activation function (yh21 to yh28)
+      yh21 = exp(y21)
       ...
-c Derivatives terms (xa0 to xa8), (xb0 to xb16)
-      xa0 = w3(1)*yh20
+c Derivatives terms (xa1 to xa9), (xb1 to xb17)
+      xa1 = w3(1)*yh21
       ...
-      xb0 = (w2(1,1)*xa0 + w2(2,1)*xa1 + w2(3,1)*xa2
-     + +w2(4,1)*xa3 + ... + w2(9,1)*xa8)*yh10
+      xb1 = (w2(1,1)*xa1 + w2(2,1)*xa2 + w2(3,1)*xa3
+     + +w2(4,1)*xa4 + ... + w2(9,1)*xa9)*yh11
       ...
 c Outputs of the subroutine
-      Yield(k) = xrO*(w3(1)*yh20 + w3(2)*yh21
-     + +w3(3)*yh22 + ... +b3) + xmO
-      dyieldDeqps(k,1) = xrO*(w1(1,1)*xb0 + w1(2,1)*xb1
-     + +w1(3,1)*xb2 + ... + w1(17,1)*xb16) / xrI(1)
-      dyieldDeqps(k,2) = xrO*(w1(1,2)*xb0 + w1(2,2)*xb1
-     + +w1(3,2)*xb2 + ... + w1(17,2)*xb16)/(xrI(2)*eqpsRate(k))
-      dyieldDtemp(k) = xrO*(w1(1,3)*xb0 + w1(2,3)*xb1
-     + +w1(3,3)*xb2 + ... + w1(17,3)*xb16) / xrI(3)
+      Yield(k) = xrO*(w3(1)*yh21 + w3(2)*yh22
+     + +w3(3)*yh23 + ... +b3) + xmO
+      dyieldDeqps(k,1) = xrO*(w1(1,1)*xb1 + w1(2,1)*xb2
+     + +w1(3,1)*xb3 + ... + w1(17,1)*xb17) / xrI(1)
+      dyieldDeqps(k,2) = xrO*(w1(1,2)*xb1 + w1(2,2)*xb2
+     + +w1(3,2)*xb3 + ... + w1(17,2)*xb17)/(xrI(2)*eqpsRate(k))
+      dyieldDtemp(k) = xrO*(w1(1,3)*xb1 + w1(2,3)*xb2
+     + +w1(3,3)*xb3 + ... + w1(17,3)*xb17) / xrI(3)
 c Return from the VUHARD subroutine
       return
       end
 \end{FortranListing}
 \caption{Part of the VUHARD Fortran 77 subroutine for the ANN flow law and the exponential activation function.\label{fig:FortranStress}}
 \end{figure}
-Depending on the kind of activation function used, some lines differ from one version to the other one, such as the definitions of the activation functions (see line 16 in Figure~\ref{fig:FortranStress}) and the expressions of the internal variables \var{xa} and \var{xb} (see lines 26 and 28 in Figure~\ref{fig:FortranStress}). Figure~\ref{fig:FortranSigmoid} show the declaration of the Sigmoid activation function and its derivative, while Figure~\ref{fig:FortranSoftplus} show the same part of the code with the use of the Softplus activation function.
+Depending on the kind of activation function used, some lines differ from one version to the other one, such as the definitions of the activation functions (see line 16 in Figure~\ref{fig:FortranStress}) and the expressions of the internal variables \var{xa} and \var{xb} (see lines 26 and 28 in Figure~\ref{fig:FortranStress}). 
+Figure~\ref{fig:FortranSigmoid} show the declaration of the Sigmoid activation function and its derivative as defined by Equation (\ref{eq:act-sig}), while Figure~\ref{fig:FortranSoftplus} show the same part of the code with the use of the Softplus activation function as defined by Equation (\ref{eq:act-softplus}).
 \begin{figure}[h]
 \begin{FortranListing}
-c sigmoid activation function (yh10 to yh116)
-      yh10 = 1/(1 + exp(-y10))
+c sigmoid activation function (yh11 to yh116)
+      yh11 = 1/(1 + exp(-y11))
       ...
-c Derivatives terms (xa0 to xa8), (xb0 to xb16)
-      xa0 = w3(1)*(yh20*(1 - yh20))
+c Derivatives terms (xa1 to xa9), (xb1 to xb17)
+      xa1 = w3(1)*(yh21*(1 - yh21))
       ...
-      xb0 = (w2(1,1)*xa0 + w2(2,1)*xa1 + w2(3,1)*xa2
-     + +w2(4,1)*xa3 + ... + w2(9,1)*xa8)*(yh10*(1 - yh10))
+      xb1 = (w2(1,1)*xa1 + w2(2,1)*xa2 + w2(3,1)*xa3
+     + +w2(4,1)*xa4 + ... + w2(9,1)*xa9)*(yh11*(1 - yh11))
       ...
 \end{FortranListing}
 \caption{Part of the VUHARD Fortran 77 subroutine with the Sigmoid activation function.\label{fig:FortranSigmoid}}
 \end{figure}
 \begin{figure}[h]
 \begin{FortranListing}
-c softplus activation function (yh10 to yh116)
-      yh10 = log(1 + exp(y10))
+c Softplus activation function (yh11 to yh116)
+      yh11 = log(1 + exp(y11))
       ...
-c Derivatives terms (xa0 to xa8), (xb0 to xb16)
-      xa0 = w3(1)*(1/(1 + exp(-y20)))
+c Derivatives terms (xa1 to xa9), (xb1 to xb17)
+      xa1 = w3(1)*(1/(1 + exp(-y21)))
       ...
-      xb0 = (w2(1,1)*xa0 + w2(2,1)*xa1 + w2(3,1)*xa2
-     + +w2(4,1)*xa3 + ... + w2(9,1)*xa8)*(1/(1 + exp(-y10)))
+      xb1 = (w2(1,1)*xa1 + w2(2,1)*xa2 + w2(3,1)*xa3
+     + +w2(4,1)*xa4 + ... + w2(9,1)*xa9)*(1/(1 + exp(-y11)))
       ...
 \end{FortranListing}
 \caption{Part of the VUHARD Fortran 77 subroutine with the Softplus activation function.\label{fig:FortranSoftplus}}
@@ -744,39 +745,55 @@ We consider therefore a medium-carbon steel, type P20 cylinder in compression wi
 \caption{Axis-symmetric model for the numerical simulation of the compression of a cylinder.}
 \label{fig:Num-model}
 \end{figure}
-At the end of the compression process, the final height of the cylinder is~$h_f=6$~mm, so that the reduction is $60\%$. 
-The displacement is applied with a constant speed and the simulation time is fixed to $t=1$~s, so that the strain rate is around $1~\ps$ during the simulation at the center of the specimen.
+At the end of the compression process, the final height of the cylinder is~$h_f=8$~mm. 
+The displacement is applied with a constant speed and the simulation time is fixed to $t=1$~s, so that the strain rate is around $\mdot{\varepsilon}=1~\ps$ during the simulation at the center of the specimen.
 %The six ANN flow laws will be compared here-after.
 The mesh consists of $850$ axis-symmetric quadrilateral finite elements with 4 nodes and reduced integration (CAX4R) with 50 elements along the axis direction and 17 elements along the radial direction.
+Only reduced integration is available in Abaqus explicit for an axis-symmetric structure in the 2022 version used for the simulation.
 The cylinder is between two rigid surfaces and a Coulomb friction law with a friction coefficient $\mu=0.15$ is used.
 A global mass scaling with a value of $M_s=1000$ is used to reduce the computing time by a factor of $31.6$.
 The initial temperature of the material is set to $T_0=1050\celsius$ and we use an explicit adiabatic solver for the simulation of the compression process. 
 %The elastic properties of the material are fixed to a Young modulus $E=207~\GPa$ and a Poisson ration $\nu=0.285$.
+Conforming to the applied boundaries conditions used for the simulation of the compression test, and, the average strain rate during the compression for the center element of the specimen is around~$\mdot{\overline{\varepsilon}^p}=0.8~\ps$.
+All simulations are performed using the 2022 version of the Abaqus explicit solver on the same computer as the on used for the learning of the ANNs in Section~\ref{subsec:train}. Simulations are performed with the double precision version of the solver without any parallelization directive.
 
-The average strain rate during the compression for the center element of the specimen is around~$\mdot{\overline{\varepsilon}^p}=0.8~\ps$.
+Figure~\ref{fig:Num-misesCP} shows a comparison of the von Mises equivalent stress $\overline{\sigma}$ contourplot for the six activation functions.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\columnwidth]{Figures/MisesHalf}
+\caption{Von Mises equivalent stress $\overline{\sigma}$ contourplot for the six activation functions.}
+\label{fig:Num-misesCP}
+\end{figure}
+In this figure, only the top half of the cylinders is shown, as the solution is symmetrical on either side of a cutting plane located halfway up the cylinder.
+In this figure, we can see that the solutions differ slightly both in terms of maximum stress value and stress isovalues distribution over the entire central zone of the specimen. 
+Nevertheless, the disparities in values remain minimal and within about $3\%$ between the six different models.
 
+In order to compare the different models quantitatively, Table~\ref{tab:Training} reports the values of the plastic strain $\overline{\varepsilon}^p$, the von Mises equivalent stress $\overline{\sigma}$ and the temperature $T$ for the element located at the center of the specimen at the end of the simulation.
 \begin{table}[h]
-\caption{Table}
+\caption{Comparison of quantitative results concerning the six activation functions analyzed.}
 \begin{tabular}{lcccccc}
 \toprule
-Activation & CPU time & $N_{inc}$ & $N_{inc}$/s & $\overline{\varepsilon}^p$ & $\overline{\sigma}$ & $T$\\
+Activation & CPU time & $N_{inc}$ & $N_{inc}$/s & $\overline{\varepsilon}^p$ & $\overline{\sigma}$ & $T$ \\
  & (s) & & & & (\MPa) &(\celsius)\\ \midrule
-Sigmoid & 1089 & 1~251~869 & 1150 & 0.787 & 126.8 & 1071.1 \\
-Tanh & 1202 & 1~253~740 & 1043 & 0.786 & 125.2 & 1070.6 \\
-ReLU & 915 & 1~247~899 & 1364 & 0.787 & 128.4 & 1071.1 \\
-Softplus & 1795 & 1~245~146 & 694 & 0.783 & 125.2 & 1070.2 \\
-Swish & 1322 & 1~246~006 & 943 & 0.789 & 123.7 & 1071.0 \\
-Exp & 998 & 1~250~145 & 1253 & 0.787 &122.5 &1070.5 \\
+Sigmoid & 807 & 976~075 & 1209 & 0.724 & 122.6 & 1068.9 \\
+Tanh & 904 & 979~131 & 1083 & 0.724 & 118.8 & 1068.6 \\
+ReLU & 637 & 980~528 & 1539 & 0.725 & 124.5 & 1068.9 \\
+Softplus & 1346 & 980~520 & 728 & 0.719 & 119.5 & 1068.0 \\
+Swish & 1017 & 980~086 & 963 & 0.727 & 120.1 & 1069.0 \\
+Exp & 755 & 977~096 & 1294 & 0.722 & 118.3 & 1068.4 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.8\columnwidth]{Figures/MisesHalf}
-\caption{xx.}
-\label{fig:Num-misesCP}
-\end{figure}
+From the values reported in this Table, we can see that if the models differ a little concerning the equivalent stress (around $3\%$), the difference is much smaller concerning the equivalent plastic strain (below $1\%$) and the temperature (below $0.1\%$). In fact the Sigmoid, Tanh and Exp activation functions give almost the same results concerning the plastic strain and temperature results.
+It is important to note that one origin of the differences between the models comes from the fact that in the end the plastic strain $\overline{\varepsilon}^p$ is greater than $0.7$, so the model has to extrapolate the yield stress with respect to the data used for the training phase. This increases the discrepancy between the models, since each extrapolates the results from the training domain in a different way with respect to its internal formulation.
+
+In Table~\ref{tab:Training} we also have reported the total number of increments $N_{inc}$ needed to complete the simulation along with the total CPU time.
+From these two, we can calculate the number of increments performed per second and propose a classification from the fastest to the slowest ANN, where: ReLU is the fastest and Softplus is the slowest of the proposed models.
+From those results, we can note that, as expected in Section~\ref{subsubsec:ANN-act}, the Exp activation function is very efficient in terms of CPU computation time as it is just second after the very light ReLU function, but gives quite good results as reported in Table~\ref{tab:Training} which is not the case of the ReLU function.
+Figure~\ref{fig:Num-misesTH} shows the evolution of the von Mises equivalent stress for the center of the cylinder, as a function of the displacement of the top edge of the cylinder for three activation functions. From this later, we can see that the Exp and Tanh functions give almost the same results, while the corresponding CPU time reported in Figure 
+\OP{To continue}
+
 
 \begin{figure}[h]
 \centering
