@@ -150,10 +150,10 @@ backgroundcolor=\color{gray95},
 
 %=================================================================
 % Full title of the paper (Capitalized)
-\Title{\textcolor{red}{Title}}
+\Title{Comparing Activation Functions in Machine Learning for Finite Element Simulations in Thermomechanical Forming}
 
 % MDPI internal command: Title for citation in the left column
-\TitleCitation{\textcolor{red}{Title}}
+\TitleCitation{Comparing Activation Functions in Machine Learning for Finite Element Simulations in Thermomechanical Forming}
 
 % Author Orchid ID: enter ID or remove command
 \newcommand{\orcidauthorA}{0000-0001-7367-5453} % Add \orcidA{} behind the author's name
@@ -184,10 +184,10 @@ backgroundcolor=\color{gray95},
 %\conference{} % An extended version of a conference paper
 
 % Abstract (Do not insert blank lines, i.e. \\)
-\abstract{\textcolor{red}{Abstract}.}
+\abstract{Numerical finite element (FE) methods have been effective in simulating thermomechanical forming processes, yet challenges arise when applying them to new materials due to nonlinear behaviors. To address this, machine learning techniques and artificial neural networks play an increasingly vital role in developing complex models. This paper presents an innovative approach to parameter identification in flow laws, utilizing an artificial neural network that learns directly from test data and automatically generates a Fortran 77 subroutine for Abaqus FE code. We investigate the impact of activation functions on prediction and computational efficiency by comparing Sigmoid, Tanh, ReLU, Swish, Softplus, and the less common Exponential function. Despite its infrequent use, the Exponential function demonstrates noteworthy performance and reduced computation times. Model validation involves comparing predictive capabilities with experimental data from compression tests, and numerical simulations confirm the numerical implementation in the Abaqus FE code.}
 
 % Keywords
-\keyword{ANN flow law; Constitutive Behavior; Numerical Implementation; VUHARD ; Activation Functions; Abaqus Explicit}
+\keyword{ANN Flow Law; Constitutive Behavior; Numerical Implementation; User Hardening; Activation Functions; Abaqus FE code}
 
 % The fields PACS, MSC, and JEL may be left empty or commented out if not applicable
 %\PACS{J0101}
@@ -309,7 +309,7 @@ In order to have a more complete knowledge about the compression tests conducted
 The imposed displacement was set to~$d=7.5$~mm, resulting in a reduction of~$50\%$ of the initial height.
 Hot compression tests were performed for five temperature levels, namely~$1050~\celsius$, $1100~\celsius$, $1150~\celsius$, $1200~\celsius$, and~$1250~\celsius$, with the six strain rates of~$0.001~\ps$, $0.01~\ps$, $0.1~\ps$, $1~\ps$, $2.0~\ps$, and~$5~\ps$.
 Figure \ref{fig:RawData} reports a plot of all 30 stress/strain curves extracted from the compression tests experiments.
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.9\columnwidth]{Figures/3Cr2Mo-raw}
 \caption{Stress/strain curves of P20 alloy extracted from the Gleeble device for the five temperatures ($T$) and six strain rates ($\mdot{\varepsilon}$).}
@@ -340,7 +340,7 @@ After the training phase, the weights and biases of the ANN are transcoded into 
 
 \subsubsection{Network architecture}\label{subsubsec:ANN-arch}
 According to Figure \ref{fig:ANN-2HL}, the ANN used for computing the flow stress~$\sigma$ from the strain~$\varepsilon$, the strain rate~$\mdot{\varepsilon}$ and the temperature~$T$ is a two hidden layers network as already proposed by Pantalé \eal~\cite{Pantale-2021-EIN, Pantale-2023-DIA}.
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.55\columnwidth]{Figures/ANN-2HL}
 \caption{Two hidden layers ANN architecture with 3 inputs neurons ($\varepsilon$, $\mdot{\varepsilon}$ and~$T$) and 1 output neuron ($\sigma$).}
@@ -382,7 +382,7 @@ A number of activations functions can be used in neural networks.
 In a previous published work~\cite{Pantale-2021-EIN, Pantale-2023-DIA}, we have mostly used the Sigmoid activation function for the ANN flow laws.
 In the present paper, we are going to explore other activations functions and their influence on the final results, up-to the implementation into a finite element code such as the Abaqus software.
 Among the number of activations functions available in the literature, we have selected the six ones reported in Figure \ref{fig:ActFunctions}.
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\columnwidth]{Figures/ActFunctions}
 \caption{Activation functions used in ANNs.}
@@ -524,7 +524,7 @@ In this study, the error evaluation of the models is based on the Mean Square Er
 where~$N$ is the total number of numerical training data used, $\square_i$ is the~$i$th value predicted by the neural network, and~$\square_i^e$ is the corresponding experimental value coming from the experimental tests.
 
 Figure \ref{fig:ANN-conv} show the evolution of the common logarithm of the Mean Square Error, \ie $\log_{10}(\MSE)$, of the output $s$ of the ANN during the training.
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\columnwidth]{Figures/3Cr2Mo-convergence-17-9}
 \caption{Global convergence of the six ANN models.}
@@ -532,10 +532,12 @@ Figure \ref{fig:ANN-conv} show the evolution of the common logarithm of the Mean
 \end{figure}
 From this figure we can compare the convergence rates of the different networks and consider that we have reached a stationary state for all the ANNs analyzed after $30~000$ iterations.
 As expected, the ReLU activation function gives the worst results with a final value of~$\MSE=3.092\times10^{-5}$, mainly due to the low number of neurons and the fact that this function is a piecewise linear function and not able to efficiently approximate the nonlinear behavior of the material.
-The other five activation functions enhance more or less the same behavior, and the final value of the $\MSE$ is pretty much the same for all of them, and around $\MSE=6\times10^{-6}$.
+The other five activation functions enhance more or less the same behavior. 
+The final value of the $\MSE$ is pretty much the same for all of them, and around $\MSE=6\times10^{-6}$.
+The Tanh and Exp activation functions are slightly less powerful than the Sigmoid, Swish, and Softplus functions.
 
 Table~\ref{tab:Training} shows the main results from the training phase of the ANNs.
-\begin{table}[h]
+\begin{table}[h!]
 \caption{Comparison of the models' error depending on the activation function used.\label{tab:Training}}
 \begin{tabular}{lcccccc}
 \toprule
@@ -558,8 +560,8 @@ Concerning the $\MARE$, the value of all models is around~$1\%$ while it is more
 Of the six activation functions used in this study, the Swish function gives the best results in terms of solution quality, while the ReLU function gives the worst.
 From another point of view, the Swish activation function requires the most training time, but the difference is not discriminatory given the performance at this stage of the study.
 
-Figure~\ref{fig:ANNFit} shows a comparison of the experimental flow stress measures during the Gleeble compression tests (reported as dots in Figure) and the predicted flow stress~$\sigma$ using the ANN for the strain rate~$\mdot{\varepsilon}=1~\ps$.
-\begin{figure}[h]
+Figure~\ref{fig:ANNFit} shows a comparison of the experimental flow stress measures during the Gleeble compression tests (reported as dots in Figure~\ref{fig:ANNFit}) and the predicted flow stress~$\sigma$ using the ANN for the strain rate~$\mdot{\varepsilon}=1~\ps$.
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.95\columnwidth]{Figures/ANN-fit}
 \caption{Comparison of experimental (dots) and the flow stress~$\sigma$ predicted by the ANN (continuous line) for~$\mdot{\varepsilon}=1~\ps$.}
@@ -572,7 +574,7 @@ Among the six activation functions proposed, as already presented in Section \re
 If we analyze the results reported in Table~\ref{tab:Training} and Figure~\ref{fig:ANNFit} concerning the exponential activation function, we can see that this one has a $\RMSE=0.420~\MPa$, $\MARE=1.302\%$ and the global behavior of the flow stress for~$\mdot{\varepsilon}=1~\ps$ is similar to the Sigmoid, Tanh, Swish or Softplus functions even if the results in terms of performance are a little below those of the other four functions.
 
 In terms of global performance of the 3-17-9-1-exp ANN, Figure~\ref{fig:ANN-ExpFit} shows the comparison of the experimental data (dots) and the ANN flow stress for all strain rates and all temperatures defined in Section \ref{subsec:ExpTests}.
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.95\columnwidth]{Figures/3Cr2Mo-3-17-9-1-exponential}
 \caption{Comparison of experimental (dots) and the flow stress~$\sigma$ predicted by the ANN (continuous line) using the Exponential activation function.}
@@ -635,7 +637,7 @@ where the expression used for $f'()$ changes depending on the activation functio
 As an illustration the corresponding implementation using Python of those equations is proposed in Figure~\ref{fig:PythonStress}, where the arguments of the functions are \var{xi} for the $\overrightarrow{\xi}$ vector, \var{deps} for $\mdot{\varepsilon}$, \var{Act} for the activation function and \var{dAct} for the derivative of the activation function.
 The network architecture is defined by the numpy arrays \var{w1}, \var{w2}, \var{w}, \var{b1}, \var{b2} and \var{b}.
 The other variables \var{xi0}, \var{Dxi}, \var{sig0} and \var{Dsig} correspond to the quantities $\overrightarrow{\xi}_{0}$, $\Delta\overrightarrow{\xi}$, $\sigma_{0}$ and $\Delta\sigma$ respectively.
-\begin{figure}[h]
+\begin{figure}[h!]
 \begin{PythonListing}
 def stressAndDerivatives(xi, deps, Act, dAct):
   x = (xi - xi0) / Dxi
@@ -654,7 +656,7 @@ def stressAndDerivatives(xi, deps, Act, dAct):
 A Python program is used to analyze the code reported in Figure~\ref{fig:PythonStress} and translate it into a Fortran 77 subroutine.
 During the translation phase, all functions corresponding to array operators, as matrix--matrix multiplications or element-wise operations, are converted into unrolled loops (explicitly written), all values of the ANNs parameters are explicitly written as data at the beginning of the subroutine, so that the a 3-17-9-1-exp Fortran routine consist of more than 400 lines of code.
 A small extract of the corresponding VUHARD subroutine is presented in Figure \ref{fig:FortranStress}.
-\begin{figure}[h]
+\begin{figure}[!h]
 \begin{FortranListing}
       subroutine vuhard (... Heading of VUHARD routine ...)
       ...
@@ -703,7 +705,7 @@ c Return from the VUHARD subroutine
 \end{figure}
 Depending on the kind of activation function used, some lines differ from one version to the other one, such as the definitions of the activation functions (see line 16 in Figure~\ref{fig:FortranStress}) and the expressions of the internal variables \var{xa} and \var{xb} (see lines 26 and 28 in Figure~\ref{fig:FortranStress}). 
 Figure~\ref{fig:FortranSigmoid} show the declaration of the Sigmoid activation function and its derivative as defined by Equation (\ref{eq:act-sig}), while Figure~\ref{fig:FortranSoftplus} show the same part of the code with the use of the Softplus activation function as defined by Equation (\ref{eq:act-softplus}).
-\begin{figure}[h]
+\begin{figure}[h!]
 \begin{FortranListing}
 c sigmoid activation function (yh11 to yh116)
       yh11 = 1/(1 + exp(-y11))
@@ -717,7 +719,7 @@ c Derivatives terms (xa1 to xa9), (xb1 to xb17)
 \end{FortranListing}
 \caption{Part of the VUHARD Fortran 77 subroutine with the Sigmoid activation function.\label{fig:FortranSigmoid}}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}[h!]
 \begin{FortranListing}
 c Softplus activation function (yh11 to yh116)
       yh11 = log(1 + exp(y11))
@@ -739,13 +741,13 @@ The Fortran subroutine is compiled with double precision directive using the Int
 
 To compare the influence of choosing different type of activation functions on the numerical results using the Abaqus explicit software, we have made the choice to simulate the compression test presented in Section \ref{subsec:ExpTests}.
 We consider therefore a medium-carbon steel, type P20 cylinder in compression with an initial diameter of~$d=10$~mm and a height of~$h_0=15$~mm as reported in Figure~\ref{fig:Num-model}.
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.65\columnwidth]{Figures/CyCompression}
 \caption{Axis-symmetric model for the numerical simulation of the compression of a cylinder.}
 \label{fig:Num-model}
 \end{figure}
-At the end of the compression process, the final height of the cylinder is~$h_f=8$~mm. 
+At the end of the compression process, the final height of the cylinder is~$h_f=8$~mm, so that the reduction is $46\%$ of the total height. 
 The displacement is applied with a constant speed and the simulation time is fixed to $t=1$~s, so that the strain rate is around $\mdot{\varepsilon}=1~\ps$ during the simulation at the center of the specimen.
 %The six ANN flow laws will be compared here-after.
 The mesh consists of $850$ axis-symmetric quadrilateral finite elements with 4 nodes and reduced integration (CAX4R) with 50 elements along the axis direction and 17 elements along the radial direction.
@@ -757,19 +759,27 @@ The initial temperature of the material is set to $T_0=1050\celsius$ and we use 
 Conforming to the applied boundaries conditions used for the simulation of the compression test, and, the average strain rate during the compression for the center element of the specimen is around~$\mdot{\overline{\varepsilon}^p}=0.8~\ps$.
 All simulations are performed using the 2022 version of the Abaqus explicit solver on the same computer as the on used for the learning of the ANNs in Section~\ref{subsec:train}. Simulations are performed with the double precision version of the solver without any parallelization directive.
 
-Figure~\ref{fig:Num-misesCP} shows a comparison of the von Mises equivalent stress $\overline{\sigma}$ contourplot for the six activation functions.
-\begin{figure}[h]
+Figure~\ref{fig:Num-peeqCP} shows a comparison of the equivalent plastic strain $\overline{\varepsilon}^p$ contourplot for the six activation functions tested, at the end of the simulation (when the displacement of the top edge is $d=7$~mm).
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\columnwidth]{Figures/PeeqHalf}
+\caption{Equivalent plastic strain $\overline{\varepsilon}$ contourplot for the six activation functions.}
+\label{fig:Num-peeqCP}
+\end{figure}
+In this figure, only the top half of the cylinders is shown, as the solution is symmetrical on either side of a cutting plane located halfway up the cylinder.
+From this later, we can cearly see that all activation functions gives almost the exact same results and the choice of any of the available ANN has no influence on the values and isovalues contourplot reported in Figure~\ref{fig:Num-peeqCP}.
+Figure~\ref{fig:Num-misesCP} shows a comparison of the von Mises equivalent stress $\overline{\sigma}$ contourplot.
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\columnwidth]{Figures/MisesHalf}
 \caption{Von Mises equivalent stress $\overline{\sigma}$ contourplot for the six activation functions.}
 \label{fig:Num-misesCP}
 \end{figure}
-In this figure, only the top half of the cylinders is shown, as the solution is symmetrical on either side of a cutting plane located halfway up the cylinder.
 In this figure, we can see that the solutions differ slightly both in terms of maximum stress value and stress isovalues distribution over the entire central zone of the specimen. 
 Nevertheless, the disparities in values remain minimal and within about $3\%$ between the six different models.
 
 In order to compare the different models quantitatively, Table~\ref{tab:Training} reports the values of the plastic strain $\overline{\varepsilon}^p$, the von Mises equivalent stress $\overline{\sigma}$ and the temperature $T$ for the element located at the center of the specimen at the end of the simulation.
-\begin{table}[h]
+\begin{table}[h!]
 \caption{Comparison of quantitative results concerning the six activation functions analyzed.}
 \begin{tabular}{lcccccc}
 \toprule
@@ -784,26 +794,38 @@ Exp & 755 & 977~096 & 1294 & 0.722 & 118.3 & 1068.4 \\
 \bottomrule
 \end{tabular}
 \end{table}
-
 From the values reported in this Table, we can see that if the models differ a little concerning the equivalent stress (around $3\%$), the difference is much smaller concerning the equivalent plastic strain (below $1\%$) and the temperature (below $0.1\%$). In fact the Sigmoid, Tanh and Exp activation functions give almost the same results concerning the plastic strain and temperature results.
 It is important to note that one origin of the differences between the models comes from the fact that in the end the plastic strain $\overline{\varepsilon}^p$ is greater than $0.7$, so the model has to extrapolate the yield stress with respect to the data used for the training phase. This increases the discrepancy between the models, since each extrapolates the results from the training domain in a different way with respect to its internal formulation.
 
 In Table~\ref{tab:Training} we also have reported the total number of increments $N_{inc}$ needed to complete the simulation along with the total CPU time.
-From these two, we can calculate the number of increments performed per second and propose a classification from the fastest to the slowest ANN, where: ReLU is the fastest and Softplus is the slowest of the proposed models.
-From those results, we can note that, as expected in Section~\ref{subsubsec:ANN-act}, the Exp activation function is very efficient in terms of CPU computation time as it is just second after the very light ReLU function, but gives quite good results as reported in Table~\ref{tab:Training} which is not the case of the ReLU function.
-Figure~\ref{fig:Num-misesTH} shows the evolution of the von Mises equivalent stress for the center of the cylinder, as a function of the displacement of the top edge of the cylinder for three activation functions. From this later, we can see that the Exp and Tanh functions give almost the same results, while the corresponding CPU time reported in Figure 
-\OP{To continue}
+From these two, we can calculate the number of increments performed per second and propose a classification from the fastest to the slowest ANN, where: ReLU is the fastest (with 1539 iteration per second) and Softplus is the slowest (with 728 iteration per second) of the proposed models.
+Those results are directly linked to the complexity of the expression of the activation function and its derivative as introduced in Section~\ref{subsubsec:ANN-act}. 
+From those results, we can note that, as expected, the Exp activation function is very efficient in terms of CPU computation time (with 1294 iteration per second) as it is just second after the very light ReLU function, but gives quite good results as reported in Table~\ref{tab:Training} which is not the case of the ReLU function.
 
-
-\begin{figure}[h]
+Figure~\ref{fig:Num-misesTH} shows the evolution of the von Mises equivalent stress for the center of the cylinder, as a function of the displacement of the top edge of the cylinder for three activation functions (Exp, Tanh and ReLU).
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\columnwidth]{Figures/vonMises}
-\caption{xx.}
+\caption{Von Mises stress evolution with the displacement of the top edge of the cylinder for three activation functions.}
 \label{fig:Num-misesTH}
 \end{figure}
+From this later, we can see that the Exp and Tanh functions give almost the same results, while the ReLu enhances a piecewise behavior due to its formulation and the low number of neurons used for the ANN.
+
 %----------------------------------------------------------------------------------
 \section{Conclusions and future work}\label{sec:Conclusions}
 %----------------------------------------------------------------------------------
+In this paper, several artificial neural network-based flow laws for thermomechanical modeling of the behavior of a P20 medium-alloy steel have been identified. 
+These six laws differ only in the type of activation function used, although they share the same architecture in terms of the number of hidden layers and the number of neurons on each hidden layer.
+In addition to the five classic activation functions (Sigmoid, Tanh, ReLU, Softplus and Swift), we proposed the use, in this paper, of the Exp (exponential) function as an activation function, although this is almost never used in neural network formulations.
+The expressions of the activation functions and their derivatives were used in the neural network writing formalism to calculate the derivatives of the flow stress $\sigma$ with respect to the input variables: strain $\varepsilon$, strain rate $\mdot{\varepsilon}$ and temperature $T$.
+
+Comparison of the ANNs results (in terms of flow stress $\sigma$) with experimental tests carried out on the Gleeble simulator have shown that all five activation functions, with the exception of the ReLU function, give very good results, far superior to those obtained conventionally using formalisms based on analytical flow laws from the literature, such as the Johnson--Cook, Arrhenius or Modified Zerilli--Armstrong models.
+
+Based on the equations describing the mathematical formulation of a neural network with 2 hidden layers, and depending on the nature of these activation functions, we have implemented these constitutive laws in the form of a Fortran 77 subroutine for the Abaqus Explicit FE code. 
+The same approach can also be used to write a UHARD routine enabling the same flow laws to be used in the standard Abaqus FE code.
+
+Numerical results obtained from a compression test on a metal cylinder using the Abaqus Explicit calculation code have shown that neural network behavior models give very satisfactory results, in line with experimental tests. The Exp activation function, which is rarely used in the formulation of artificial neural networks, showed very good results (in agreement with more complex models such as Tanh), while enabling the code user to benefit from the efficiency and ease of implementation of an exponential function. We then obtain results equivalent in terms of solution quality to sigmoid or tanh-type formulations, while having computation times comparable to a ReLU function.
+This study emphasizes the valuable impact of neural network-derived flow laws for numerical finite element simulation executed with a commercial FE code like Abaqus.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\section{Patents}
