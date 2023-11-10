@@ -236,7 +236,9 @@ The results of these numerical simulations are strongly dependent on the constit
 The quality and accuracy of the results of any numerical simulation depend on the choice of these behavior laws (thus their mathematical formulation) and the user's ability to identify the coefficients of these behavior laws for a given material by conducting experiments under conditions similar to those encountered during the actual loading of the structure in service that one wishes to design.
 Depending on the nature of the thermomechanical loadings involved, whether quasi-static, dynamic, at high or low temperatures, these tests are based on quasi-static or dynamic tensile or compression tests, tests on thermomechanical simulators such as Gleeble~\cite{Lin-2009-MFS, Bennett-2010-C, Kumar-2016-TMS, Yu-2019-RCR}, or impact tests using gas guns or Hopkinson bars~\cite{Kolsky-1949-IMP}.
 
+%----------------------------------------------------------------------------------
 \subsection{Constitutive behavior and material flow law}\label{subsec:ConstBehavior}
+%----------------------------------------------------------------------------------
 
 Thermomechanical behavior laws within numerical integration algorithms~\cite{Ponthot-2002-USU} make use of flow law functions which, due to the nature of the materials and the phenomena involved (work hardening, dislocation movement, structural hardening, phase transformations, etc.), are highly non-linear.
 The validity of these flow laws is limited to a certain range of deformations, strain rates and temperatures.
@@ -294,9 +296,26 @@ We therefore work on the entire calculation chain, from experimental data acquis
 In this study, we will focus only on the use of the Abaqus explicit FE code, since the computation of the flow stress in an explicit integration scheme becomes very CPU intensive due to the integration method, and variations in the performance of this implementation have a significant impact on the total CPU time.
 On the other hand, in an implicit integration scheme, as used in the Abaqus standard, most of the time is spent in inverting the linear system of equations, therefore variations in the performance of the stress computation has no influence on the final result, hoping that the stress is calculated correctly.
 
+%----------------------------------------------------------------------------------
 \subsection{Experimental tests and data}\label{subsec:ExpTests}
+%----------------------------------------------------------------------------------
 
-The material used for this study is a medium-carbon steel, type P20.
+The material used for this study is a medium-carbon steel, type P20, with the chemical composition presented in Table~\ref{tab:Composition}.
+\begin{table}[H]
+\caption{Chemical composition of medium-carbon steel. Fe = balance.}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{lCCCCCCC}
+\toprule
+\textbf{Element} & \textbf{C} & \textbf{Mn} & \textbf{Mo} & \textbf{Si} & \textbf{Ni} & \textbf{Cr} & \textbf{Cu} \\
+\midrule
+Wt~\% %MDPI: Not necessary
+ & $0.30$ & $0.89$ & $0.52$ & $0.34$ & $0.68$ & $1.86$ & $0.17$ \\
+\bottomrule
+\end{tabularx}
+\label{tab:Composition}
+\end{table}
+
 The experimental tests used for this work are identical to those previously published by Tize Mha \eal~\cite{Tize-2023-IEP} and concern hot compression tests, on a Gleeble-3800 thermomechanical simulator, of P20 steel cylinders with an initial diameter of~$\phi_{0}=10$~mm and a height of~$h_{0}=15$~mm.
 Only the most relevant information about those experiments is reported here after.
 In order to have a more complete knowledge about the compression tests conducted during this study, the interested reader can refer to Tize Mha \eal~\cite{Tize-2023-IEP}.
@@ -330,9 +349,13 @@ As already proposed in Pantalé \eal~\cite{Pantale-2021-EIN, Pantale-2023-DIA}, 
 The ANN is trained on the basis of the Gleeble experiments as already introduced in Section~\ref{sec:Introduction} and is used to compute the value of the flow stress~$\sigma$ as a function of the strain~$\varepsilon$, the strain rate~$\mdot{\varepsilon}$ and the temperature~$T$.
 After the training phase, the weights and biases of the ANN are transcoded into a Fortran subroutine wich is compiled and linked with the libraries of the Abaqus FE code to include the thermomechanical behavior and compute the flow stress and its three derivatives~$\partial\sigma/\partial\varepsilon$, $\partial\sigma/\partial\mdot{\varepsilon}$ and~$\partial\sigma/\partial T$ needed by the radial-return algorithm of the FE code.
 
+%----------------------------------------------------------------------------------
 \subsection{ANN governing equations}\label{subsec:ANN-eqn}
+%----------------------------------------------------------------------------------
 
+%----------------------------------------------------------------------------------
 \subsubsection{Network architecture}\label{subsubsec:ANN-arch}
+%----------------------------------------------------------------------------------
 According to Figure~\ref{fig:ANN-2HL}, the ANN used for computing the flow stress~$\sigma$ from the strain~$\varepsilon$, the strain rate~$\mdot{\varepsilon}$ and the temperature~$T$ is a two hidden layers network.
 \begin{figure}[h!]
 \centering
@@ -359,7 +382,9 @@ s = \overrightarrow{w}^T \dotp \overrightarrow{\hat{y}}\lay{2} + b\label{eq:ANN-
 where~$\overrightarrow{w}$ is the vector of the output weights of the ANN and~$b$ is the bias associated to the output neuron.
 As usually done in a regression approach, there is no activation function associated to the output neuron of the network (or some authors consider here a linear activation function).
 
+%----------------------------------------------------------------------------------
 \subsubsection{Activation functions}\label{subsubsec:ANN-act}
+%----------------------------------------------------------------------------------
 
 At the heart of ANNs lies the concept of activation functions, pivotal elements that determine how information is transformed within the network's neurons.
 The choice of activation functions is a critical design decision, as these functions greatly influence the network's capacity to learn and represent complex patterns in data.
@@ -445,7 +470,9 @@ Those authors have proved that a three hidden layer with this activation functio
 
 In order to compare the different activation functions, all six activations functions presented earlier will be used in the rest of this paper and results will be compared in terms of efficiency,  precision of the models and computational cost.
 
+%----------------------------------------------------------------------------------
 \subsubsection{Pre and post processing architecture}\label{subsubsec:ANN-pre}
+%----------------------------------------------------------------------------------
 
 As we are using activations functions enhancing vanishing gradients for large values, the three inputs as well as the output must be normalized within the range~$[0,1]$ to avoid ill-conditioning of the neural network.
 This range has been chosen because we will use the Sigmoid activation function as one of the six proposed formulations, while this later squashed the output to the lowest range~$[0,1]$.
@@ -474,7 +501,9 @@ Therefore, we apply the same procedure as previously presented and the flow stre
 \sigma = \Delta\sigma.s + \sigma_{0}.\label{eq:ANN-output}
 \end{equation}
 
+%----------------------------------------------------------------------------------
 \subsubsection{Derivatives of the Neural Network}\label{subsubsec:ANN-der}
+%----------------------------------------------------------------------------------
 
 As introduced in Section~\ref{sec:Introduction}, in order to implement the ANN as a Fortran subroutine in the Abaqus FE code, we need to compute the three derivatives of the flow stress~$\sigma$ with respect to the strain~$\varepsilon$, the strain rate~$\mdot{\varepsilon}$ and the temperature~$T$.
 We can compute those derivatives using differentiation of the output of the network with respect to the inputs.
@@ -497,7 +526,9 @@ where~$s'_i$ is one of the three components of the vector~$\overrightarrow{s}'$ 
 
 Finally, Equations (\ref{eq:ANN-y}-\ref{eq:ANN-s}), (\ref{eq:ANN-input}-\ref{eq:ANN-der2}) and the requested activation function defined by one of the Equations (\ref{eq:act-sig}-\ref{eq:act-exp}) will be used to implement the ANN as a Fortran subroutine for the Abaqus FE software as it will be presented in Section~\ref{subsec:Num-impl}.
 
+%----------------------------------------------------------------------------------
 \subsection{Training of the ANN on experimental data}\label{subsec:train}
+%----------------------------------------------------------------------------------
 
 The Python program used for training the neural network was created with the dedicated Python library, Tensorflow~\cite{Tensorflow-2015}.
 The training phase employed the Adaptive Moment Estimation (ADAM) optimizer~\cite{Kingma-2015-AMS} and the Mean Square Error to evaluate the loss function.
@@ -580,6 +611,7 @@ This model will therefore be retained for the remainder of the comparative study
 %----------------------------------------------------------------------------------
 \section{Numerical simulations using the ANN flow law}\label{sec:Numerical}
 %----------------------------------------------------------------------------------
+
 Now that the flow stress models have been defined, trained and the results analyzed in terms of their relative performance in reproducing the experimental behavior recorded during compression tests on Gleeble, we will now numerically implement these models in the Abaqus FE code in the form of user routines in Fortran in order to perform numerical simulations.
 After training phase, all optimized internal parameters of the ANN are stored in HDF5~\cite{Koranne-2011-HDF} files which are read by a Python program in charge to write the Fortran 77 subroutine for the Abaqus FE code.
 Implementation of the flow law in the Abaqus FE code can be done using either a VUMAT (we will use the Explicit version of the Abaqus code for simulating our examples), where one have to program the computation of the stress tensor $\Sig_{1}$ at the end of the increment from the value of the stress tensor at the beginning of the increment $\Sig_{0}$ and the increment of strain $\Delta\Eps$.
@@ -588,7 +620,9 @@ During the corrector phase, one have to evaluate the flow stress~$\sigma$ of the
 The computation of those four quantities is usually done in a subroutine called VUHARD for the Abaqus explicit FE code.
 This is the function we have to implement depending on the structure and the activation functions of the ANN flow law.
 
+%----------------------------------------------------------------------------------
 \subsection{Numerical implementation of the ANN flow law}\label{subsec:Num-impl}
+%----------------------------------------------------------------------------------
 
 In order to have a better understanding of the implementation of the VUHARD subroutine, we are going to detail the procedure used to compute the flow stress and the three derivatives in one step as a function of the triplet of input values~$\varepsilon$, $\mdot{\varepsilon}$, $T$.
 We suppose that the current input is stored in a three components vector $\overrightarrow{\xi}^T=\left[\varepsilon, \log(\mdot{\varepsilon}/\mdot{\varepsilon}_{0}), T\right]$.
@@ -730,7 +764,9 @@ c Derivatives terms (xa1 to xa9), (xb1 to xb17)
 
 The Fortran subroutine is compiled with double precision directive using the Intel Fortran 14.0.2 compiler on a Ubuntu 22.04 server and linked to the main Abaqus explicit executable.
 
+%----------------------------------------------------------------------------------
 \subsection{Numerical simulations and comparisons}\label{subsec:Num-sim}
+%----------------------------------------------------------------------------------
 
 To compare the influence of choosing different type of activation functions on the numerical results using the Abaqus explicit software, we have made the choice to simulate the compression test presented in Section~\ref{subsec:ExpTests}.
 We consider therefore a medium-carbon steel, type P20 cylinder in compression with an initial diameter of~$\phi_{0}=10$~mm and a height of~$h_{0}=15$~mm as reported in Figure~\ref{fig:Num-model}, where only the superior half part of cylinder is represented, as the solution is symmetrical on either side of a cutting plane located halfway up the cylinder.
@@ -818,6 +854,7 @@ Any other type of activation function give quite good results for this applicati
 %----------------------------------------------------------------------------------
 \section{Conclusions and future work}\label{sec:Conclusions}
 %----------------------------------------------------------------------------------
+
 In this paper, several artificial neural network-based flow laws for thermomechanical modeling of the behavior of a P20 medium-alloy steel have been identified.
 These six laws differ only in the type of activation function used, although they share the same architecture in terms of the number of hidden layers and the number of neurons on each hidden layer.
 In addition to the five classic activation functions (Sigmoid, Tanh, ReLU, Softplus and Swift), we proposed the use, in this paper, of the Exp (exponential) function as an activation function, although this is almost never used in neural network formulations.
