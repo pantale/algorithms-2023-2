@@ -290,7 +290,7 @@ ANN behavior laws can also include chemical composition of materials in their fo
 In the majority of the works presented in the previous paragraph, the authors work either on the proposal of a neural network model and its identification in relation to experimental tests, or on the use of a neural network within the framework of a numerical simulation of a process.
 The approach proposed here is more complete in that we identify a neural network from experimental tests (in our case, cylinder compression tests on a Gleeble thermomechanical simulator), then identify the network parameters.
 We then implement this network in the Abaqus FE code in the form of a user subroutine in Fortran, and subsequently validate and use this network in numerical simulations.
-This can be done for either Abaqus explicit or Abaqus standard since we can generate the Fortran subroutines for both versions of the code. 
+This can be done for either Abaqus explicit or Abaqus standard since we can generate the Fortran subroutines for both versions of the code.
 We therefore work on the entire calculation chain, from experimental data acquisition, through network formulation and learning, to implementation and use.
 
 In this study, we will focus only on the use of the Abaqus explicit FE code, since the computation of the flow stress in an explicit integration scheme becomes very CPU intensive due to the integration method, and variations in the performance of this implementation have a significant impact on the total CPU time.
@@ -300,7 +300,7 @@ On the other hand, in an implicit integration scheme, as used in the Abaqus stan
 \subsection{Experimental tests and data}\label{subsec:ExpTests}
 %----------------------------------------------------------------------------------
 
-The material used for this study is a medium-carbon steel, type P20, with the chemical composition presented in Table~\ref{tab:Composition}.
+The material used for this study is a medium-carbon steel, type P20, \textcolor{red}{with the chemical composition presented in Table~\ref{tab:Composition}.
 \begin{table}[H]
 \caption{Chemical composition of medium-carbon steel. Fe = balance.}
 \newcolumntype{L}{>{\raggedright\arraybackslash}X}
@@ -314,7 +314,7 @@ Wt~\% %MDPI: Not necessary
 \bottomrule
 \end{tabularx}
 \label{tab:Composition}
-\end{table}
+\end{table}}
 
 The experimental tests used for this work are identical to those previously published by Tize Mha \eal~\cite{Tize-2023-IEP} and concern hot compression tests, on a Gleeble-3800 thermomechanical simulator, of P20 steel cylinders with an initial diameter of~$\phi_{0}=10$~mm and a height of~$h_{0}=15$~mm.
 Only the most relevant information about those experiments is reported here after.
@@ -532,10 +532,10 @@ Finally, Equations (\ref{eq:ANN-y}-\ref{eq:ANN-s}), (\ref{eq:ANN-input}-\ref{eq:
 
 The Python program used for training the neural network was created with the dedicated Python library, Tensorflow~\cite{Tensorflow-2015}.
 The training phase employed the Adaptive Moment Estimation (ADAM) optimizer~\cite{Kingma-2015-AMS} and the Mean Square Error to evaluate the loss function.
-With regard to our previous publications about ANN constitutive flow law~\cite{Pantale-2021-EIN}, we have made the choice to arbitrary fix some hyper-parameters of the ANNs, so to use a two hidden layers ANN with 17 neurons for the first hidden layer and 9 neurons for the second hidden layer.
-There is a total number of~$240$ trainable parameters to optimize.
-As we have 3 inputs and 1 output, we reference each of the ANNs using the notation 3-17-9-1-act, where act refers the activation function used for the model.
-All six models have been trained in simultaneously for the same number of iterations ($30~000$ iterations, lasting around 5 hours) on a PowerEdge R730 server running Ubuntu 22.04 LTS 64 bits, 96 GB of Ram, with 2 Intel Xeon CPU E5-2650 2.20GHz.
+With regard to our previous publications about ANN constitutive flow law~\cite{Pantale-2021-EIN}, we have made the choice to arbitrary fix some hyper-parameters of the ANNs, so to use a two hidden layers ANN with \textcolor{red}{15} neurons for the first hidden layer and \textcolor{red}{7} neurons for the second hidden layer.
+There is a total number \textcolor{red}{of~$180$} trainable parameters to optimize.
+As we have 3 inputs and 1 output, we reference each of the ANNs using the notation \textcolor{red}{3-15-7-1-act}, where act refers the activation function used for the model.
+All six models have been trained in simultaneously for the same number of iterations (\textcolor{red}{$6~000$} iterations, lasting around \textcolor{red}{1 hour}) on a PowerEdge R730 server running Ubuntu 22.04 LTS 64 bits, 96 GB of Ram, with 2 Intel Xeon CPU E5-2650 2.20GHz.
 
 In this study, the error evaluation of the models is based on the Mean Square Error ($\MSE$), the Root Mean Square Error ($\RMSE$) and the Mean Absolute Relative Error ($\MARE$) given by the following equations:
 \begin{equation}
@@ -551,39 +551,39 @@ where~$N$ is the total number of numerical training data used, $\square_i$ is th
 Figure~\ref{fig:ANN-conv} show the evolution of the common logarithm of the Mean Square Error, \ie $\log_{10}(\MSE)$, of the output $s$ of the ANN during the training.
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.8\columnwidth]{Figures/3Cr2Mo-convergence-17-9}
+\includegraphics[width=0.8\columnwidth]{Figures/3Cr2Mo-convergence}
 \caption{Global convergence of the six ANN models.}
 \label{fig:ANN-conv}
 \end{figure}
-From this figure we can compare the convergence rates of the different networks and consider that we have reached a stationary state for all the ANNs analyzed after $30~000$ iterations.
-As expected, the ReLU activation function gives the worst results with a final value of~$\MSE=3.092\times10^{-5}$, mainly due to the low number of neurons and the fact that this function is a piecewise linear function and not able to efficiently approximate the nonlinear behavior of the material.
+From this figure we can compare the convergence rates of the different networks and consider that we have reached a stationary state for all the ANNs analyzed after \textcolor{red}{$6~000$} iterations.
+As expected, the ReLU activation function gives the worst results with a final value of~$\MSE=31.537\times10^{-6}$, mainly due to the low number of neurons and the fact that this function is a piecewise linear function and not able to efficiently approximate the nonlinear behavior of the material.
 The other five activation functions enhance more or less the same behavior.
-The final value of the $\MSE$ is pretty much the same for all of them, and around $\MSE=6\times10^{-6}$.
-The Tanh and Exp activation functions are slightly less powerful than the Sigmoid, Swish, and Softplus functions.
-
+The final value of the $\MSE$ is pretty much the same for all of them, and around $\MSE=12\times10^{-6}$.
+%The Tanh Swish, and Exp activation functions are slightly less powerful than the Sigmoid, and Softplus functions.
 Table~\ref{tab:Training} shows the main results from the training phase of the ANNs.
 \begin{table}[h!]
 \caption{Comparison of the models' error depending on the activation function used.\label{tab:Training}}
-\begin{tabular}{l|c|c|cc|cc}
+\begin{tabular}{l|c|c|cc|cc|cc}
 \toprule
-Activation & CPU & $\MSE$ & $\RMSE$ & $\Delta\RMSE$ & $\MARE$ & $\Delta\MARE$ \\
- & & $\times 10^{-6}$ & (\MPa) & & (\%) &\\ \midrule
-Sigmoid & 5:14 & 5.891 & 0.427 & 1.247 & 0.952 & 1.322\\
-Tanh & 5:25 & 7.234 & 0.418 & 1.223 & 0.851 & 1.181\\
-ReLU & 5:14 & 30.92 & 1.171 & 3.422 & 4.575 & 6.350\\
-Softplus & 5:25 & 5.791 & 0.394 & 1.151 & 1.070 & 1.485\\
-Swish & 5:31 & 5.693 & 0.342 & / &0.720 & / \\
-Exp & 5:18 & 6.861 & 0.420 & 1.227 & 1.302 & 1.808\\
+Activation & CPU & $\MSE$ & $\RMSE$ & $\Delta\RMSE$ & $\MARE$ & $\Delta\MARE$ &  $\Delta E$ & rank \\
+ & & $\times 10^{-6}$ & (\MPa) & & (\%) & & &\\ \midrule
+Sigmoid & 1:04 & 13.853 & 0.604 & 1.007 & 1.412 & 1.201 & 1.536 & 2\\
+Tanh & 1:03 & 12.890 & 0.621 & 1.035 & 1.634 & 1.390 & 1.748 & 5\\
+ReLU & 1:03 & 31.537 & 0.860 & 1.434 & 2.750 & 2.339 & 2.881 & 6\\
+Softplus & 1:04 & 13.968 & 0.600 & / & 1.617 & 1.375 & 1.724 & 4\\
+Swish & 1:04 & 12.434 & 0.619 & 1.417 & 0.720 & 1.205 & 1.546 & 3\\
+Exp & 1:03 & 12.843 & 0.688 & 1.147 & 1.176 & / & 1.362 & 1\\
 \bottomrule
 \end{tabular}
 \end{table}
+
 We can see from this later that all models need more or less the same training time to complete the requested number of iterations.
 We can see that the complexity of the activation functions has an influence on the training time, since it is greater for the Swish and Softplus functions than for the ReLU one.
-We also reported in this table the real values of the~$\RMSE$ and~$\MARE$ concerning the flow stress~$\sigma$.
-From this later we can see that the~$\RMSE$ is about~$0.3$ to~$0.4~\MPa$ for all activation functions except the ReLU one where the value is above~$1.1~\MPa$.
-Concerning the $\MARE$, the value of all models is around~$1\%$ while it is more than~$6\%$ for the ReLU function.
-Of the six activation functions used in this study, the Swish function gives the best results in terms of solution quality, while the ReLU function gives the worst.
-From another point of view, the Swish activation function requires the most training time, but the difference is not discriminatory given the performance at this stage of the study.
+We also reported in this table the real values of the~$\RMSE$ and~$\MARE$ concerning the flow stress~$\sigma$ using the whole experimental database.
+From this later we can see that the~$\RMSE$ is about~$0.6~\MPa$ for all activation functions except the ReLU one where the value is above~$0.8~\MPa$.
+Concerning the $\MARE$, the value of all models is around~$1\%$ while it is more than~$2\%$ for the ReLU function.
+Of the six activation functions used in this study, the Exponential function gives the best results in terms of solution quality, while the ReLU function gives the worst as reported by $\Delta E=\sqrt{\RMSE^2+\MARE^2}$.
+%From another point of view, the Swish activation function requires the most training time, but the difference is not discriminatory given the performance at this stage of the study.
 
 Figure~\ref{fig:ANNFit} shows a comparison of the experimental flow stress measures during the Gleeble compression tests (reported as dots in Figure~\ref{fig:ANNFit}) and the predicted flow stress~$\sigma$ using the ANN for the strain rate~$\mdot{\varepsilon}=1~\ps$.
 \begin{figure}[h!]
@@ -596,12 +596,12 @@ From this later, we can see that all ANNs models are able to reproduce quite wel
 The exception is concerning the ReLU activation function where it can be seen from the results in Figure~\ref{fig:ANNFit} that the predicted flow stress enhances a piecewise linear behavior.
 
 Among the six activation functions proposed, as already presented in Section~\ref{subsubsec:ANN-act}, the exponential activation function is interesting since the computation of the function and its derivative in the same step requires only one evaluation of the exponential function because $f'(x)=f(x)$ as reported in Equation (\ref{eq:act-exp}).
-If we analyze the results reported in Table~\ref{tab:Training} and Figure~\ref{fig:ANNFit} concerning the exponential activation function, we can see that this one has a $\RMSE=0.420~\MPa$, $\MARE=1.302\%$ and the global behavior of the flow stress for~$\mdot{\varepsilon}=1~\ps$ is similar to the Sigmoid, Tanh, Swish or Softplus functions even if the results in terms of performance are a little below those of the other four functions.
+If we analyze the results reported in Table~\ref{tab:Training} and Figure~\ref{fig:ANNFit} concerning the exponential activation function, we can see that this one has a $\RMSE=0.688~\MPa$, $\MARE=1.176\%$ and the global behavior of the flow stress for~$\mdot{\varepsilon}=1~\ps$ is similar to the Sigmoid, Tanh, Swish or Softplus functions.
 
-In terms of global performance of the 3-17-9-1-exp ANN, Figure~\ref{fig:ANN-ExpFit} shows the comparison of the experimental data (dots) and the ANN flow stress for all strain rates and all temperatures defined in Section~\ref{subsec:ExpTests}.
+In terms of global performance of the \textcolor{red}{3-15-7-1-exp} ANN, Figure~\ref{fig:ANN-ExpFit} shows the comparison of the experimental data (dots) and the ANN flow stress for all strain rates and all temperatures defined in Section~\ref{subsec:ExpTests}.
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.95\columnwidth]{Figures/3Cr2Mo-3-17-9-1-exponential}
+\includegraphics[width=0.95\columnwidth]{Figures/3Cr2Mo-3-15-7-1-exponential}
 \caption{Comparison of experimental (dots) and the flow stress~$\sigma$ predicted by the ANN (continuous line) using the Exponential activation function.}
 \label{fig:ANN-ExpFit}
 \end{figure}
@@ -631,136 +631,42 @@ We also suppose that the minimum and range values of the inputs, used during the
 \begin{itemize}
 \item We first use Equation (\ref{eq:ANN-input}) to compute the vector $\overrightarrow{x}$ where all components of $\overrightarrow{\xi}$ will be remapped within the range $[0,1]$:
 \begin{equation}
-\overrightarrow{x}=\left(\overrightarrow{\xi}-\overrightarrow{\xi}_{0}\right)\oslash\Delta\overrightarrow{\xi},
+\overrightarrow{x}=\left(\overrightarrow{\xi}-\overrightarrow{\xi}_{0}\right)\oslash\Delta\overrightarrow{\xi}, \label{eq:ANNi1}
 \end{equation}
 where $\oslash$ is the Hadamard division operator.
 \item Conforming to Equation (\ref{eq:ANN-y}), we compute the vector:
 \begin{equation}
-\overrightarrow{y}\lay{1}=\w\lay{1}\cdot\overrightarrow{x}+\overrightarrow{b}\lay{1}.
+\overrightarrow{y}\lay{1}=\w\lay{1}\cdot\overrightarrow{x}+\overrightarrow{b}\lay{1}.\label{eq:ANNi2}
 \end{equation}
 \item Then, from Equation (\ref{eq:ANN-f}) and the expression of the activation function used for the first layer of the ANN and defined by one of the Equations (\ref{eq:act-sig}-\ref{eq:act-exp}), we compute the vector:
 \begin{equation}
-\overrightarrow{\hat{y}}\lay{1}=f\lay{1}(\overrightarrow{y}\lay{1}).
+\overrightarrow{\hat{y}}\lay{1}=f\lay{1}(\overrightarrow{y}\lay{1}).\label{eq:ANNi3}
 \end{equation}
 \item We repeat the process for the second layer, so that we compute the vectors: \begin{equation}
-\overrightarrow{y}\lay{2}=\w\lay{2}\cdot\overrightarrow{\hat{y}}\lay{1}+\overrightarrow{b}\lay{2},
+\overrightarrow{y}\lay{2}=\w\lay{2}\cdot\overrightarrow{\hat{y}}\lay{1}+\overrightarrow{b}\lay{2},\label{eq:ANNi4}
 \end{equation}
 and:
 \begin{equation}
-\overrightarrow{\hat{y}}\lay{2}=f\lay{2}(\overrightarrow{y}\lay{2}).
+\overrightarrow{\hat{y}}\lay{2}=f\lay{2}(\overrightarrow{y}\lay{2}).\label{eq:ANNi5}
 \end{equation}
 \item From Equations (\ref{eq:ANN-s}) and (\ref{eq:ANN-output}), we compute the flow stress $\sigma$ using the following equation:
 \begin{equation}
-s = \Delta\sigma.\left(\overrightarrow{w}^T \dotp \overrightarrow{\hat{y}}\lay{2} + b\right) + \sigma_{0}.
+\sigma = \Delta\sigma.\left(\overrightarrow{w}^T \dotp \overrightarrow{\hat{y}}\lay{2} + b\right) + \sigma_{0}.\label{eq:ANNi6}
 \end{equation}
 \item Then we can compute in a single step the three derivatives $\overrightarrow{\sigma}'$ from Equation (\ref{eq:ANN-der}) with the following expression:
 \begin{equation}
 \begin{array}{l}
 \overrightarrow{\Sig}' = \Delta\sigma.\w\lay{1}^T \dotp\left[\left(\w\lay{2}^T \dotp \left(\overrightarrow{w}^T \circ f'(\overrightarrow{y}\lay{2})\right)\right) \circ f'(\overrightarrow{y}\lay{1})\right] \oslash \Delta\overrightarrow{\xi}\\
 \Sig_{2}' := \Sig_{2}' / \mdot{\varepsilon}
-\end{array},
+\end{array},\label{eq:ANNi7}
 \end{equation}
 where the expression used for $f'()$ changes depending on the activation function used.
 \end{itemize}
-As an illustration the corresponding implementation using Python of those equations is proposed in Figure~\ref{fig:PythonStress}, where the arguments of the functions are \var{xi} for the $\overrightarrow{\xi}$ vector, \var{deps} for $\mdot{\varepsilon}$, \var{Act} for the activation function and \var{dAct} for the derivative of the activation function.
-The network architecture is defined by the numpy arrays \var{w1}, \var{w2}, \var{w}, \var{b1}, \var{b2} and \var{b}.
-The other variables \var{xi0}, \var{Dxi}, \var{sig0} and \var{Dsig} correspond to the quantities $\overrightarrow{\xi}_{0}$, $\Delta\overrightarrow{\xi}$, $\sigma_{0}$ and $\Delta\sigma$ respectively.
-\begin{figure}[h!]
-\begin{PythonListing}
-def stressAndDerivatives(xi, deps, Act, dAct):
-  x = (xi - xi0) / Dxi
-  y1 = w1.dot(x) + b1
-  yh1 = Act(y1)
-  y2 = w2.dot(yh1) + b2
-  yh2 = Act(y2)
-  Sig = Dsig*(w.dot(yh2) + b) + sig0
-  dSig = Dsig*((w1.T).dot((w2.T).dot(w.T*dAct(y2))*dAct(y1))) / Dxi
-  dSig[1] = dSig[1] / deps
-  return Sig, dSig
-\end{PythonListing}
-\caption{Python function to compute the flow stress and the derivative vector.\label{fig:PythonStress}}
-\end{figure}
-
-A Python program is used to analyze the code reported in Figure~\ref{fig:PythonStress} and translate it into a Fortran 77 subroutine.
-During the translation phase, all functions corresponding to array operators, as matrix--matrix multiplications or element-wise operations, are converted into unrolled loops (explicitly written), all values of the ANNs parameters are explicitly written as data at the beginning of the subroutine, so that the a 3-17-9-1-exp Fortran routine consist of more than 400 lines of code.
-A small extract of the corresponding VUHARD subroutine is presented in Figure~\ref{fig:FortranStress}.
-\begin{figure}[!h]
-\begin{FortranListing}
-      subroutine vuhard (... Heading of VUHARD routine ...)
-      ...
-c Block of Data
-      double precision w1(17, 3)
-      data w1/-18.005151041D0, -2.1260391826D0, -2.150871965D0,
-     + -0.8321546516D0,...
-      ...
-c Preprocessing of the variables
-      xeps = (eqps(k) - xmI(1))/xrI(1)
-      xdeps = (log(eqpsRate(k)/xdeps0) - xmI(2))/xrI(2)
-      xtemp = (tempNew(k) - xmI(3))/xrI(3)
-c Hidden layer #1 (y11 to y116)
-      y11 = w1(1,1)*xeps + w1(1,2)*xdeps + w1(1,3)*xtemp + b1(1)
-      ...
-c exponential activation function (yh11 to yh117)
-      yh11 = exp(y11)
-      ...
-c Hidden layer #2 (y21 to y28)
-      y21 = w2(1,1)*yh11 + w2(1,2)*yh12 + w2(1,3)*yh13
-     + +w2(1,4)*yh14 + ... + b2(1)
-      ...
-c exponential activation function (yh21 to yh28)
-      yh21 = exp(y21)
-      ...
-c Derivatives terms (xa1 to xa9), (xb1 to xb17)
-      xa1 = w3(1)*yh21
-      ...
-      xb1 = (w2(1,1)*xa1 + w2(2,1)*xa2 + w2(3,1)*xa3
-     + +w2(4,1)*xa4 + ... + w2(9,1)*xa9)*yh11
-      ...
-c Outputs of the subroutine
-      Yield(k) = xrO*(w3(1)*yh21 + w3(2)*yh22
-     + +w3(3)*yh23 + ... +b3) + xmO
-      dyieldDeqps(k,1) = xrO*(w1(1,1)*xb1 + w1(2,1)*xb2
-     + +w1(3,1)*xb3 + ... + w1(17,1)*xb17) / xrI(1)
-      dyieldDeqps(k,2) = xrO*(w1(1,2)*xb1 + w1(2,2)*xb2
-     + +w1(3,2)*xb3 + ... + w1(17,2)*xb17)/(xrI(2)*eqpsRate(k))
-      dyieldDtemp(k) = xrO*(w1(1,3)*xb1 + w1(2,3)*xb2
-     + +w1(3,3)*xb3 + ... + w1(17,3)*xb17) / xrI(3)
-c Return from the VUHARD subroutine
-      return
-      end
-\end{FortranListing}
-\caption{Part of the VUHARD Fortran 77 subroutine for the ANN flow law and the exponential activation function.\label{fig:FortranStress}}
-\end{figure}
-Depending on the kind of activation function used, some lines differ from one version to the other one, such as the definitions of the activation functions (see line 16 in Figure~\ref{fig:FortranStress}) and the expressions of the internal variables \var{xa} and \var{xb} (see lines 26 and 28 in Figure~\ref{fig:FortranStress}).
-Figure~\ref{fig:FortranSigmoid} show the declaration of the Sigmoid activation function and its derivative as defined by Equation (\ref{eq:act-sig}), while Figure~\ref{fig:FortranSoftplus} show the same part of the code with the use of the Softplus activation function as defined by Equation (\ref{eq:act-softplus}).
-\begin{figure}[h!]
-\begin{FortranListing}
-c sigmoid activation function (yh11 to yh116)
-      yh11 = 1/(1 + exp(-y11))
-      ...
-c Derivatives terms (xa1 to xa9), (xb1 to xb17)
-      xa1 = w3(1)*(yh21*(1 - yh21))
-      ...
-      xb1 = (w2(1,1)*xa1 + w2(2,1)*xa2 + w2(3,1)*xa3
-     + +w2(4,1)*xa4 + ... + w2(9,1)*xa9)*(yh11*(1 - yh11))
-      ...
-\end{FortranListing}
-\caption{Part of the VUHARD Fortran 77 subroutine with the Sigmoid activation function.\label{fig:FortranSigmoid}}
-\end{figure}
-\begin{figure}[h!]
-\begin{FortranListing}
-c Softplus activation function (yh11 to yh116)
-      yh11 = log(1 + exp(y11))
-      ...
-c Derivatives terms (xa1 to xa9), (xb1 to xb17)
-      xa1 = w3(1)*(1/(1 + exp(-y21)))
-      ...
-      xb1 = (w2(1,1)*xa1 + w2(2,1)*xa2 + w2(3,1)*xa3
-     + +w2(4,1)*xa4 + ... + w2(9,1)*xa9)*(1/(1 + exp(-y11)))
-      ...
-\end{FortranListing}
-\caption{Part of the VUHARD Fortran 77 subroutine with the Softplus activation function.\label{fig:FortranSoftplus}}
-\end{figure}
+As an illustration the corresponding implementation using Python of those equations is proposed in \textcolor{red}{Appendix \ref{sec:Appendix1}}.
+A dedicated Python program is used to translate those equations into a Fortran 77 subroutine.
+During the translation phase, all functions corresponding to array operators, as matrix--matrix multiplications or element-wise operations, are converted into unrolled loops (explicitly written), all values of the ANNs parameters are explicitly written as data at the beginning of the subroutine, so that the a 3-15-7-1-exp Fortran routine consist of more than 400 lines of code.
+A small extract of the corresponding VUHARD subroutine is presented in Figure~\ref{fig:FortranStress} \textcolor{red}{in Appendix \ref{sec:Appendix2}}.
+\textcolor{red}{All full source files of the six VUHARD subroutines is available in the Software Heritage Archive~\cite{Pantale-2023-SSF}.}
 
 The Fortran subroutine is compiled with double precision directive using the Intel Fortran 14.0.2 compiler on a Ubuntu 22.04 server and linked to the main Abaqus explicit executable.
 
@@ -811,19 +717,19 @@ Figure~\ref{fig:Num-misesCP} shows a comparison of the von Mises equivalent stre
 In this figure, we can see that the solutions differ slightly both in terms of maximum stress value and stress isovalues distribution.
 Nevertheless, the disparities in values remain minimal and below $1\%$ between the six different models.
 
-In order to compare the different models quantitatively, Table~\ref{tab:Training} reports the values of the plastic strain $\overline{\varepsilon}^p$, the von Mises equivalent stress $\overline{\sigma}$ and the temperature $T$ for the element located at the center of the specimen at the end of the simulation.
+In order to compare the different models quantitatively, Table~\ref{tab:Simulation} reports the values of the plastic strain $\overline{\varepsilon}^p$, the von Mises equivalent stress $\overline{\sigma}$ and the temperature $T$ for the element located at the center of the specimen at the end of the simulation.
 \begin{table}[h!]
-\caption{Comparison of quantitative results concerning the six activation functions analyzed.}
+\caption{Comparison of quantitative results concerning the six activation functions analyzed.\label{tab:Simulation}}
 \begin{tabular}{l|ccc|ccc}
 \toprule
 Activation & CPU & $N_{inc}$ & $N_{inc}$/s & $\overline{\varepsilon}^p$ & $\overline{\sigma}$ & $T$ \\
  & (s) & & & & (\MPa) &(\celsius)\\ \midrule
-Sigmoid & 645 & 1~090~238 & 1690 & 0.759 & 87.8 & 1164.4 \\
-Tanh & 726 & 1~089~766 & 1501 & 0.747 & 86.3 & 1164.0 \\
-ReLU & 511 & 1~075~083 & 2103 & 0.759 & 87.5 & 1164.4 \\
-Softplus & 1070 & 1~096~153 & 1024 & 0.754 & 87.6 & 1164.2 \\
-Swish & 822 & 1~101~546 & 1340 & 0.751 & 86.4 & 1164.0 \\
-Exp & 603 & 1~086~201 & 1801 & 0.754 & 86.7 & 1164.2 \\
+Sigmoid & 574 & 1~092~001 & 1902 & 0.762 & 87.6 & 1164.3 \\
+Tanh & 648 & 1~096~099 & 1691 & 0.761 & 88.3 & 1164.4 \\
+ReLU & 460 & 1~082~453 & 2353 & 0.750 & 85.6 & 1163.9 \\
+Softplus & 906 & 1~087~812 & 1200 & 0.753 & 87.4 & 1164.1 \\
+Swish & 738 & 1~082~832 & 1467 & 0.753 & 86.6 & 1164.0 \\
+Exp & 540 & 1~077~954 & 1996 & 0.757 & 85.6 & 1164.1 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -832,12 +738,12 @@ From the values reported in this Table, we can see that the models differ a litt
 It is important to note that one origin of the differences between the models comes from the fact that in the end of the simulation, the plastic strain $\overline{\varepsilon}^p$ is greater than $0.7$, so the model has to extrapolate the yield stress with respect to the data used for the training phase.
 This increases the discrepancy between the models, since each extrapolates the results from the training domain differently with respect to its internal formulation.
 
-In Table~\ref{tab:Training} we also have reported the total number of increments $N_{inc}$ needed to complete the simulation along with the total CPU time.
+In Table~\ref{tab:Simulation} we also have reported the total number of increments $N_{inc}$ needed to complete the simulation along with the total CPU time.
 We remark that the number of increment varies from one activation function to another one, since the convergence of the model differ because it takes into account the stress in the computation of the stable time increment.
-From these two, we can calculate the number of increments performed per second and propose a classification from the fastest to the slowest ANN, where: ReLU is the fastest (with 2103 iteration per second) and Softplus is the slowest (with 1024 iteration per second) of the proposed models (two times slower than the ReLU one).
+From these two, we can calculate the number of increments performed per second and propose a classification from the fastest to the slowest ANN, where: ReLU is the fastest (with 2353 iteration per second) and Softplus is the slowest (with 1200 iteration per second) of the proposed models (two times slower than the ReLU one).
 Those results are directly linked to the complexity of the expression of the activation function and its derivative as introduced in Section~\ref{subsubsec:ANN-act}.
-For example, we can note that a simulation using the Sigmoid activation function requires 1~090~238 increments and the model contains 400 under integrated CAX4RT elements, therefore, we will have 436~095~200 computations of the code presented in Figure~\ref{fig:FortranSigmoid}.
-From those results, we can note that, as expected, the Exp activation function is very efficient in terms of CPU computation time (with 1801 iteration per second) as it is just second after the very light ReLU function, but gives quite good results as reported in Table~\ref{tab:Training} which is not the case of the ReLU function.
+For example, we can note that a simulation using the Sigmoid activation function requires 1~092~001 increments and the model contains 400 under integrated CAX4RT elements, therefore, we will have 436~800~400 computations of the code presented in Figure~\ref{fig:FortranSigmoid}.
+From those results, we can note that, as expected, the Exp activation function is very efficient in terms of CPU computation time (with 1996 iteration per second) as it is just second after the very light ReLU function, but gives quite good results as reported in Table~\ref{tab:Simulation} which is not the case of the ReLU function.
 
 Figure~\ref{fig:Num-misesTH} shows the evolution of the von Mises equivalent stress for the center of the cylinder, as a function of the displacement of the top edge of the cylinder for three activation functions (Exp, Sigmoid and ReLU).
 \begin{figure}[h!]
@@ -941,14 +847,122 @@ VUHARD & Abaqus explicit user subroutine \\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optional
-\appendixtitles{no} % Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
-%\appendixstart
-%\appendix
+\appendixtitles{yes} % Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
+\appendixstart
+\appendix
+
+%----------------------------------------------------------------------------------
+\textcolor{red}{\section[\appendixname~\thesection]{Python code to compute stress and derivatives\label{sec:Appendix1}}}
+%----------------------------------------------------------------------------------
+
+\textcolor{red}{The implementation using Python of Equations (\ref{eq:ANNi1}) to (\ref{eq:ANNi7}) is proposed in Figure~\ref{fig:PythonStress}, where the arguments of the functions are \var{xi} for the $\overrightarrow{\xi}$ vector, \var{deps} for $\mdot{\varepsilon}$, \var{Act} for the activation function and \var{dAct} for the derivative of the activation function.}
+\begin{figure}[h!]
+\begin{PythonListing}
+def stressAndDerivatives(xi, deps, Act, dAct):
+  x = (xi - xi0) / Dxi
+  y1 = w1.dot(x) + b1
+  yf1 = Act(y1)
+  y2 = w2.dot(yf1) + b2
+  yf2 = Act(y2)
+  Sig = Dsig*(w.dot(yf2) + b) + sig0
+  dSig = Dsig*((w1.T).dot((w2.T).dot(w.T*dAct(y2))*dAct(y1))) / Dxi
+  dSig[1] = dSig[1] / deps
+  return Sig, dSig
+\end{PythonListing}
+\caption{Python function to compute the flow stress and the derivative vector.\label{fig:PythonStress}}
+\end{figure}
+\textcolor{red}{The network architecture is defined by the numpy arrays \var{w1}, \var{w2}, \var{w}, \var{b1}, \var{b2} and \var{b}.
+The other variables \var{xi0}, \var{Dxi}, \var{sig0} and \var{Dsig} correspond to the quantities $\overrightarrow{\xi}_{0}$, $\Delta\overrightarrow{\xi}$, $\sigma_{0}$ and $\Delta\sigma$ respectively.
+Line~2 in Figure~\ref{fig:PythonStress} correspond to Equation (\ref{eq:ANNi1}). Lines~3 and~4 correspond to Equations (\ref{eq:ANNi2}) and (\ref{eq:ANNi3}) and concerns the first hidden layer, while lines~5 and~6 correspond to Equations (\ref{eq:ANNi4}) and (\ref{eq:ANNi5}) and concerns the second hidden layer. Finally, line~7 computes the flow stress $\sigma$ conforming to Equation (\ref{eq:ANNi6}) and lines~8 and~9 computes the three derivatives of the flow stress conforming to Equation (\ref{eq:ANNi7}). The stress and the three derivatives are returned as a tuple at line~10.}
+
+%----------------------------------------------------------------------------------
+\textcolor{red}{\section[\appendixname~\thesection]{Fortran 77 subroutines to implement the ANN flow law\label{sec:Appendix2}}}
+%----------------------------------------------------------------------------------
+
+\begin{figure}[!h]
+\begin{FortranListing}
+      subroutine vuhard (... Heading of VUHARD routine ...)
+      ...
+c Block of Data
+      double precision w1(15, 3)
+      data w1/-0.480648012140D0, 1.20722861399D0, -0.024459252119D0,
+     + -0.088911109397D0,
+      ...
+c Preprocessing of the variables
+      xeps = (eqps(k) - xmI(1))/xrI(1)
+      xdeps = (log(eqpsRate(k)/xdeps0) - xmI(2))/xrI(2)
+      xtemp = (tempNew(k) - xmI(3))/xrI(3)
+c Hidden layer #1 (y11 to y115)
+      y11 = w1(1,1)*xeps + w1(1,2)*xdeps + w1(1,3)*xtemp + b1(1)
+      ...
+c exponential activation function (yf11 to yf115)
+      yf11 = exp(y11)
+      ...
+c Hidden layer #2 (y21 to y27)
+      y21 = w2(1,1)*yf11 + w2(1,2)*yf12 + w2(1,3)*yf13
+     + +w2(1,4)*yf14 + ... + b2(1)
+      ...
+c exponential activation function (yf21 to yf27)
+      yf21 = exp(y21)
+      ...
+c Derivatives terms (xa1 to xa7), (xb1 to xb15)
+      xa1 = w3(1)*yf21
+      ...
+      xb1 = (w2(1,1)*xa1 + w2(2,1)*xa2 + w2(3,1)*xa3
+     + +w2(4,1)*xa4 + ... + w2(7,1)*xa7)*yf11
+      ...
+c Outputs of the subroutine
+      Yield(k) = xrO*(w3(1)*yf21 + w3(2)*yf22
+     + +w3(3)*yf23 + ... + b3) + xmO
+      dyieldDeqps(k,1) = xrO*(w1(1,1)*xb1 + w1(2,1)*xb2
+     + +w1(3,1)*xb3 + ... + w1(15,1)*xb15) / xrI(1)
+      dyieldDeqps(k,2) = xrO*(w1(1,2)*xb1 + w1(2,2)*xb2
+     + +w1(3,2)*xb3 + ... + w1(15,2)*xb15)/(xrI(2)*eqpsRate(k))
+      dyieldDtemp(k) = xrO*(w1(1,3)*xb1 + w1(2,3)*xb2
+     + +w1(3,3)*xb3 + ... + w1(15,3)*xb15) / xrI(3)
+c Return from the VUHARD subroutine
+      return
+      end
+\end{FortranListing}
+\caption{Part of the VUHARD Fortran 77 subroutine for the ANN flow law and the exponential activation function.\label{fig:FortranStress}}
+\end{figure}
+\textcolor{red}{
+Depending on the kind of activation function used, some lines differ from one version to the other one, such as the definitions of the activation functions (see line 16 in Figure~\ref{fig:FortranStress}) and the expressions of the internal variables \var{xa} and \var{xb} (see lines 26 and 28 in Figure~\ref{fig:FortranStress}).
+Figure~\ref{fig:FortranSigmoid} show the declaration of the Sigmoid activation function and its derivative as defined by Equation (\ref{eq:act-sig}), while Figure~\ref{fig:FortranSoftplus} show the same part of the code with the use of the Softplus activation function as defined by Equation (\ref{eq:act-softplus}).}
+\begin{figure}[h!]
+\begin{FortranListing}
+c sigmoid activation function (yf11 to yf115)
+      yf11 = 1/(1 + exp(-y11))
+      ...
+c Derivatives terms (xa1 to xa7), (xb1 to xb15)
+      xa1 = w3(1)*(yf21*(1 - yf21))
+      ...
+      xb1 = (w2(1,1)*xa1 + w2(2,1)*xa2 + w2(3,1)*xa3
+     + +w2(4,1)*xa4 + ... + w2(7,1)*xa7)*(yf11*(1 - yf11))
+      ...
+\end{FortranListing}
+\caption{Part of the VUHARD Fortran 77 subroutine with the Sigmoid activation function.\label{fig:FortranSigmoid}}
+\end{figure}
+\begin{figure}[h!]
+\begin{FortranListing}
+c softplus activation function (yf11 to yf115)
+      yf11 = log(1 + exp(y11))
+      ...
+c Derivatives terms (xa1 to xa7), (xb1 to xb15)
+      xa1 = w3(1)*(1/(1 + exp(-y21)))
+      ...
+      xb1 = (w2(1,1)*xa1 + w2(2,1)*xa2 + w2(3,1)*xa3
+     + +w2(4,1)*xa4 + ... + w2(7,1)*xa7)*(1/(1 + exp(-y11)))
+      ...
+\end{FortranListing}
+\caption{Part of the VUHARD Fortran 77 subroutine with the Softplus activation function.\label{fig:FortranSoftplus}}
+\end{figure}
+
 %%----------------------------------------------------------------------------------
 %\section[\appendixname~\thesection]{ANN Flow Law Coefficients\label{sec:Appendix}}
 %%----------------------------------------------------------------------------------
 %
-%In order to complete this paper, we report here after the computing process and the $240$~coefficients of the artificial neural network ANN-3-17-9-1-exp model.
+%In order to complete this paper, we report here after the computing process and the $180$~coefficients of the artificial neural network ANN-3-15-7-1-exp model.
 %The weight matrix for the first hidden layer $\w_{1}$ is a $17\times3$ matrix:
 %\begin{equation*}
 %\w_{1} = \left[
