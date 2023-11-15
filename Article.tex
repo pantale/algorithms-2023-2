@@ -579,10 +579,10 @@ Exp & 1:03 & 12.843 & 0.688 & 1.147 & 1.176 & / & 1.362 & 1\\
 
 We can see from this later that all models need more or less the same training time to complete the requested number of iterations.
 We can see that the complexity of the activation functions has an influence on the training time, since it is greater for the Swish and Softplus functions than for the ReLU one.
-We also reported in this table the real values of the~$\RMSE$ and~$\MARE$ concerning the flow stress~$\sigma$ using the whole experimental database.
+We also reported in this table the real values of the~$\RMSE$ and~$\MARE$ concerning the flow stress~$\sigma$ \textcolor{red}{using the whole experimental database}.
 From this later we can see that the~$\RMSE$ is about~$0.6~\MPa$ for all activation functions except the ReLU one where the value is above~$0.8~\MPa$.
 Concerning the $\MARE$, the value of all models is around~$1\%$ while it is more than~$2\%$ for the ReLU function.
-Of the six activation functions used in this study, the Exponential function gives the best results in terms of solution quality, while the ReLU function gives the worst as reported by $\Delta E=\sqrt{\RMSE^2+\MARE^2}$.
+Of the six activation functions used in this study, the Exponential function gives the best results in terms of solution quality, while the ReLU function gives the worst \textcolor{red}{as reported by $\Delta E=\sqrt{\RMSE^2+\MARE^2}$}.
 %From another point of view, the Swish activation function requires the most training time, but the difference is not discriminatory given the performance at this stage of the study.
 
 Figure~\ref{fig:ANNFit} shows a comparison of the experimental flow stress measures during the Gleeble compression tests (reported as dots in Figure~\ref{fig:ANNFit}) and the predicted flow stress~$\sigma$ using the ANN for the strain rate~$\mdot{\varepsilon}=1~\ps$.
@@ -745,15 +745,15 @@ Those results are directly linked to the complexity of the expression of the act
 For example, we can note that a simulation using the Sigmoid activation function requires 1~092~001 increments and the model contains 400 under integrated CAX4RT elements, therefore, we will have 436~800~400 computations of the code presented in Figure~\ref{fig:FortranSigmoid}.
 From those results, we can note that, as expected, the Exp activation function is very efficient in terms of CPU computation time (with 1996 iteration per second) as it is just second after the very light ReLU function, but gives quite good results as reported in Table~\ref{tab:Simulation} which is not the case of the ReLU function.
 
-Figure~\ref{fig:Num-misesTH} shows the evolution of the von Mises equivalent stress for the center of the cylinder, as a function of the displacement of the top edge of the cylinder for three activation functions (Exp, Sigmoid and ReLU).
+Figure~\ref{fig:Num-misesTH} shows the evolution of the von Mises equivalent stress for the center of the cylinder, as a function of the displacement of the top edge of the cylinder for all activation functions.
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\columnwidth]{Figures/vonMises}
-\caption{Von Mises stress evolution with the displacement of the top edge of the cylinder for three activation functions.}
+\caption{Von Mises stress evolution with the displacement of the top edge of the cylinder for all activation functions.}
 \label{fig:Num-misesTH}
 \end{figure}
-The other three activations functions enhancing the same behavior as the Exp and Sigmoid ones have been removed to simplify the graph.
-From this later, we can see that the Exp and Sigmoid functions give almost the same results, while the ReLU enhances a piecewise behavior due to its formulation and the low number of neurons used for the ANN.
+The other three activations functions enhancing the same behavior as the Exp and Sigmoid ones %have been removed to simplify the graph.
+From this later, we can see that all activation functions give almost the same results, while the ReLU enhances a piecewise behavior due to its formulation and the low number of neurons used for the ANN.
 This behavior has an influence on the precision of the ANN flow law, and we suggest avoiding the use of the ReLU activation function in this kind of application.
 Any other type of activation function give quite good results for this application, while among them, the use of the Exp activation function gives precise results and minimum computation time for numerical applications.
 
