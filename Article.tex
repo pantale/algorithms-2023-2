@@ -360,7 +360,7 @@ According to Figure~\ref{fig:ANN-2HL}, the ANN used for computing the flow stres
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.55\columnwidth]{Figures/ANN-2HL}
-\caption{Two hidden layers ANN architecture with 3 inputs neurons ($\varepsilon$, $\mdot{\varepsilon}$ and~$T$) and 1 output neuron ($\sigma$).}
+\caption{Two hidden layers ANN architecture with 3 inputs ($\varepsilon$, $\mdot{\varepsilon}$ and~$T$) and 1 output ($\sigma$).}
 \label{fig:ANN-2HL}
 \end{figure}
 The input of the neural network is a three component vector noted~$\overrightarrow{x}$.
@@ -532,35 +532,41 @@ Finally, Equations (\ref{eq:ANN-y}-\ref{eq:ANN-s}), (\ref{eq:ANN-input}-\ref{eq:
 
 The Python program used for training the neural network was created with the dedicated Python library, Tensorflow~\cite{Tensorflow-2015}.
 The training phase employed the Adaptive Moment Estimation (ADAM) optimizer~\cite{Kingma-2015-AMS} and the Mean Square Error to evaluate the loss function.
-With regard to our previous publications about ANN constitutive flow law~\cite{Pantale-2021-EIN}, we have made the choice to arbitrary fix some hyper-parameters of the ANNs, so to use a two hidden layers ANN with \textcolor{red}{15} neurons for the first hidden layer and \textcolor{red}{7} neurons for the second hidden layer.
+\textcolor{red}{With regard to our previous publications about ANN constitutive flow law~\cite{Pantale-2021-EIN}, we have made the choice to arbitrary fix some hyper-parameters of the ANNs, so to use a two hidden layers ANN with 15 neurons for the first hidden layer and 7 neurons for the second hidden layer.}
 There is a total number \textcolor{red}{of~$180$} trainable parameters to optimize.
 As we have 3 inputs and 1 output, we reference each of the ANNs using the notation \textcolor{red}{3-15-7-1-act}, where act refers the activation function used for the model.
 All six models have been trained in simultaneously for the same number of iterations (\textcolor{red}{$6~000$} iterations, lasting around \textcolor{red}{1 hour}) on a PowerEdge R730 server running Ubuntu 22.04 LTS 64 bits, 96 GB of Ram, with 2 Intel Xeon CPU E5-2650 2.20GHz.
 
+\textcolor{red}{Concerning the dataset used for the training of the ANN, as already introduced in the previous sections, this dataset is composed of~$21~030$ quadruplets ($\varepsilon$, $\mdot{\varepsilon}$, $T$ and~$\sigma$) acquired during the Gleeble experiments described in Section \ref{subsec:ExpTests}.
+A chunk of $75\%$ of the dataset is used for training while the rest is used for the test during the training of the ANN.
+All details about this procedure can be found in Pantalé~\cite{Pantale-2023-SSF} where the interested reader can download the source, data and results of this training program.}
+\textcolor{red}{Regarding the training procedure, specifically the starting point, all models are initialized with precisely identical weights and biases.
+However, due to different activation functions, the initial solution varies from one model to another.}
+
 In this study, the error evaluation of the models is based on the Mean Square Error ($\MSE$), the Root Mean Square Error ($\RMSE$) and the Mean Absolute Relative Error ($\MARE$) given by the following equations:
 \begin{equation}
 \begin{cases}
-\MSE (\MPa) = \frac{1}{N} \sum_{i=1}^{N} \left(\square_i^e - \square_i\right)^2\\
+\MSE = \frac{1}{N} \sum_{i=1}^{N} \left(\square_i^e - \square_i\right)^2\\
 \RMSE (\MPa) = \sqrt{\MSE}\\
 \MARE(\%) = \frac{1}{N} \sum_{i=1}^{N}{\left|\frac{\square_i -\square_i^e}{\square_i^e}\right|} \times 100
 \end{cases},
 \label{eq:Errors}
 \end{equation}
-where~$N$ is the total number of numerical training data used, $\square_i$ is the~$i$th value predicted by the neural network, and~$\square_i^e$ is the corresponding experimental value coming from the experimental tests.
+where~$N$ is the \textcolor{red}{total number of points for the computation of those errors}, $\square_i$ is the~$i$th value predicted by the neural network, and~$\square_i^e$ is the corresponding experimental value coming from the experimental tests.
 
-Figure~\ref{fig:ANN-conv} show the evolution of the common logarithm of the Mean Square Error, \ie $\log_{10}(\MSE)$, of the output $s$ of the ANN during the training.
+Figure~\ref{fig:ANN-conv} show the evolution of the common logarithm of the Mean Square Error, \ie $\log_{10}(\MSE)$, of the output $s$ of the ANN during the training, \textcolor{red}{evaluated using only the test data ($25\%$ of the dataset)}.
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.8\columnwidth]{Figures/3Cr2Mo-convergence}
+\includegraphics[width=0.7\columnwidth]{Figures/3Cr2Mo-convergence}
 \caption{Global convergence of the six ANN models.}
 \label{fig:ANN-conv}
 \end{figure}
 From this figure we can compare the convergence rates of the different networks and consider that we have reached a stationary state for all the ANNs analyzed after \textcolor{red}{$6~000$} iterations.
-As expected, the ReLU activation function gives the worst results with a final value of~$\MSE=31.537\times10^{-6}$, mainly due to the low number of neurons and the fact that this function is a piecewise linear function and not able to efficiently approximate the nonlinear behavior of the material.
+As expected, the ReLU activation function gives the worst results with a final value of~$\MSE=32\times10^{-6}$, mainly due to the low number of neurons and the fact that this function is a piecewise linear function and not able to efficiently approximate the nonlinear behavior of the material.
 The other five activation functions enhance more or less the same behavior.
 The final value of the $\MSE$ is pretty much the same for all of them, and around $\MSE=12\times10^{-6}$.
 %The Tanh Swish, and Exp activation functions are slightly less powerful than the Sigmoid, and Softplus functions.
-Table~\ref{tab:Training} shows the main results from the training phase of the ANNs.
+Table~\ref{tab:Training} shows the main results from the training phase of the ANNs, \textcolor{red}{the errors reported in this Table are computed using the whole dataset (both train and test parts)}.
 \begin{table}[h!]
 \caption{Comparison of the models' error depending on the activation function used.\label{tab:Training}}
 \begin{tabular}{l|c|c|cc|cc|cc}
@@ -582,7 +588,9 @@ We can see that the complexity of the activation functions has an influence on t
 We also reported in this table the real values of the~$\RMSE$ and~$\MARE$ concerning the flow stress~$\sigma$ \textcolor{red}{using the whole experimental database}.
 From this later we can see that the~$\RMSE$ is about~$0.6~\MPa$ for all activation functions except the ReLU one where the value is above~$0.8~\MPa$.
 Concerning the $\MARE$, the value of all models is around~$1\%$ while it is more than~$2\%$ for the ReLU function.
-Of the six activation functions used in this study, the Exponential function gives the best results in terms of solution quality, while the ReLU function gives the worst \textcolor{red}{as reported by $\Delta E=\sqrt{\RMSE^2+\MARE^2}$}.
+Of the six activation functions used in this study, the Exponential function gives the best results in terms of solution quality, while the ReLU function gives the worst, \textcolor{red}{as reported by computing the global error using the following expression $\Delta E=\sqrt{\RMSE^2+\MARE^2}$}.
+\textcolor{red}{But we must note that the results of all models, except the ReLU one are very close at the end of the training stage, as illustrated in Figure~\ref{fig:ANN-conv} and Table~\ref{tab:Training}.
+Depending on when the train is stopped, a particular model may yield the best performance due to the varying slopes of convergence among the models.}
 %From another point of view, the Swish activation function requires the most training time, but the difference is not discriminatory given the performance at this stage of the study.
 
 Figure~\ref{fig:ANNFit} shows a comparison of the experimental flow stress measures during the Gleeble compression tests (reported as dots in Figure~\ref{fig:ANNFit}) and the predicted flow stress~$\sigma$ using the ANN for the strain rate~$\mdot{\varepsilon}=1~\ps$.
@@ -607,6 +615,32 @@ In terms of global performance of the \textcolor{red}{3-15-7-1-exp} ANN, Figure~
 \end{figure}
 We can see that over the whole range of temperatures~$T$ and strain rates~$\mdot{\varepsilon}$, the performance of the model based on an exponential function is very good overall.
 This model will therefore be retained for the remainder of the comparative study.
+
+\textcolor{red}{It is well known that artificial neural networks are able to interpolate data correctly within their learning domain, but behave unsatisfactorily when we wish to evaluate results outside the boundaries of this learning domain.
+The ANNs developed in this study follow this general rule, but with different degrees of progress depending on the nature of the activation function used.
+In order to test the extreme limits of the proposed networks, Figure~\ref{fig:ANN-Extrapolation} shows the comparison of predicted values according to the nature of the network for conditions globally outside the learning limits.}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.95\columnwidth]{Figures/Extrapolation}
+\caption{Comparison of the provided ANN results during an out of range computation.}
+\label{fig:ANN-Extrapolation}
+\end{figure}
+
+\textcolor{red}{We selected the worst case, multiplied the strain range by $2$ (up to $\varepsilon=1.4$), multiplied the strain rate by 2 ($\mdot{\varepsilon}=10$) and lowered the temperature to $T=1000\celsius$.
+Figure~\ref{fig:ANN-Extrapolation} shows the evolution of the flow stress predicted by the six models.
+In Figure~\ref{fig:ANN-Extrapolation}, top left, when deformation alone is extended, we can see that all six models correctly predict the flow stress evolution over the interval $\varepsilon=[0,0.7]$, whereas they diverge beyond a deformation of $\varepsilon=0.7$.
+The behavior of the different models is highly variable, and overall, only the Sigmoid and Tanh models show a physically consistent trend.
+The model with an exponential activation function behaves catastrophically outside the learning range, due to the very nature of the exponential function.
+When deformation and temperature are out of range (top right), behavior is consistent below $\varepsilon=0.7$ and divergent beyond.
+Again, only the Sigmoid and Tanh models show a physically consistent trend above $\varepsilon=0.7$.
+When strain and strain rate are out of range (bottom left in Figure~\ref{fig:ANN-Extrapolation}), the behavior is consistent below $\varepsilon=0.7$, while diverging above $\varepsilon=0.7$.
+The values given by the exponential model are out of range for all strain values.
+Finally, when all inputs are out of range (bottom right), the behavior is consistent and identical except for the ReLU model below $\varepsilon=0.7$.
+It is divergent above $\varepsilon=0.7$, and consistent only for the Sigmoid and Tanh models.}
+
+\textcolor{red}{We can therefore conclude from this extrapolation study that it is important to remain as far as possible within the limits of the neural network's learning domain if the results are to be physically admissible.
+Furthermore, from these analyses, it appears that only the Sigmoid and Tanh models are capable of physically admissible prediction of the flow stress values outside the learning domain.
+This is due in particular to the double saturation of the tanh and sigmoid functions, as illustrated in Figure~\ref{fig:ActFunctions}, when the input values are outside the usual limits.}
 
 %----------------------------------------------------------------------------------
 \section{Numerical simulations using the ANN flow law}\label{sec:Numerical}
@@ -748,7 +782,7 @@ From those results, we can note that, as expected, the Exp activation function i
 Figure~\ref{fig:Num-misesTH} shows the evolution of the von Mises equivalent stress for the center of the cylinder, as a function of the displacement of the top edge of the cylinder for all activation functions.
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.8\columnwidth]{Figures/vonMises}
+\includegraphics[width=0.7\columnwidth]{Figures/vonMises}
 \caption{Von Mises stress evolution with the displacement of the top edge of the cylinder for all activation functions.}
 \label{fig:Num-misesTH}
 \end{figure}
@@ -767,13 +801,16 @@ In addition to the five classic activation functions (Sigmoid, Tanh, ReLU, Softp
 The expressions of the activation functions and their derivatives were used in the neural network writing formalism to calculate the derivatives of the flow stress $\sigma$ with respect to the input variables: strain $\varepsilon$, strain rate $\mdot{\varepsilon}$ and temperature $T$.
 
 Comparison of the ANNs results (in terms of flow stress $\sigma$) with experimental tests carried out on the Gleeble simulator have shown that all five activation functions, with the exception of the ReLU function, give very good results, far superior to those obtained conventionally using formalisms based on analytical flow laws from the literature, such as the Johnson--Cook, Arrhenius or Modified Zerilli--Armstrong models.
+\textcolor{red}{To improve the extrapolation ability of the models, it is recommended to use the Sigmoid and Tanh activation functions. These functions can effectively squash out of bounds values, giving the artificial neural network a more realistic behavior beyond the training bounds.}
 
 Based on the equations describing the mathematical formulation of a neural network with 2 hidden layers, and depending on the nature of these activation functions, we have implemented these constitutive laws in the form of a Fortran 77 subroutine for the Abaqus explicit FE code.
-Can can note that, the same approach can also be used to write a UHARD routine enabling the same flow laws to be used in the Abaqus standard FE code.
+We can note that, the same approach can also be used to write a UHARD routine enabling the same flow laws to be used in the Abaqus standard FE code.
 
 Numerical results obtained from a compression test on a metal cylinder using the Abaqus explicit code have shown that neural network behavior models give very satisfactory results, in line with experimental tests.
-The Exp activation function, which is rarely used in the formulation of artificial neural networks, showed very good results (in agreement with more complex models such as Tanh), while enabling the code user to benefit from the efficiency and ease of implementation of an exponential function.
+The Exp activation function, which is rarely used in the formulation of artificial neural networks, showed very good results (in agreement with more complex models such as Tanh), while enabling the code user to benefit from the efficiency and ease of implementation of an exponential function. \textcolor{red}{These results are satisfactory insofar as the inputs remain entirely within the model's learning domain, since the extrapolation capabilities of the network based on the exponential function are very limited.}
 We then obtain results equivalent in terms of solution quality to sigmoid or tanh-type formulations, while having computation times comparable to a ReLU function.
+
+\textcolor{red}{Overall, this study concludes by recommending the use of the sigmoid activation function for the development of flow laws, since it gives very good results in the identification domain, allows us to leave the learning domain with a behavior that is certainly biased, but physically admissible, and offers very good performance in terms of simulation time when implemented in a finite element code.}
 This study emphasizes the valuable impact of neural network-derived flow laws for numerical finite element simulation executed with a commercial FE code like Abaqus.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
