@@ -72,7 +72,7 @@
 \definecolor{gray50}{gray}{0.50}
 \definecolor{gray40}{gray}{0.40}
 \definecolor{redcolor}{rgb}{0.6,0.0,0.0}
-\definecolor{greencolor}{rgb}{0.0,0.6,0.0}  % Green color
+\definecolor{greencolor}{rgb}{0.0,0.6,0.0}  % green color
 
 % Definition des listings avec langage par défaut Python
 \usepackage{listings}
@@ -236,10 +236,6 @@ These simulations rely on finite element (FE) codes, like Abaqus~\cite{Abaqus}, 
 The accuracy of these simulations is heavily influenced by constitutive equations and the identification of their parameters through experimental tests.
 These tests, conducted under conditions similar to the actual service loading, involve quasi-static or dynamic tensile/compression tests, thermomechanical simulators (e.g., Gleeble~\cite{Lin-2009-MFS, Bennett-2010-C, Kumar-2016-TMS, Yu-2019-RCR}), or impact tests using gas guns or Hopkinson bars~\cite{Kolsky-1949-IMP}.
 The choice and formulation of behavior laws and the accurate identification of coefficients from experiments are crucial for obtaining reliable simulation results.}
-%In industry and research, numerical simulations of the behavior of structures subjected to severe thermomechanical loadings, such as in the case of high-temperature forming of metallic materials, are typically based on the use of commercial finite element (FE) codes, such as Abaqus~\cite{Abaqus}, or academic codes.
-%The results of these numerical simulations are strongly dependent on the constitutive equations and the identification of their parameters from experimental tests, which form the basis of the description of the thermomechanical behavior of materials.
-%The quality and accuracy of the results of any numerical simulation depend on the choice of these behavior laws (thus their mathematical formulation) and the user's ability to identify the coefficients of these behavior laws for a given material by conducting experiments under conditions similar to those encountered during the actual loading of the structure in service that one wishes to design.
-%Depending on the nature of the thermomechanical loadings involved, whether quasi-static, dynamic, at high or low temperatures, these tests are based on quasi-static or dynamic tensile or compression tests, tests on thermomechanical simulators such as Gleeble~\cite{Lin-2009-MFS, Bennett-2010-C, Kumar-2016-TMS, Yu-2019-RCR}, or impact tests using gas guns or Hopkinson bars~\cite{Kolsky-1949-IMP}.
 
 %----------------------------------------------------------------------------------
 \subsection{Constitutive behavior and material flow law}\label{subsec:ConstBehavior}
@@ -253,7 +249,7 @@ The general form of the flow law is expressed through a mathematical equation:}
 \sigma = \Sig\left(\varepsilon, \mdot{\varepsilon}, T\right).\label{eq:GenFlow}
 \end{equation}
 
-\textcolor{blue}{The historical development of behavior laws for simulating hot forming processes, beginning in the 1950s, involved the use of power laws to describe stress-strain relationships, later adapted to incorporate temperature effects.
+\textcolor{blue}{The historical development of behavior laws for simulating hot forming processes, beginning in the 1950s, involved the use of power laws to describe strain/stress relationships, later adapted to incorporate temperature effects.
 In the 1970s, thermomechanical models evolved to include time dependence, linking flow laws to strain rate and time.
 Notable models like the Johnson--Cook~\cite{Johnson-1983-CMD}, Zerilli--Armstrong~\cite{Zerilli-1987-DMB}, and Arrhenius~\cite{Jonas-1969} flow laws emerged and are commonly used in forming process simulations.
 The selection of a flow law for simulating material behavior in finite element analysis is crucial, and it should be based on experimental tests conducted under conditions resembling real-world applications.
@@ -274,8 +270,8 @@ The findings revealed that, among the tested strain rates and temperatures, only
 This approach leverages the capacity of artificial neural networks (ANNs) to act as universal approximators, a concept established by Minsky \eal~\cite{Minsky-1969-PIC} and Hornik \eal~\cite{Hornik-1989-MFN}.
 With this innovative method, there is no longer a prerequisite to predefine a mathematical form for the constitutive equation before its use in a finite element simulation.}
 
-\textcolor{blue}{Artificial neural networks have been investigated in the field of thermomechanical plasticity modeling as reported by Gorji \eal~\cite{Gorji-2020} or Jamli \eal~\cite{Jamli-2019-SNN}. 
-These studies explore the application of ANNs in FE investigation of metal forming processes and their characterization of meta-materials. 
+\textcolor{blue}{Artificial neural networks have been investigated in the field of thermomechanical plasticity modeling as reported by Gorji \eal~\cite{Gorji-2020} or Jamli \eal~\cite{Jamli-2019-SNN}.
+These studies explore the application of ANNs in FE investigation of metal forming processes and their characterization of meta-materials.
 Lin \eal~\cite{Lin-2008} successfully applied an ANN to predict the yield stress of 42CrMo4 steel in hot compression, and ANNs have demonstrated success in predicting the flow stress behavior under hot working conditions~\cite{Stoffel-2018-ANN, Stoffel-2019-NNB}.
 They have also been applied recently in micromechanics for polycrystalline metals by Ali \eal~\cite{Ali-2019-AAN}.
 The domain of application has been extended to dynamic recrystallization of metal alloys by Wang \eal~\cite{Wang-2021-ANN}.
@@ -295,7 +291,7 @@ On the other hand, in an implicit integration scheme, as used in the Abaqus stan
 \subsection{Experimental tests and data}\label{subsec:ExpTests}
 %----------------------------------------------------------------------------------
 
-The material used for this study is a medium-carbon steel, type P20, \textcolor{red}{with the chemical composition presented in Table~\ref{tab:Composition}.
+\textcolor{greencolor}{This study uses} a medium-carbon steel, type P20, \textcolor{red}{with the chemical composition presented in Table~\ref{tab:Composition}.
 \begin{table}[H]
 \caption{Chemical composition of medium-carbon steel. Fe = balance.}
 \newcolumntype{L}{>{\raggedright\arraybackslash}X}
@@ -311,12 +307,13 @@ Wt~\% %MDPI: Not necessary
 \label{tab:Composition}
 \end{table}}
 
-The experimental tests used for this work are identical to those previously published by Tize Mha \eal~\cite{Tize-2023-IEP} and concern hot compression tests, on a Gleeble-3800 thermomechanical simulator, of P20 steel cylinders with an initial diameter of~$\phi_{0}=10$~mm and a height of~$h_{0}=15$~mm.
+\textcolor{greencolor}{The experiments used in this study mirror those previously conducted by Tize Mha \eal~\cite{Tize-2023-IEP}.
+These tests involve hot compression on a Gleeble-3800 of P20 steel cylinders with initial dimensions of ~$\phi_{0}=10$~mm and~$h_{0}=15$~mm.}
 Only the most relevant information about those experiments is reported here after.
-In order to have a more complete knowledge about the compression tests conducted during this study, the interested reader can refer to Tize Mha \eal~\cite{Tize-2023-IEP}.
+In order to have a more complete knowledge about the compression tests conducted during this study, \textcolor{greencolor}{we} refer to Tize Mha \eal~\cite{Tize-2023-IEP}.
 %The imposed displacement was set to~$d=7.5$~mm, resulting in a reduction of~$50\%$ of the initial height.
-Hot compression tests were performed for five temperature levels, namely~$1050~\celsius$, $1100~\celsius$, $1150~\celsius$, $1200~\celsius$, and~$1250~\celsius$, with the six strain rates of~$0.001~\ps$, $0.01~\ps$, $0.1~\ps$, $1~\ps$, $2.0~\ps$, and~$5~\ps$.
-Figure~\ref{fig:RawData} reports a plot of all 30 stress/strain curves extracted from the compression tests experiments.
+\textcolor{greencolor}{Hot compression tests were performed for five temperatures, $[1050,1100,1150,1200,1250]~\celsius$ and six strain rates $[0.001,0.01,0.1,1,2,5]~\ps$.
+Figure~\ref{fig:RawData} reports a plot of all 30 strain/stress curves extracted from the experiments.}
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.9\columnwidth]{Figures/3Cr2Mo-raw}
@@ -324,34 +321,36 @@ Figure~\ref{fig:RawData} reports a plot of all 30 stress/strain curves extracted
 \label{fig:RawData}
 \end{figure}
 The experimental database is composed of all strain/stress data for all 30 couples of strain rate and temperature.
-Each strain/stress curve is composed of 701 equidistant strain values from~$\varepsilon=0.0$ to~$\varepsilon=0.7$ in~$\Delta\varepsilon=0.001$ increments.
-The complete database is therefore composed of~$21~030$ quadruplets ($\varepsilon$, $\mdot{\varepsilon}$, $T$ and~$\sigma$).
+\textcolor{greencolor}{Each strain/stress curve contains 701 equidistant strains $\varepsilon=[0.0,0.7]$ in~$\Delta\varepsilon=0.001$ increments.
+The complete database contains~$21~030$ quadruplets ($\varepsilon$, $\mdot{\varepsilon}$, $T$ and~$\sigma$).}
 This dataset will be used here after to identify the ANN flow law parameters depending on the selected hyperparameters of the ANNs.
 
-Section~\ref{sec:ANN} is dedicated to the presentation of the material flow law based on an artificial neural network.
+\textcolor{greencolor}{Section~\ref{sec:ANN} is dedicated to the presentation of the ANN based flow law.}
 The first part is dedicated to a reminder of the basic notions on ANNs, with a section on the choice of activation functions to be used in the formulation.
-The architecture chosen for the formulation of the flow laws based on a two-hidden-layer network will then be presented, together with the formulation of the derivatives of the output as a function of the input variables.
+\textcolor{greencolor}{The architecture chosen for the formulation of the flow laws based on a two-hidden-layer network will then be presented, together with the formulation of the derivatives of the output with regard to the input variables.}
 The learning methodology and the results in terms of network performance as a function of the activation functions selected will then be presented.
-Section~\ref{sec:Numerical} is dedicated to the numerical simulation of a compression test on the Abaqus explicit FE code, integrating the ANN implemented as a user routine in Fortran.
+\textcolor{greencolor}{Section~\ref{sec:Numerical} is dedicated to the FE simulation of a compression test using the explicit version of Abaqus, integrating the ANN implemented as a user routine in Fortran.}
 The quality of the numerical solution obtained and its performance in terms of computational cost will be analyzed as a function of the network structure.
-Finally, conclusions and future prospects are presented in the last section.
+\textcolor{greencolor}{Finally, the last section concerns conclusions and recommendations.}
 
 %----------------------------------------------------------------------------------
 \section{Artificial Neural Network flow law}\label{sec:ANN}
 %----------------------------------------------------------------------------------
 
-As already proposed in Pantalé \eal~\cite{Pantale-2021-EIN, Pantale-2023-DIA}, the approach used here is to implement the constitutive flow law defined by a trained ANN as a Fortran subroutine into the Abaqus finite element code.
-The ANN is trained on the basis of the Gleeble experiments as already introduced in Section~\ref{sec:Introduction} and is used to compute the value of the flow stress~$\sigma$ as a function of the strain~$\varepsilon$, the strain rate~$\mdot{\varepsilon}$ and the temperature~$T$.
-After the training phase, the weights and biases of the ANN are transcoded into a Fortran subroutine wich is compiled and linked with the libraries of the Abaqus FE code to include the thermomechanical behavior and compute the flow stress and its three derivatives~$\partial\sigma/\partial\varepsilon$, $\partial\sigma/\partial\mdot{\varepsilon}$ and~$\partial\sigma/\partial T$ needed by the radial-return algorithm of the FE code.
+\textcolor{greencolor}{As previously proposed by Pantalé \eal~\cite{Pantale-2021-EIN, Pantale-2023-DIA}, the employed methodology involves embedding the flow law, defined by a trained ANN, into the Abaqus code as a Fortran subroutine.
+The ANN is trained using the experiments, as introduced in Section~\ref{sec:Introduction}, to compute the flow stress~$\sigma$ as a function of~$\varepsilon$, $\mdot{\varepsilon}$ and $T$.
+Following the training phase, the ANN's weights and biases are transcribed into a Fortran subroutine, which is then compiled and linked with Abaqus libraries.
+This integration enables Abaqus to incorporate the thermomechanical behavior by computing the flow stress and its derivatives ($\partial\sigma/\partial\varepsilon$, $\partial\sigma/\partial\mdot{\varepsilon}$, and $\partial\sigma/\partial T$) essential for the radial-return algorithm within the FE code.}
 
 %----------------------------------------------------------------------------------
-\subsection{ANN governing equations}\label{subsec:ANN-eqn}
+\textcolor{greencolor}{\subsection{Artificial Neural Network equations}\label{subsec:ANN-eqn}}
 %----------------------------------------------------------------------------------
 
 %----------------------------------------------------------------------------------
 \subsubsection{Network architecture}\label{subsubsec:ANN-arch}
 %----------------------------------------------------------------------------------
-According to Figure~\ref{fig:ANN-2HL}, the ANN used for computing the flow stress~$\sigma$ from the strain~$\varepsilon$, the strain rate~$\mdot{\varepsilon}$ and the temperature~$T$ is a two hidden layers network.
+
+\textcolor{greencolor}{As illustrated in Figure~\ref{fig:ANN-2HL}, the ANN used for computing $\sigma$ from $\varepsilon$, $\mdot{\varepsilon}$ and $T$ is a two hidden layers network.}
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.55\columnwidth]{Figures/ANN-2HL}
@@ -359,18 +358,19 @@ According to Figure~\ref{fig:ANN-2HL}, the ANN used for computing the flow stres
 \label{fig:ANN-2HL}
 \end{figure}
 The input of the neural network is a three component vector noted~$\overrightarrow{x}$.
-Any hidden layer~\Lay{k}, containing~$n$ neurons, takes a weighted sum of the outputs~$\overrightarrow{\hat{y}}\lay{k-1}$ of the previous layer~\Lay{k-1}, containing~$m$ neurons, given by the following equation:
+\textcolor{greencolor}{Layer~\Lay{k}, composed of~$n$ neurons, computes the weighted sum of the outputs~$\overrightarrow{\hat{y}}\lay{k-1}$ of previous layer~\Lay{k-1}, composed of~$m$ neurons, according the equation:}
 \begin{equation}
 \overrightarrow{y}\lay{k} = \w\lay{k} \cdot \overrightarrow{\hat{y}}\lay{k-1}+ \overrightarrow{b}\lay{k}\label{eq:ANN-y},
 \end{equation}
-where~$\overrightarrow{y}\lay{k}$ contains the internal values of the neurons from summation at the layer level~\Lay{k}, $\w\lay{k}$ is the weight parameter matrix~$[n\times m]$ between layer~\Lay{k} and layer~\Lay{k-1}, $\overrightarrow{b}\lay{k}$ is the bias vector of the layer~\Lay{k} and~$\overrightarrow{\hat{y}}\lay{k-1}$ is the output vector of the layer~\Lay{k-1} after the application of the activation function defined here-after.
-The total number of learning parameters~$N$ for any hidden layer~\Lay{k} is the sum of the number of weights and the number of biases in the layer~\Lay{k}, i.e. $N=n(m+1)$.
-After the summation operation defined by equation (\ref{eq:ANN-y}), each hidden layer~\Lay{k} provides an output vector~$\overrightarrow{\hat{y}\lay{k}}$ calculated from an activation function~$f\lay{k}$ according to the following equation:
+\textcolor{greencolor}{where~$\overrightarrow{y}\lay{k}$ are the internal values of the neurons resulting the summation at the layer level~\Lay{k}, $\w\lay{k}$ is the weights matrix~$[n\times m]$ linking layer~\Lay{k} and layer~\Lay{k-1}, $\overrightarrow{b}\lay{k}$ is the bias vector of layer~\Lay{k} and~$\overrightarrow{\hat{y}}\lay{k-1}$ is the output vector of layer~\Lay{k-1} result of the activation function defined here-after.}
+
+\textcolor{greencolor}{The number of learning parameters~$N$ for any layer~\Lay{k} is the sum of the weights and biases in that layer, expressed as~$N=n(m+1)$.
+Following the summation operation outlined in Equation (\ref{eq:ANN-y}), each hidden layer ~\Lay{k} produces an output vector~$\overrightarrow{\hat{y}}\lay{k}$ computed through an activation function~$f\lay{k}$, as defined by the subsequent equation:}
 \begin{equation}
 \overrightarrow{\hat{y}}\lay{k}=f\lay{k}(\overrightarrow{y}\lay{k}).
 \label{eq:ANN-f}
 \end{equation}
-This process is repeated for each hidden layer of the neural network until we reach the output layer where the formulation differ, so that the output~$s$ of the neural network is given by:
+\textcolor{greencolor}{This process is repeated for each hidden layer of the ANN until we reach the output layer where the formulation differ, so that the output~$s$ of the neural network is given by:}
 \begin{equation}
 s = \overrightarrow{w}^T \dotp \overrightarrow{\hat{y}}\lay{2} + b\label{eq:ANN-s},
 \end{equation}
@@ -381,20 +381,18 @@ As usually done in a regression approach, there is no activation function associ
 \subsubsection{Activation functions}\label{subsubsec:ANN-act}
 %----------------------------------------------------------------------------------
 
-At the heart of ANNs lies the concept of activation functions, pivotal elements that determine how information is transformed within the network's neurons.
-The choice of activation functions is a critical design decision, as these functions greatly influence the network's capacity to learn and represent complex patterns in data.
+\textcolor{greencolor}{At the heart of ANNs lies the concept of activation functions, pivotal elements that determine how information is transformed within the neurons.
+Choosing activation functions is a critical design decision, as these functions greatly influence the network's capacity to learn and represent complex patterns in data.}
 The selection of activation functions is guided by their distinct properties, including non-linearity, differentiability, and computational efficiency.
 
-%An activation function is a function that acts on the output of all neurons of the hidden layers and helps the ANN to learn complex non-linear features of the data to process.
 In regression ANNs, the choice of activation functions is typically driven by the need to approximate continuous output values rather than class labels.
 Many studies have been proposed concerning the right activation function to use depending on the physical problem to solve such as the review proposed by Dubey \eal~\cite{Dubey-2022-AFD} or Jagtap \eal~\cite{Jagtap-2023-HIA}.
-The key aspect of the activation function is its capacity to introduce non-linearity into the network to capture non-linear features.
-Without this non-linearity, the neural network behaves like a linear regression model.
-According to and Hornik \eal~\cite{Hornik-1989-MFN}, the activation function must be bounded, non-constant, monotonically increasing, and continuous to ensure the universal approximation property of the neural network.
+\textcolor{greencolor}{The activation function is essential for introducing non-linearity into a neural network, allowing it to capture non-linear features.
+Without this non-linearity, the network would behave like a linear regression model, as emphasized by Hornik \eal~\cite{Hornik-1989-MFN}.}
 A number of activations functions can be used in neural networks.
 
 In our previous published work~\cite{Pantale-2021-EIN, Pantale-2023-DIA}, we have mostly used the Sigmoid activation function for the ANN flow laws.
-In the present paper, we are going to explore other activations functions and their influence on the final results, up-to the implementation into a finite element code such as the Abaqus software.
+\textcolor{greencolor}{In the present paper, we are going to explore other activations functions and their influence on the final results, up-to the implementation into a FE software.}
 Among the number of activations functions available in the literature, we have selected the six ones reported in Figure~\ref{fig:ActFunctions}.
 \begin{figure}[h!]
 \centering
@@ -403,17 +401,17 @@ Among the number of activations functions available in the literature, we have s
 \label{fig:ActFunctions}
 \end{figure}
 
-The Sigmoid activation function~\cite{Han-1995-ISF}, also known as the logistic activation function, is a widely used activation function in ANNs.
+\textcolor{greencolor}{The Sigmoid activation function~\cite{Han-1995-ISF}, also known as the logistic activation function, is widely used in ANNs.}
 It was originally developed in the field of logistic regression and later adapted for use in neural networks.
 It maps any input to an output in the range~$[0,1]$, making it suitable for tasks where the network's output needs to represent probabilities or values between 0 and 1.
-The Sigmoid activation function~$f(x)$ and its derivative~$f'(x)$ are defined by the following equations:
+\textcolor{greencolor}{The Sigmoid activation function~$f(x)$ and its derivative~$f'(x)$ are defined by:}
 \begin{equation}
 f(x) = \frac{1}{1+\e{-x}}\qquad \text{and}\qquad f'(x) = f(x)\cdotp\left[1-f(x)\right].\label{eq:act-sig}
 \end{equation}
-This activation function has been widely used until the early 1990s.
-Its main advantage is that it is bounded, while its main drawbacks are the vanishing gradient problem, an output not centered on zero and saturation for large input values.
+\textcolor{greencolor}{This function has been widely used until the early 1990s.
+Its main advantage is that it is bounded, while its main drawbacks are the problem of vanishing gradient, a non-centered on zero output and saturation for large input values.}
 
-From 1990s to 2000s, the hyperbolic tangent activation function has been introduced and was preferred for the training of neural networks with respect to the Sigmoid function.
+\textcolor{greencolor}{From 1990s to 2000s, the hyperbolic tangent activation function has been introduced and was preferred to the Sigmoid function for the training of ANNs.}
 The hyperbolic tangent function squashes the output within the range~$[-1,+1]$ and its formulation is given by the following equations:
 \begin{equation}
 f(x) = \frac{\e{x} - \e{-x}}{\e{x} + \e{-x}}\qquad \text{and}\qquad f'(x) = 1 - f(x)^2.\label{eq:act-tanh}
@@ -422,7 +420,7 @@ This function is useful when the network needs to model data with mean-centered 
 The Tanh activation function and the Sigmoid activation function are closely related in the sense that they both introduce non-linearity and squash their inputs into bounded ranges.
 The evaluation of this activation function requires more CPU time than the Sigmoid function since we need to compute two exponential functions ($\e{x}$ and $\e{-x}$) to evaluate~$f(x)$.
 
-ReLU is a widely used activation function in classification ANNs due to its simplicity and computational efficiency, as it involves simple thresholding.
+ReLU is a classic function in classification ANNs due to its simplicity and computational efficiency, as it involves simple thresholding.
 It introduces non-linearity and is computationally efficient.
 It outputs the input if it's positive and zero if it's negative:
 \begin{equation}
@@ -434,7 +432,7 @@ f(x) = \max(0,x)\qquad \text{and}\qquad f'(x) =
 \end{equation}
 ReLU mitigates the vanishing gradient problem better than Sigmoid and Tanh, making it suitable for deep networks.
 It often leads to faster convergence in training deep neural networks.
-The downside of ReLU is with the vanishing gradient problem for all negative inputs.
+\textcolor{greencolor}{The vanishing gradient for all negative input is the major drawback of the ReLU function.}
 
 The Softplus function~\cite{Dugas-2000-ISO} approximates the ReLU activation function smoothly.
 It is defined as the primitive of the Sigmoid function and is written:
@@ -448,8 +446,9 @@ Swish~\cite{Ramachandran-2018-SAF} is a smooth and differentiable activation fun
 \begin{equation}
 f(x) = \frac{x}{1+\e{-x}}\qquad \text{and}\qquad f'(x) = f(x) + \frac{1 - f(x)}{1+\e{-x}}.\label{eq:act-swish}
 \end{equation}
-Swish has shown improved performance in some network architectures, especially when used as an activation function in deep learning models.
-The simplicity of Swish and its similarity to ReLU make it easy for practitioners to replace ReLUs with Swish units in any neural network.
+\textcolor{greencolor}{Swish demonstrates enhanced performance in certain network architectures, particularly when employed as an activation function in deep learning models, and its simplicity and similarity to ReLU facilitate straightforward substitution in neural networks by practitioners.}
+%Swish has shown improved performance in some network architectures, especially when used as an activation function in deep learning models.
+%The simplicity of Swish and its similarity to ReLU make it easy for practitioners to replace ReLUs with Swish units in any neural network.
 Even if the expression of the Swish function and its derivative seems more complex that the Softplus function presented earlier, the CPU time is lower.
 
 Looking at the shape of the ReLU and Swish functions, apart from those classic activations functions already widely used in ANNs, we propose here-after to add an extra one, based on the exponential function and simply defined by:
@@ -457,28 +456,28 @@ Looking at the shape of the ReLU and Swish functions, apart from those classic a
 f(x) = \e{x}\qquad \text{and}\qquad f'(x) = f(x).\label{eq:act-exp}
 \end{equation}
 We found very few literature papers about the use of the exponential activation function in ANN, but it has been reported that in specific domains and mathematical modeling tasks, exponential activations can be highly relevant and effective.
-The idea here is to use the property so that the derivative of the activation function is defined only by the activation function itself, as well as for the Sigmoid and Tanh, but with the simplest formulation.
-This will reduce the CPU cost since we need to compute both the function and its derivative for our implementation in the FE code into a very CPU intensive subroutine, because of the explicit integration scheme used in Abaqus explicit.
+\textcolor{greencolor}{The idea here is to use the property so that the derivative expression is defined only by the function itself, as well as for the Sigmoid and Tanh, but with the simplest formulation.}
+\textcolor{greencolor}{This will reduce the CPU cost since we need to compute both the function and its derivative for our implementation in the FE code into a very CPU intensive subroutine, due to the explicit integration}.
 
 Of course there is no limitation to the use of alternative activation functions in ANNs and there exist some much more complicated such as the one proposed by Shen \eal~\cite{Shen-2021-NNA} which is a combination of a floor, an exponential and a step function.
 Those authors have proved that a three hidden layer with this activation function can approximate any Hölder continuous function with an exponential approximation rate.
 
-In order to compare the different activation functions, all six activations functions presented earlier will be used in the rest of this paper and results will be compared in terms of efficiency,  precision of the models and computational cost.
+\textcolor{greencolor}{In order to compare the different activation functions, all six activations functions presented earlier will be used in the rest of this paper and efficiency, precision of the models and computational cost will be analyzed}.
 
 %----------------------------------------------------------------------------------
 \subsubsection{Pre and post processing architecture}\label{subsubsec:ANN-pre}
 %----------------------------------------------------------------------------------
 
-As we are using activations functions enhancing vanishing gradients for large values, the three inputs as well as the output must be normalized within the range~$[0,1]$ to avoid ill-conditioning of the neural network.
+\textcolor{greencolor}{As we are using activations functions that mitigate vanishing gradients for large values, it is essential to normalize the three inputs and the output within the range of~$[0,1]$ to prevent ill-conditioning of the neural network.}
+%As we are using activations functions enhancing vanishing gradients for large values, the three inputs as well as the output must be normalized within the range~$[0,1]$ to avoid ill-conditioning of the neural network.
 This range has been chosen because we will use the Sigmoid activation function as one of the six proposed formulations, while this later squashed the output to the lowest range~$[0,1]$.
 
 Concerning the inputs, the range $\Delta[~]$ and minimum $[~]_{0}$ values of the input quantities are very different according to the data presented in Section~\ref{sec:Introduction}.
 In our case, the range and minimum values of the strain are~$\Delta\varepsilon=0.7$ and~$\varepsilon_{0}=0$ respectively.
 Concerning the strain rate~$\Delta\mdot{\varepsilon}=4.999~\ps$ and~$\mdot{\varepsilon}_{0}=0.001~\ps$ and concerning the temperature~$\Delta T=200~\celsius$ and~$T_{0}=1050~\celsius$.
 
-As proposed in Pantalé \eal~\cite{Pantale-2021-EIN}, and with regard to considerations concerning the effect of the strain rate over the evolution of the flow stress, we first substitute~$\log(\mdot{\varepsilon}/\mdot{\varepsilon}_{0})$ for the value of~$\mdot{\varepsilon}$.
-Then in a second time, we remap the strain, strain rate and temperature within the range~$[0,1]$.
-Therefore, the three components of the input vector~$\overrightarrow{x}$ are calculated from the strain~$\varepsilon$, the strain rate~$\mdot{\varepsilon}$ and the temperature~$T$ using the following expressions:
+\textcolor{greencolor}{As introduced in Pantalé \eal~\cite{Pantale-2021-EIN}, and with regard to considerations concerning the influence of the strain rate over the evolution of the stress, we first substitute~$\log(\mdot{\varepsilon}/\mdot{\varepsilon}_{0})$ for~$\mdot{\varepsilon}$.
+Then in a second time, we remap the inputs $x_i$ within the range~$[0,1]$, so that the input vector~$\overrightarrow{x}$ is calculated from $\varepsilon$, $\mdot{\varepsilon}$ and $T$ using the following expressions:}
 \begin{equation}
 \overrightarrow{x}=
 \begin{cases}
@@ -490,8 +489,8 @@ x_{3} = \left(T-T_{0}\right)/\Delta T
 \end{equation}
 where~$[~]_{0}$ and~$\Delta[~]$ are the minimum and range values of the corresponding field.
 
-The output of the model, \ie the flow stress~$\sigma$, enhances the same kind of behavior with~$\Delta\sigma=153.7~\MPa$ and~$\sigma_{0}=0~\MPa$.
-Therefore, we apply the same procedure as previously presented and the flow stress~$\sigma$ is related to the output~$s$ of the ANN according to the following relation:
+\textcolor{greencolor}{The flow stress~$\sigma$, enhances the same behavior with~$\Delta\sigma=153.7~\MPa$ and~$\sigma_{0}=0~\MPa$.}
+\textcolor{greencolor}{Therefore, we apply the same procedure as previously presented and the flow stress~$\sigma$ is related to the output~$s$ according to the expression:}
 \begin{equation}
 \sigma = \Delta\sigma.s + \sigma_{0}.\label{eq:ANN-output}
 \end{equation}
@@ -500,14 +499,14 @@ Therefore, we apply the same procedure as previously presented and the flow stre
 \subsubsection{Derivatives of the Neural Network}\label{subsubsec:ANN-der}
 %----------------------------------------------------------------------------------
 
-As introduced in Section~\ref{sec:Introduction}, in order to implement the ANN as a Fortran subroutine in the Abaqus FE code, we need to compute the three derivatives of the flow stress~$\sigma$ with respect to the strain~$\varepsilon$, the strain rate~$\mdot{\varepsilon}$ and the temperature~$T$.
-We can compute those derivatives using differentiation of the output of the network with respect to the inputs.
+\textcolor{greencolor}{As presented in Section~\ref{sec:Introduction}, in order to implement the ANN as a Fortran routine in Abaqus, we need to compute the three derivatives of $\sigma$ with respect to t$\varepsilon$, $\mdot{\varepsilon}$ and $T$.}
+\textcolor{greencolor}{We can compute those derivatives using differentiation of the output with respect to the inputs.}
 As illustrated in Figure~\ref{fig:ANN-2HL}, we are using here a two hidden layers neural network.
 Therefore, as Equations (\ref{eq:ANN-y}-\ref{eq:ANN-s}) are used to compute~$\overrightarrow{y}\lay{k}$ and~$\overrightarrow{\hat{y}}\lay{k}$ for each hidden layer and the output~$s$ from the input vector~$\overrightarrow{x}$ of the ANN we can write the derivative~$\overrightarrow{s}'$ of a two hidden layers network as follow:
 \begin{equation}
 \overrightarrow{s}' = \w\lay{1}^T \dotp\left[\left(\w\lay{2}^T \dotp \left(\overrightarrow{w}^T \circ f'(\overrightarrow{y}\lay{2})\right)\right) \circ f'(\overrightarrow{y}\lay{1})\right] \label{eq:ANN-der},
 \end{equation}
-where~$f'\left(\square\right)$ is the derivative of the activation function defined by Equations (\ref{eq:act-sig}-\ref{eq:act-exp}) and~$\circ$ is the Hadamard product (also known as the element-wise product).
+\textcolor{greencolor}{where~$f'\left(\square\right)$ is the activation function's derivative introduced by Equations (\ref{eq:act-sig}-\ref{eq:act-exp}) and~$\circ$ is the Hadamard product (the so called element-wise product).}
 Because of the pre and post processing of the values introduced in Section~\ref{subsubsec:ANN-pre}, the derivative of the flow stress~$\sigma$ with respect to the inputs~$\varepsilon$, $\mdot{\varepsilon}$ and~$T$ is then given by:
 \begin{equation}
 \begin{cases}
@@ -525,12 +524,13 @@ Finally, Equations (\ref{eq:ANN-y}-\ref{eq:ANN-s}), (\ref{eq:ANN-input}-\ref{eq:
 \subsection{Training of the ANN on experimental data}\label{subsec:train}
 %----------------------------------------------------------------------------------
 
-The Python program used for training the neural network was created with the dedicated Python library, Tensorflow~\cite{Tensorflow-2015}.
-The training phase employed the Adaptive Moment Estimation (ADAM) optimizer~\cite{Kingma-2015-AMS} and the Mean Square Error to evaluate the loss function.
+\textcolor{greencolor}{The Python program, developed with the dedicated library Tensorflow~\cite{Tensorflow-2015}, utilized the Adaptive Moment Estimation (ADAM) optimizer~\cite{Kingma-2015-AMS} and the Mean Square Error for assessing the loss function during the training phase.}
+%The Python program used for training the neural network was created with the dedicated Python library, Tensorflow~\cite{Tensorflow-2015}.
+%The training phase employed the Adaptive Moment Estimation (ADAM) optimizer~\cite{Kingma-2015-AMS} and the Mean Square Error to evaluate the loss function.
 \textcolor{red}{With regard to our previous publications about ANN constitutive flow law~\cite{Pantale-2021-EIN}, we have made the choice to arbitrary fix some hyper-parameters of the ANNs, so to use a two hidden layers ANN with 15 neurons for the first hidden layer and 7 neurons for the second hidden layer.}
 There is a total number \textcolor{red}{of~$180$} trainable parameters to optimize.
 As we have 3 inputs and 1 output, we reference each of the ANNs using the notation \textcolor{red}{3-15-7-1-act}, where act refers the activation function used for the model.
-All six models have been trained in simultaneously for the same number of iterations (\textcolor{red}{$6~000$} iterations, lasting around \textcolor{red}{1 hour}) on a PowerEdge R730 server running Ubuntu 22.04 LTS 64 bits, 96 GB of Ram, with 2 Intel Xeon CPU E5-2650 2.20GHz.
+All six models underwent parallel training for a consistent number of iterations (\textcolor{red}{$6~000$} iterations, lasting around \textcolor{red}{1 hour}), on a PowerEdge R730 server running Ubuntu 22.04 LTS 64-bit, equipped with 96 GB of RAM and 2 Intel Xeon CPU E5-2650 2.20GHz processors.
 
 \textcolor{red}{Concerning the dataset used for the training of the ANN, as already introduced in the previous sections, this dataset is composed of~$21~030$ quadruplets ($\varepsilon$, $\mdot{\varepsilon}$, $T$ and~$\sigma$) acquired during the Gleeble experiments described in Section \ref{subsec:ExpTests}.
 A chunk of $75\%$ of the dataset is used for training while the rest is used for the test during the training of the ANN.
@@ -538,7 +538,7 @@ All details about this procedure can be found in Pantalé~\cite{Pantale-2023-SSF
 \textcolor{red}{Regarding the training procedure, specifically the starting point, all models are initialized with precisely identical weights and biases.
 However, due to different activation functions, the initial solution varies from one model to another.}
 
-In this study, the error evaluation of the models is based on the Mean Square Error ($\MSE$), the Root Mean Square Error ($\RMSE$) and the Mean Absolute Relative Error ($\MARE$) given by the following equations:
+\textcolor{greencolor}{Error evaluation of the models uses the Mean Square Error ($\MSE$), the Root Mean Square Error ($\RMSE$) and the Mean Absolute Relative Error ($\MARE$) given by the following equations:}
 \begin{equation}
 \begin{cases}
 \MSE = \frac{1}{N} \sum_{i=1}^{N} \left(\square_i^e - \square_i\right)^2\\
@@ -547,7 +547,7 @@ In this study, the error evaluation of the models is based on the Mean Square Er
 \end{cases},
 \label{eq:Errors}
 \end{equation}
-where~$N$ is the \textcolor{red}{total number of points for the computation of those errors}, $\square_i$ is the~$i$th value predicted by the neural network, and~$\square_i^e$ is the corresponding experimental value coming from the experimental tests.
+\textcolor{greencolor}{where~$N$ is the \textcolor{red}{total number of points for the computation of those errors}, $\square_i$ is the~$i$th output value of the ANN, and~$\square_i^e$ is the corresponding experimental value.}
 
 Figure~\ref{fig:ANN-conv} show the evolution of the common logarithm of the Mean Square Error, \ie $\log_{10}(\MSE)$, of the output $s$ of the ANN during the training, \textcolor{red}{evaluated using only the test data ($25\%$ of the dataset)}.
 \begin{figure}[h!]
@@ -556,12 +556,12 @@ Figure~\ref{fig:ANN-conv} show the evolution of the common logarithm of the Mean
 \caption{Global convergence of the six ANN models.}
 \label{fig:ANN-conv}
 \end{figure}
-From this figure we can compare the convergence rates of the different networks and consider that we have reached a stationary state for all the ANNs analyzed after \textcolor{red}{$6~000$} iterations.
+By examining this figure, we can assess and compare the convergence rates of various ANNs, concluding that a stable state was more or less achieved for all analyzed ANNs after \textcolor{red}{$6~000$} iterations.
 As expected, the ReLU activation function gives the worst results with a final value of~$\MSE=32\times10^{-6}$, mainly due to the low number of neurons and the fact that this function is a piecewise linear function and not able to efficiently approximate the nonlinear behavior of the material.
 The other five activation functions enhance more or less the same behavior.
 The final value of the $\MSE$ is pretty much the same for all of them, and around $\MSE=12\times10^{-6}$.
 %The Tanh Swish, and Exp activation functions are slightly less powerful than the Sigmoid, and Softplus functions.
-Table~\ref{tab:Training} shows the main results from the training phase of the ANNs, \textcolor{red}{the errors reported in this Table are computed using the whole dataset (both train and test parts)}.
+Table~\ref{tab:Training} reports the results of the training phase, \textcolor{red}{the errors reported in this Table are computed using the whole dataset (both train and test parts)}.
 \begin{table}[h!]
 \caption{Comparison of the models' error depending on the activation function used.\label{tab:Training}}
 \begin{tabular}{l|c|c|cc|cc|cc}
@@ -578,37 +578,35 @@ Exp & 1:03 & 12.843 & 0.688 & 1.147 & 1.176 & / & 1.362 & 1\\
 \end{tabular}
 \end{table}
 
-We can see from this later that all models need more or less the same training time to complete the requested number of iterations.
-We can see that the complexity of the activation functions has an influence on the training time, since it is greater for the Swish and Softplus functions than for the ReLU one.
+\textcolor{greencolor}{From the data, it is evident that all models require approximately the same training time to complete the specified number of iterations, with the complexity of activation functions influencing this duration; notably, the training time is a bit greater for Swish and Softplus functions compared to ReLU.}
 We also reported in this table the real values of the~$\RMSE$ and~$\MARE$ concerning the flow stress~$\sigma$ \textcolor{red}{using the whole experimental database}.
 From this later we can see that the~$\RMSE$ is about~$0.6~\MPa$ for all activation functions except the ReLU one where the value is above~$0.8~\MPa$.
 Concerning the $\MARE$, the value of all models is around~$1\%$ while it is more than~$2\%$ for the ReLU function.
-Of the six activation functions used in this study, the Exponential function gives the best results in terms of solution quality, while the ReLU function gives the worst, \textcolor{red}{as reported by computing the global error using the following expression $\Delta E=\sqrt{\RMSE^2+\MARE^2}$}.
+Of the six activation functions, the Exponential function gives the best results in terms of solution quality, while the ReLU function gives the worst, \textcolor{red}{as reported by computing the global error using the following expression $\Delta E=\sqrt{\RMSE^2+\MARE^2}$}.
 \textcolor{red}{But we must note that the results of all models, except the ReLU one are very close at the end of the training stage, as illustrated in Figure~\ref{fig:ANN-conv} and Table~\ref{tab:Training}.
 Depending on when the train is stopped, a particular model may yield the best performance due to the varying slopes of convergence among the models.}
 %From another point of view, the Swish activation function requires the most training time, but the difference is not discriminatory given the performance at this stage of the study.
 
-Figure~\ref{fig:ANNFit} shows a comparison of the experimental flow stress measures during the Gleeble compression tests (reported as dots in Figure~\ref{fig:ANNFit}) and the predicted flow stress~$\sigma$ using the ANN for the strain rate~$\mdot{\varepsilon}=1~\ps$.
+Figure~\ref{fig:ANNFit} reports a comparison of the experimental stress acquired during the Gleeble compression tests (reported as dots in Figure~\ref{fig:ANNFit}) and the predicted stress~$\sigma$ using the ANN for the strain rate~$\mdot{\varepsilon}=1~\ps$.
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.95\columnwidth]{Figures/ANN-fit}
 \caption{Comparison of experimental (dots) and the flow stress~$\sigma$ predicted by the ANN (continuous line) for~$\mdot{\varepsilon}=1~\ps$.}
 \label{fig:ANNFit}
 \end{figure}
-From this later, we can see that all ANNs models are able to reproduce quite well the experimental results.
-The exception is concerning the ReLU activation function where it can be seen from the results in Figure~\ref{fig:ANNFit} that the predicted flow stress enhances a piecewise linear behavior.
+\textcolor{greencolor}{From this observation, we can infer that all ANNs effectively replicate the experimental results, except for the ReLU activation function. In the case of ReLU, as depicted in Figure~\ref{fig:ANNFit}, the predicted flow stress exhibits a piecewise linear behavior.}
 
-Among the six activation functions proposed, as already presented in Section~\ref{subsubsec:ANN-act}, the exponential activation function is interesting since the computation of the function and its derivative in the same step requires only one evaluation of the exponential function because $f'(x)=f(x)$ as reported in Equation (\ref{eq:act-exp}).
+\textcolor{greencolor}{Of the six activation functions introduced, as detailed in Section~\ref{subsubsec:ANN-act}, the exponential function stands out due to its unique feature. The computation of the function and its derivative in a single step necessitates only one evaluation of the exponential function, as indicated by $f'(x)=f(x)$ in Equation (\ref{eq:act-exp}).}
 If we analyze the results reported in Table~\ref{tab:Training} and Figure~\ref{fig:ANNFit} concerning the exponential activation function, we can see that this one has a $\RMSE=0.688~\MPa$, $\MARE=1.176\%$ and the global behavior of the flow stress for~$\mdot{\varepsilon}=1~\ps$ is similar to the Sigmoid, Tanh, Swish or Softplus functions.
 
-In terms of global performance of the \textcolor{red}{3-15-7-1-exp} ANN, Figure~\ref{fig:ANN-ExpFit} shows the comparison of the experimental data (dots) and the ANN flow stress for all strain rates and all temperatures defined in Section~\ref{subsec:ExpTests}.
+In terms of global performance of the \textcolor{red}{3-15-7-1-exp} ANN, Figure~\ref{fig:ANN-ExpFit} reports the comparison of the experimental data (dots) and the ANN flow stress for all strain rates and temperatures defined in Section~\ref{subsec:ExpTests}.
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.95\columnwidth]{Figures/3Cr2Mo-3-15-7-1-exponential}
-\caption{Comparison of experimental (dots) and the flow stress~$\sigma$ predicted by the ANN (continuous line) using the Exponential activation function.}
+\caption{Comparison of experimental (dots) and ANN predicted flow stresses (continuous line) using the Exponential activation function.}
 \label{fig:ANN-ExpFit}
 \end{figure}
-We can see that over the whole range of temperatures~$T$ and strain rates~$\mdot{\varepsilon}$, the performance of the model based on an exponential function is very good overall.
+We can see that over the whole temperatures~$T$ and strain rates~$\mdot{\varepsilon}$, the performance of the model based on an exponential function is very good overall.
 This model will therefore be retained for the remainder of the comparative study.
 
 \textcolor{red}{It is well known that artificial neural networks are able to interpolate data correctly within their learning domain, but behave unsatisfactorily when we wish to evaluate results outside the boundaries of this learning domain.
@@ -641,19 +639,21 @@ This is due in particular to the double saturation of the tanh and sigmoid funct
 \section{Numerical simulations using the ANN flow law}\label{sec:Numerical}
 %----------------------------------------------------------------------------------
 
-Now that the flow stress models have been defined, trained and the results analyzed in terms of their relative performance in reproducing the experimental behavior recorded during compression tests on Gleeble, we will now numerically implement these models in the Abaqus FE code in the form of user routines in Fortran in order to perform numerical simulations.
-After training phase, all optimized internal parameters of the ANN are stored in HDF5~\cite{Koranne-2011-HDF} files which are read by a Python program in charge to write the Fortran 77 subroutine for the Abaqus FE code.
-Implementation of the flow law in the Abaqus FE code can be done using either a VUMAT (we will use the Explicit version of the Abaqus code for simulating our examples), where one have to program the computation of the stress tensor $\Sig_{1}$ at the end of the increment from the value of the stress tensor at the beginning of the increment $\Sig_{0}$ and the increment of strain $\Delta\Eps$.
-This is usually done using a predictor/corrector algorithm based for example on the radial--return integration scheme~\cite{Ponthot-2002-USU}, and the curious reader can refer for example to Ming \eal~\cite{Ming-2018-ERV} for the details concerning this implementation using the Safe--Newton integration scheme or Liang \eal~\cite{Liang-2022} for a dedicated application concerning the Arrhenius flow law.
-During the corrector phase, one have to evaluate the flow stress~$\sigma$ of the material as a function of the strain~$\varepsilon$, the strain rate~$\mdot{\varepsilon}$ and the temperature~$T$ at the current integration point of the element, and to solve a non-linear equation defining the plastic corrector expression and involving the computation of the three derivatives of the flow stress ~$\partial\sigma/\partial\varepsilon$, $\partial\sigma/\partial\mdot{\varepsilon}$ and~$\partial\sigma/\partial T$.
-The computation of those four quantities is usually done in a subroutine called VUHARD for the Abaqus explicit FE code.
-This is the function we have to implement depending on the structure and the activation functions of the ANN flow law.
+Now that the flow stress models have been defined, trained and the results analyzed in terms of their relative performance in reproducing the experimental behavior recorded during compression tests on Gleeble, we will now numerically implement these models in Abaqus as a user routine in Fortran in order to perform numerical simulations.
+\textcolor{greencolor}{Following training, the optimized internal parameters of the ANNs are saved in HDF5~\cite{Koranne-2011-HDF} files. Subsequently, a Python program is responsible for reading these files and generating the Fortran 77 subroutine for Abaqus.}
+
+\textcolor{greencolor}{The implementation of a user flow law in Abaqus FE code, specifically using the Explicit version, involves programming the computation of the stress tensor $\Sig_{1}$ based on the stress tensor at the beginning of the increment $\Sig_{0}$ and the strain increment $\Delta\Eps$. 
+A predictor/corrector algorithm, such as the radial-return integration scheme~\cite{Ponthot-2002-USU}, is typically employed. 
+For detailed implementations, Ming \eal~\cite{Ming-2018-ERV} discusses the Safe-Newton integration scheme, and Liang \eal~\cite{Liang-2022} focuses on an application related to the Arrhenius flow law. 
+During the corrector phase, the flow stress $\sigma$ must be evaluated at the current integration point as a function of $\varepsilon$, $\mdot{\varepsilon}$, and $T$. 
+This process involves solving a non-linear equation defining the plastic corrector expression and computing three derivatives of the flow stress: $\partial\sigma/\partial\varepsilon$, $\partial\sigma/\partial\mdot{\varepsilon}$, and $\partial\sigma/\partial T$. 
+Typically, the subroutine VUHARD in the Abaqus explicit is responsible for computing these quantities, and its implementation depends on the structure and activation functions of the ANN.}
 
 %----------------------------------------------------------------------------------
 \subsection{Numerical implementation of the ANN flow law}\label{subsec:Num-impl}
 %----------------------------------------------------------------------------------
 
-In order to have a better understanding of the implementation of the VUHARD subroutine, we are going to detail the procedure used to compute the flow stress and the three derivatives in one step as a function of the triplet of input values~$\varepsilon$, $\mdot{\varepsilon}$, $T$.
+\textcolor{greencolor}{In order to have a better understanding of the implementation of the VUHARD subroutine, we are going to detail the computation of the flow stress and the three derivatives in one step as a function of the triplet of input values~$\varepsilon$, $\mdot{\varepsilon}$, $T$.}
 We suppose that the current input is stored in a three components vector $\overrightarrow{\xi}^T=\left[\varepsilon, \log(\mdot{\varepsilon}/\mdot{\varepsilon}_{0}), T\right]$.
 We also suppose that the minimum and range values of the inputs, used during the learning phase, are stored in two vectors $\overrightarrow{\xi}_{0}$ and $\Delta\overrightarrow{\xi}$ respectively.
 % The minimum and ran values of the stress are also stored in two variables $\sigma_{0}$ and $\sigma_{max}$ respectively.
@@ -667,7 +667,7 @@ where $\oslash$ is the Hadamard division operator.
 \begin{equation}
 \overrightarrow{y}\lay{1}=\w\lay{1}\cdot\overrightarrow{x}+\overrightarrow{b}\lay{1}.\label{eq:ANNi2}
 \end{equation}
-\item Then, from Equation (\ref{eq:ANN-f}) and the expression of the activation function used for the first layer of the ANN and defined by one of the Equations (\ref{eq:act-sig}-\ref{eq:act-exp}), we compute the vector:
+\item Then, from Equation (\ref{eq:ANN-f}) and the expression of the activation function in the first layer and defined by one of the Equations (\ref{eq:act-sig}-\ref{eq:act-exp}), we compute the vector:
 \begin{equation}
 \overrightarrow{\hat{y}}\lay{1}=f\lay{1}(\overrightarrow{y}\lay{1}).\label{eq:ANNi3}
 \end{equation}
@@ -849,7 +849,7 @@ This study emphasizes the valuable impact of neural network-derived flow laws fo
 %
 %Written informed consent for publication must be obtained from participating patients who can be identified (including by the patients themselves). Please state ``Written informed consent has been obtained from the patient(s) to publish this paper'' if applicable.}
 
-\dataavailability{Source files of the numerical simulations and the ANN flow laws are available from the author.}
+\dataavailability{Source files of the numerical simulations and the ANN flow laws are available from~\cite{Pantale-2023-SSF}.}
 
 \acknowledgments{The author thanks the team of Pr. Mohammad Jahazi from the Ecole Technique Supérieure de Montréal, Canada, for providing the experimental data used in Section~\ref{subsec:ExpTests}.}
 
@@ -887,7 +887,7 @@ VUHARD & Abaqus explicit user subroutine \\
 \textcolor{red}{\section[\appendixname~\thesection]{Python code to compute stress and derivatives\label{sec:Appendix1}}}
 %----------------------------------------------------------------------------------
 
-\textcolor{red}{The implementation using Python of Equations (\ref{eq:ANNi1}) to (\ref{eq:ANNi7}) is proposed in Figure~\ref{fig:PythonStress}, where the arguments of the functions are \var{xi} for the $\overrightarrow{\xi}$ vector, \var{deps} for $\mdot{\varepsilon}$, \var{Act} for the activation function and \var{dAct} for the derivative of the activation function.}
+\textcolor{red}{The implementation using Python of Equations (\ref{eq:ANNi1}) to (\ref{eq:ANNi7}) is proposed in Figure~\ref{fig:PythonStress}, where the arguments of the functions are \var{xi} for the $\overrightarrow{\xi}$ vector, \var{deps} for $\mdot{\varepsilon}$, \var{Act} for the activation function and \var{dAct} for its derivative.}
 \begin{figure}[h!]
 \begin{PythonListing}
 def stressAndDerivatives(xi, deps, Act, dAct):
