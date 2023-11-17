@@ -169,15 +169,15 @@ backgroundcolor=\color{gray95}
 %\conference{} % An extended version of a conference paper
 
 % Abstract (Do not insert blank lines, i.e. \\)
-\abstract{Numerical finite element (FE) methods have been effective in simulating thermomechanical forming processes, yet challenges arise when applying them to new materials due to nonlinear behaviors.
+\abstract{Finite element (FE) simulations have been effective in simulating thermomechanical forming processes, yet challenges arise when applying them to new materials due to nonlinear behaviors.
 To address this, machine learning techniques and artificial neural networks play an increasingly vital role in developing complex models.
-This paper presents an innovative approach to parameter identification in flow laws, utilizing an artificial neural network that learns directly from test data and automatically generates a Fortran 77 subroutine for Abaqus standard/explicit FE code.
+This paper presents an innovative approach to parameter identification in flow laws, utilizing an artificial neural network that learns directly from test data and automatically generates a Fortran subroutine for the Abaqus standard or explicit FE codes.
 We investigate the impact of activation functions on prediction and computational efficiency by comparing Sigmoid, Tanh, ReLU, Swish, Softplus, and the less common Exponential function.
 Despite its infrequent use, the Exponential function demonstrates noteworthy performance and reduced computation times.
 Model validation involves comparing predictive capabilities with experimental data from compression tests, and numerical simulations confirm the numerical implementation in the Abaqus explicit FE code.}
 
 % Keywords
-\keyword{ANN Flow Law; Constitutive Behavior; Numerical Implementation; User Hardening; Activation Functions; Abaqus FE code}
+\keyword{Constitutive Behavior; ANN Flow Law; Numerical Implementation; User Hardening; Activation Functions; Abaqus}
 
 % The fields PACS, MSC, and JEL may be left empty or commented out if not applicable
 %\PACS{J0101}
@@ -231,69 +231,64 @@ Model validation involves comparing predictive capabilities with experimental da
 \section{Introduction}\label{sec:Introduction}
 %----------------------------------------------------------------------------------
 
-In industry and research, numerical simulations of the behavior of structures subjected to severe thermomechanical loadings, such as in the case of high-temperature forming of metallic materials, are typically based on the use of commercial finite element (FE) codes, such as Abaqus~\cite{Abaqus}, or academic codes.
-The results of these numerical simulations are strongly dependent on the constitutive equations and the identification of their parameters from experimental tests, which form the basis of the description of the thermomechanical behavior of materials.
-The quality and accuracy of the results of any numerical simulation depend on the choice of these behavior laws (thus their mathematical formulation) and the user's ability to identify the coefficients of these behavior laws for a given material by conducting experiments under conditions similar to those encountered during the actual loading of the structure in service that one wishes to design.
-Depending on the nature of the thermomechanical loadings involved, whether quasi-static, dynamic, at high or low temperatures, these tests are based on quasi-static or dynamic tensile or compression tests, tests on thermomechanical simulators such as Gleeble~\cite{Lin-2009-MFS, Bennett-2010-C, Kumar-2016-TMS, Yu-2019-RCR}, or impact tests using gas guns or Hopkinson bars~\cite{Kolsky-1949-IMP}.
+\textcolor{blue}{In industry and research, numerical simulations are commonly employed to predict the behavior of structures under severe thermomechanical conditions, such as high-temperature forming of metallic materials.
+These simulations rely on finite element (FE) codes, like Abaqus~\cite{Abaqus}, or academic codes.
+The accuracy of these simulations is heavily influenced by constitutive equations and the identification of their parameters through experimental tests.
+These tests, conducted under conditions similar to the actual service loading, involve quasi-static or dynamic tensile/compression tests, thermomechanical simulators (e.g., Gleeble~\cite{Lin-2009-MFS, Bennett-2010-C, Kumar-2016-TMS, Yu-2019-RCR}), or impact tests using gas guns or Hopkinson bars~\cite{Kolsky-1949-IMP}.
+The choice and formulation of behavior laws and the accurate identification of coefficients from experiments are crucial for obtaining reliable simulation results.}
+%In industry and research, numerical simulations of the behavior of structures subjected to severe thermomechanical loadings, such as in the case of high-temperature forming of metallic materials, are typically based on the use of commercial finite element (FE) codes, such as Abaqus~\cite{Abaqus}, or academic codes.
+%The results of these numerical simulations are strongly dependent on the constitutive equations and the identification of their parameters from experimental tests, which form the basis of the description of the thermomechanical behavior of materials.
+%The quality and accuracy of the results of any numerical simulation depend on the choice of these behavior laws (thus their mathematical formulation) and the user's ability to identify the coefficients of these behavior laws for a given material by conducting experiments under conditions similar to those encountered during the actual loading of the structure in service that one wishes to design.
+%Depending on the nature of the thermomechanical loadings involved, whether quasi-static, dynamic, at high or low temperatures, these tests are based on quasi-static or dynamic tensile or compression tests, tests on thermomechanical simulators such as Gleeble~\cite{Lin-2009-MFS, Bennett-2010-C, Kumar-2016-TMS, Yu-2019-RCR}, or impact tests using gas guns or Hopkinson bars~\cite{Kolsky-1949-IMP}.
 
 %----------------------------------------------------------------------------------
 \subsection{Constitutive behavior and material flow law}\label{subsec:ConstBehavior}
 %----------------------------------------------------------------------------------
 
-Thermomechanical behavior laws within numerical integration algorithms~\cite{Ponthot-2002-USU} make use of flow law functions which, due to the nature of the materials and the phenomena involved (work hardening, dislocation movement, structural hardening, phase transformations, etc.), are highly non-linear.
-The validity of these flow laws is limited to a certain range of deformations, strain rates and temperatures.
-For the implementation of a thermomechanical simulation of a forming process, the behavior laws define the dependence of the material's flow stress on three input variables: the strain, the strain rate, and the temperature, so that the general form of the flow law can be expressed with the following equation:
+\textcolor{blue}{Thermomechanical behavior laws used in numerical integration algorithms such as the radial-return method~\cite{Ponthot-2002-USU} involve nonlinear flow law functions due to the complex nature of materials and associated phenomena like work hardening, dislocation movement, structural hardening, and phase transformations.
+The applicability of these flow laws is confined to specific ranges of deformations, strain rates, and temperatures.
+In the context of simulating forming processes, these behavior laws dictate how the material's flow stress~$\sigma$ depends on three key input variables: strain~$\varepsilon$, strain rate~$\mdot{\varepsilon}$, and temperature~$T$.
+The general form of the flow law is expressed through a mathematical equation:}
 \begin{equation}
-\sigma = \Sig\left(\varepsilon, \mdot{\varepsilon}, T\right),\label{eq:GenFlow}
+\sigma = \Sig\left(\varepsilon, \mdot{\varepsilon}, T\right).\label{eq:GenFlow}
 \end{equation}
-where~$\sigma$ is the flow stress of the material, $\varepsilon$ is the strain, $\mdot{\varepsilon}$ is the strain rate, $T$ is the temperature and~$\Sig()$ represents the flow law that expresses the non-linear relationship between the stress and the thermomechanical variables ($\varepsilon$, $\mdot{\varepsilon}$ and~$T$).
 
-Historically, the first mathematical formulations for the simulation of hot forming processes appeared in the 1950s.
-The flow laws used were essentially power laws, describing the relationship between stress and strain.
-These laws were later adapted to take into account the effect of temperature.
-From the 1970s, thermomechanical models evolved to include time dependence.
-This means that thermomechanical flow laws became dependent on strain rate and time.
-The Johnson--Cook flow law~\cite{Johnson-1983-CMD}, the Zerilli--Armstrong~\cite{Zerilli-1987-DMB} and the Arrhenius flow law~\cite{Jonas-1969}, which are commonly used in the simulation of forming processes, were developed at this time.
-Subsequently, researchers began to focus on modeling the effects of plastic flow in high-temperature metals and improving previous models to overcome some of their limitations.
-This led to the development of modified versions of previous models, notably the Johnson--Cook model~\cite{Duc-Toan-2012-MJC, Li-2013-MJC, Zhang-2015}, the Zerilli--Armstrong model~\cite{He-2014-MZA, Gurusamy-2017-OTP, Yu-2020-FSM} and the Arrhenius model~\cite{Zhan-2014-CMF, Liang-2022}, as well as comparative studies of the respective abilities of these models to cope with increasingly complex thermomechanical behavior~\cite{Liu-2020-FSP}.
-Of all these models, the Johnson--Cook model is generally the most widely used because it is the simplest to identify and use, requiring the determination of just 5 parameters~\cite{Zeng-2022-TCR}.
-Nevertheless, a large number of works in the literature point to the shortcomings of flow law models such as Johnson--Cook's when numerical simulations require a high degree of correlation with experiment and when thermomechanical conditions become severe.
+\textcolor{blue}{The historical development of behavior laws for simulating hot forming processes, beginning in the 1950s, involved the use of power laws to describe stress-strain relationships, later adapted to incorporate temperature effects.
+In the 1970s, thermomechanical models evolved to include time dependence, linking flow laws to strain rate and time.
+Notable models like the Johnson--Cook~\cite{Johnson-1983-CMD}, Zerilli--Armstrong~\cite{Zerilli-1987-DMB}, and Arrhenius~\cite{Jonas-1969} flow laws emerged and are commonly used in forming process simulations.
+The selection of a flow law for simulating material behavior in finite element analysis is crucial, and it should be based on experimental tests conducted under conditions resembling real-world applications.
+Researchers face a challenge in choosing the appropriate flow law after characterizing experimental behavior.
+This decision is influenced by the availability of flow laws within the finite element analysis software being used.
+For instance, users of Abaqus FE code~\cite{Abaqus} may prefer the native implementation of the Johnson--Cook flow law.
+Opting for alternative flow laws like Zerilli--Armstrong or Arrhenius requires users to personally compute material yield stress~$\sigma$ through a VUMAT subroutine in Fortran, which is time-consuming, demands expertise in flow law formulations, numerical integration, Fortran programming, and model development and testing~\cite{Gao-2007-FRT, Ming-2018-ERV, Liang-2022}.}
 
-Whatever the choice made regarding the formulation of the flow law to be used, it is imperative, based on experimental tests conducted in laboratory settings under conditions closely resembling real-world applications, to identify the parameters of these flow laws by methods typically grounded in approaches for minimizing the experimental/simulated discrepancy.
-The primary challenge confronting researchers, once the experimental behavior characterization tests have been carried out, concerns the actual selection of the flow law to use, based on the observations made on these test results.
-This selection is greatly influenced by the availability of these flow laws within the finite element analysis software employed.
-For example, a user of the Abaqus FE code is more inclined to opt for a Johnson--Cook flow law, since it is natively implemented.
-The choice of an alternative form of flow law, such as Zerilli--Armstrong or Arrhenius, necessitates, in the case of employing the Abaqus software, that the user personally undertake the computation of material yield stress~$\sigma$ through a VUMAT subroutine in Fortran, as proposed by Gao \eal~\cite{Gao-2007-FRT}, Ming \eal~\cite{Ming-2018-ERV} for a Johnson-Cook flow law, or Liang \eal~\cite{Liang-2022} for an Arrhenius-type flow law.
-This process is time-consuming, demands a certain level of expertise, and requires knowledge concerning flow law formulations, numerical integration, Fortran programming, as well as the development and testing of models.
+\textcolor{blue}{Developing and implementing a user behavior law on the Abaqus code involves calculating~$\sigma$, defined by Equation~(\ref{eq:GenFlow}), and its three derivatives with respect to $\varepsilon$, $\mdot{\varepsilon}$, and $T$.
+This process becomes complex and time-consuming with increasing flow law complexity.
+The choice of a flow law for simulating thermomechanical forming is influenced by both material behavior and process physics, but primarily by the flow laws available in the FE code.
+The decision often prioritizes the availability of a flow law over the quality of the model, making the choice of flow law a critical factor in the simulation process.
+In Tize Mha \eal~\cite{Tize-2023-IEP}, several flow laws were investigated through experimental compression tests on a Gleeble-3800 thermomechanical simulator for P20 medium-carbon steel used in foundry mold production.
+The examined flow laws included Johnson--Cook, Modified Zerilli--Armstrong, Arrhenius, Hensel--Spittle, and PTM.
+The findings revealed that, among the tested strain rates and temperatures, only the Arrhenius flow law accurately replicated the compression behavior of the material with a fidelity suitable for industrial applications.}
 
-The development and numerical implementation of a user behavior law on the Abaqus code requires the calculation of the flow stress~$\sigma$ as defined by Equation (\ref{eq:GenFlow}) and the three derivatives of this flow stress with respect to strain~$\varepsilon$, strain rate~$\mdot{\varepsilon}$ and temperature~$T$.
-This evaluation can quickly become relatively complex and time-consuming as the complexity of the flow law increases.
-The choice of a flow law formulation to be used for the simulation of a thermomechanical forming problem is therefore guided by two distinct and complementary aspects: on the one hand by the material behavior and the consideration of process physics, but above all by the availability of this flow law in the FE code used for the simulation.
-The choice of flow law to be used is mainly guided by the list of flow laws available in the finite element code used, and very often this choice is made to the detriment of model quality.
+\textcolor{blue}{Based on all these considerations, we have presented a novel approach, as outlined in Pantalé \eal~\cite{Pantale-2021-EIN, Pantale-2023-DIA}, for formulating flow laws.
+This approach leverages the capacity of artificial neural networks (ANNs) to act as universal approximators, a concept established by Minsky \eal~\cite{Minsky-1969-PIC} and Hornik \eal~\cite{Hornik-1989-MFN}.
+With this innovative method, there is no longer a prerequisite to predefine a mathematical form for the constitutive equation before its use in a finite element simulation.}
 
-As an example, Tize Mha \eal~\cite{Tize-2023-IEP}, identified several flow laws from experimental compression tests carried out on a Gleeble-3800 thermomechanical simulator for a P20 medium-carbon steel intended for the production of foundry molds.
-The work considered several flow laws and their identification from the results of these tests, including Johnson--Cook, Modified Zerilli--Armstrong, Arrhenius, Hensel--Spittle and PTM.
-The results showed that over the range of strain rates and temperatures tested, only the Arrhenius flow law was capable of reproducing the compression behavior of this material with a fidelity compatible with industrial applications.
-
-Based on all these considerations, we have recently proposed in Pantalé \eal~\cite{Pantale-2021-EIN, Pantale-2023-DIA} a new approach for the formulation of flow laws based on the ability of artificial neural networks (ANNs) to behave as universal approximators as reported by Minsky \eal~\cite{Minsky-1969-PIC} and Hornik \eal~\cite{Hornik-1989-MFN}.
-With this new approach, it is no longer necessary a priory to postulate a mathematical form of the constitutive equation for use in a finite element simulation.
-
-Artificial neural networks have been the subject of extensive research in the field of thermomechanical plasticity modeling as reported by Gorji \eal~\cite{Gorji-2020} or Jamli \eal~\cite{Jamli-2019-SNN}.
-These studies have delved into the utilization of ANNs for finite element analysis of metal forming processes and their application in characterizing meta-materials.
-Lin \eal~\cite{Lin-2008} applied an ANN to predict the yield stress of 42CrMo4 steel in hot compression tests, revealing a strong correlation between experimental findings and model predictions.
-ANNs have been successfully applied to predict the flow stress behavior of materials under hot working conditions~\cite{Stoffel-2018-ANN, Stoffel-2019-NNB}.
+\textcolor{blue}{Artificial neural networks have been investigated in the field of thermomechanical plasticity modeling as reported by Gorji \eal~\cite{Gorji-2020} or Jamli \eal~\cite{Jamli-2019-SNN}. 
+These studies explore the application of ANNs in FE investigation of metal forming processes and their characterization of meta-materials. 
+Lin \eal~\cite{Lin-2008} successfully applied an ANN to predict the yield stress of 42CrMo4 steel in hot compression, and ANNs have demonstrated success in predicting the flow stress behavior under hot working conditions~\cite{Stoffel-2018-ANN, Stoffel-2019-NNB}.
 They have also been applied recently in micromechanics for polycrystalline metals by Ali \eal~\cite{Ali-2019-AAN}.
 The domain of application has been extended to dynamic recrystallization of metal alloys by Wang \eal~\cite{Wang-2021-ANN}.
 Some approaches mix analytical and ANN flow laws such as for example the work proposed by Cheng \eal~\cite{Cheng-2022-CWD} where the authors use a combination of an ANN with the Arrhenius equation to model the behavior of a GH4169 superalloy.
-ANN behavior laws can also include chemical composition of materials in their formulation to increase the performance during simulation hot deformation for high-Mn steels with different concentrations as proposed by Churyumov \eal~\cite{Churyumov-2023-PTS}.
+ANN behavior laws can also include chemical composition of materials in their formulation to increase the performance during simulation hot deformation for high-Mn steels with different concentrations as proposed by Churyumov \eal~\cite{Churyumov-2023-PTS}.}
 
-In the majority of the works presented in the previous paragraph, the authors work either on the proposal of a neural network model and its identification in relation to experimental tests, or on the use of a neural network within the framework of a numerical simulation of a process.
-The approach proposed here is more complete in that we identify a neural network from experimental tests (in our case, cylinder compression tests on a Gleeble thermomechanical simulator), then identify the network parameters.
-We then implement this network in the Abaqus FE code in the form of a user subroutine in Fortran, and subsequently validate and use this network in numerical simulations.
+In the majority of the works presented in the previous paragraph, the authors work either on the proposal of a neural network model and its identification in relation to experimental tests, or on the use of ANNs within the framework of a numerical simulation of a process.
+The approach proposed here is more complete in that we identify a neural network from experimental tests (in our case, cylinder compression tests performed on a Gleeble device), then identify the network parameters.
+We then implement this ANN in Abaqus as a user subroutine in Fortran, and subsequently validate and use this network in numerical simulations.
 This can be done for either Abaqus explicit or Abaqus standard since we can generate the Fortran subroutines for both versions of the code.
 We therefore work on the entire calculation chain, from experimental data acquisition, through network formulation and learning, to implementation and use.
 
-In this study, we will focus only on the use of the Abaqus explicit FE code, since the computation of the flow stress in an explicit integration scheme becomes very CPU intensive due to the integration method, and variations in the performance of this implementation have a significant impact on the total CPU time.
+In this study, we will focus only on the use of the explicit version of Abaqus, since the computation of the flow stress in an explicit integration scheme becomes very CPU intensive due to the integration method, and variations in the performance of this implementation have a significant impact on the total CPU time.
 On the other hand, in an implicit integration scheme, as used in the Abaqus standard, most of the time is spent in inverting the linear system of equations, therefore variations in the performance of the stress computation has no influence on the final result, hoping that the stress is calculated correctly.
 
 %----------------------------------------------------------------------------------
