@@ -231,7 +231,7 @@ Model validation involves comparing predictive capabilities with experimental da
 \section{Introduction}\label{sec:Introduction}
 %----------------------------------------------------------------------------------
 
-\textcolor{blue}{In industry and research, numerical simulations are commonly employed to predict the behavior of structures under severe thermomechanical conditions, such as high-temperature forming of metallic materials.
+\textcolor{red}{In industry and research, numerical simulations are commonly employed to predict the behavior of structures under severe thermomechanical conditions, such as high-temperature forming of metallic materials.
 These simulations rely on finite element (FE) codes, like Abaqus~\cite{Abaqus}, or academic codes.
 The accuracy of these simulations is heavily influenced by constitutive equations and the identification of their parameters through experimental tests.
 These tests, conducted under conditions similar to the actual service loading, involve quasi-static or dynamic tensile/compression tests, thermomechanical simulators (e.g., Gleeble~\cite{Lin-2009-MFS, Bennett-2010-C, Kumar-2016-TMS, Yu-2019-RCR}), or impact tests using gas guns or Hopkinson bars~\cite{Kolsky-1949-IMP}.
@@ -241,7 +241,7 @@ The choice and formulation of behavior laws and the accurate identification of c
 \subsection{Constitutive behavior and material flow law}\label{subsec:ConstBehavior}
 %----------------------------------------------------------------------------------
 
-\textcolor{blue}{Thermomechanical behavior laws used in numerical integration algorithms such as the radial-return method~\cite{Ponthot-2002-USU} involve nonlinear flow law functions due to the complex nature of materials and associated phenomena like work hardening, dislocation movement, structural hardening, and phase transformations.
+\textcolor{red}{Thermomechanical behavior laws used in numerical integration algorithms such as the radial-return method~\cite{Ponthot-2002-USU} involve nonlinear flow law functions due to the complex nature of materials and associated phenomena like work hardening, dislocation movement, structural hardening, and phase transformations.
 The applicability of these flow laws is confined to specific ranges of deformations, strain rates, and temperatures.
 In the context of simulating forming processes, these behavior laws dictate how the material's flow stress~$\sigma$ depends on three key input variables: strain~$\varepsilon$, strain rate~$\mdot{\varepsilon}$, and temperature~$T$.
 The general form of the flow law is expressed through a mathematical equation:}
@@ -249,7 +249,7 @@ The general form of the flow law is expressed through a mathematical equation:}
 \sigma = \Sig\left(\varepsilon, \mdot{\varepsilon}, T\right).\label{eq:GenFlow}
 \end{equation}
 
-\textcolor{blue}{The historical development of behavior laws for simulating hot forming processes, beginning in the 1950s, involved the use of power laws to describe strain/stress relationships, later adapted to incorporate temperature effects.
+\textcolor{red}{The historical development of behavior laws for simulating hot forming processes, beginning in the 1950s, involved the use of power laws to describe strain/stress relationships, later adapted to incorporate temperature effects.
 In the 1970s, thermomechanical models evolved to include time dependence, linking flow laws to strain rate and time.
 Notable models like the Johnson--Cook~\cite{Johnson-1983-CMD}, Zerilli--Armstrong~\cite{Zerilli-1987-DMB}, and Arrhenius~\cite{Jonas-1969} flow laws emerged and are commonly used in forming process simulations.
 The selection of a flow law for simulating material behavior in finite element analysis is crucial, and it should be based on experimental tests conducted under conditions resembling real-world applications.
@@ -258,7 +258,7 @@ This decision is influenced by the availability of flow laws within the finite e
 For instance, users of Abaqus FE code~\cite{Abaqus} may prefer the native implementation of the Johnson--Cook flow law.
 Opting for alternative flow laws like Zerilli--Armstrong or Arrhenius requires users to personally compute material yield stress~$\sigma$ through a VUMAT subroutine in Fortran, which is time-consuming, demands expertise in flow law formulations, numerical integration, Fortran programming, and model development and testing~\cite{Gao-2007-FRT, Ming-2018-ERV, Liang-2022}.}
 
-\textcolor{blue}{Developing and implementing a user behavior law on the Abaqus code involves calculating~$\sigma$, defined by Equation~(\ref{eq:GenFlow}), and its three derivatives with respect to $\varepsilon$, $\mdot{\varepsilon}$, and $T$.
+\textcolor{red}{Developing and implementing a user behavior law on the Abaqus code involves calculating~$\sigma$, defined by Equation~(\ref{eq:GenFlow}), and its three derivatives with respect to $\varepsilon$, $\mdot{\varepsilon}$, and $T$.
 This process becomes complex and time-consuming with increasing flow law complexity.
 The choice of a flow law for simulating thermomechanical forming is influenced by both material behavior and process physics, but primarily by the flow laws available in the FE code.
 The decision often prioritizes the availability of a flow law over the quality of the model, making the choice of flow law a critical factor in the simulation process.
@@ -266,11 +266,11 @@ In Tize Mha \eal~\cite{Tize-2023-IEP}, several flow laws were investigated throu
 The examined flow laws included Johnson--Cook, Modified Zerilli--Armstrong, Arrhenius, Hensel--Spittle, and PTM.
 The findings revealed that, among the tested strain rates and temperatures, only the Arrhenius flow law accurately replicated the compression behavior of the material with a fidelity suitable for industrial applications.}
 
-\textcolor{blue}{Based on all these considerations, we have presented a novel approach, as outlined in Pantalé \eal~\cite{Pantale-2021-EIN, Pantale-2023-DIA}, for formulating flow laws.
+\textcolor{red}{Based on all these considerations, we have presented a novel approach, as outlined in Pantalé \eal~\cite{Pantale-2021-EIN, Pantale-2023-DIA}, for formulating flow laws.
 This approach leverages the capacity of artificial neural networks (ANNs) to act as universal approximators, a concept established by Minsky \eal~\cite{Minsky-1969-PIC} and Hornik \eal~\cite{Hornik-1989-MFN}.
 With this innovative method, there is no longer a prerequisite to predefine a mathematical form for the constitutive equation before its use in a finite element simulation.}
 
-\textcolor{blue}{Artificial neural networks have been investigated in the field of thermomechanical plasticity modeling as reported by Gorji \eal~\cite{Gorji-2020} or Jamli \eal~\cite{Jamli-2019-SNN}.
+\textcolor{red}{Artificial neural networks have been investigated in the field of thermomechanical plasticity modeling as reported by Gorji \eal~\cite{Gorji-2020} or Jamli \eal~\cite{Jamli-2019-SNN}.
 These studies explore the application of ANNs in FE investigation of metal forming processes and their characterization of meta-materials.
 Lin \eal~\cite{Lin-2008} successfully applied an ANN to predict the yield stress of 42CrMo4 steel in hot compression, and ANNs have demonstrated success in predicting the flow stress behavior under hot working conditions~\cite{Stoffel-2018-ANN, Stoffel-2019-NNB}.
 They have also been applied recently in micromechanics for polycrystalline metals by Ali \eal~\cite{Ali-2019-AAN}.
@@ -594,9 +594,11 @@ Figure~\ref{fig:ANNFit} reports a comparison of the experimental stress acquired
 \caption{Comparison of experimental (dots) and the flow stress~$\sigma$ predicted by the ANN (continuous line) for~$\mdot{\varepsilon}=1~\ps$.}
 \label{fig:ANNFit}
 \end{figure}
-\textcolor{greencolor}{From this observation, we can infer that all ANNs effectively replicate the experimental results, except for the ReLU activation function. In the case of ReLU, as depicted in Figure~\ref{fig:ANNFit}, the predicted flow stress exhibits a piecewise linear behavior.}
+\textcolor{greencolor}{From this observation, we can infer that all ANNs effectively replicate the experimental results, except for the ReLU activation function.
+In the case of ReLU, as depicted in Figure~\ref{fig:ANNFit}, the predicted flow stress exhibits a piecewise linear behavior.}
 
-\textcolor{greencolor}{Of the six activation functions introduced, as detailed in Section~\ref{subsubsec:ANN-act}, the exponential function stands out due to its unique feature. The computation of the function and its derivative in a single step necessitates only one evaluation of the exponential function, as indicated by $f'(x)=f(x)$ in Equation (\ref{eq:act-exp}).}
+\textcolor{greencolor}{Of the six activation functions introduced, as detailed in Section~\ref{subsubsec:ANN-act}, the exponential function stands out due to its unique feature.
+The computation of the function and its derivative in a single step necessitates only one evaluation of the exponential function, as indicated by $f'(x)=f(x)$ in Equation (\ref{eq:act-exp}).}
 If we analyze the results reported in Table~\ref{tab:Training} and Figure~\ref{fig:ANNFit} concerning the exponential activation function, we can see that this one has a $\RMSE=0.688~\MPa$, $\MARE=1.176\%$ and the global behavior of the flow stress for~$\mdot{\varepsilon}=1~\ps$ is similar to the Sigmoid, Tanh, Swish or Softplus functions.
 
 In terms of global performance of the \textcolor{red}{3-15-7-1-exp} ANN, Figure~\ref{fig:ANN-ExpFit} reports the comparison of the experimental data (dots) and the ANN flow stress for all strain rates and temperatures defined in Section~\ref{subsec:ExpTests}.
@@ -640,13 +642,14 @@ This is due in particular to the double saturation of the tanh and sigmoid funct
 %----------------------------------------------------------------------------------
 
 Now that the flow stress models have been defined, trained and the results analyzed in terms of their relative performance in reproducing the experimental behavior recorded during compression tests on Gleeble, we will now numerically implement these models in Abaqus as a user routine in Fortran in order to perform numerical simulations.
-\textcolor{greencolor}{Following training, the optimized internal parameters of the ANNs are saved in HDF5~\cite{Koranne-2011-HDF} files. Subsequently, a Python program is responsible for reading these files and generating the Fortran 77 subroutine for Abaqus.}
+\textcolor{greencolor}{Following training, the optimized internal parameters of the ANNs are saved in HDF5~\cite{Koranne-2011-HDF} files.
+Subsequently, a Python program is responsible for reading these files and generating the Fortran 77 subroutine for Abaqus.}
 
-\textcolor{greencolor}{The implementation of a user flow law in Abaqus FE code, specifically using the Explicit version, involves programming the computation of the stress tensor $\Sig_{1}$ based on the stress tensor at the beginning of the increment $\Sig_{0}$ and the strain increment $\Delta\Eps$. 
-A predictor/corrector algorithm, such as the radial-return integration scheme~\cite{Ponthot-2002-USU}, is typically employed. 
-For detailed implementations, Ming \eal~\cite{Ming-2018-ERV} discusses the Safe-Newton integration scheme, and Liang \eal~\cite{Liang-2022} focuses on an application related to the Arrhenius flow law. 
-During the corrector phase, the flow stress $\sigma$ must be evaluated at the current integration point as a function of $\varepsilon$, $\mdot{\varepsilon}$, and $T$. 
-This process involves solving a non-linear equation defining the plastic corrector expression and computing three derivatives of the flow stress: $\partial\sigma/\partial\varepsilon$, $\partial\sigma/\partial\mdot{\varepsilon}$, and $\partial\sigma/\partial T$. 
+\textcolor{greencolor}{The implementation of a user flow law in Abaqus FE code, specifically using the Explicit version, involves programming the computation of the stress tensor $\Sig_{1}$ based on the stress tensor at the beginning of the increment $\Sig_{0}$ and the strain increment $\Delta\Eps$.
+A predictor/corrector algorithm, such as the radial-return integration scheme~\cite{Ponthot-2002-USU}, is typically employed.
+For detailed implementations, Ming \eal~\cite{Ming-2018-ERV} discusses the Safe-Newton integration scheme, and Liang \eal~\cite{Liang-2022} focuses on an application related to the Arrhenius flow law.
+During the corrector phase, the flow stress $\sigma$ must be evaluated at the current integration point as a function of $\varepsilon$, $\mdot{\varepsilon}$, and $T$.
+This process involves solving a non-linear equation defining the plastic corrector expression and computing three derivatives of the flow stress: $\partial\sigma/\partial\varepsilon$, $\partial\sigma/\partial\mdot{\varepsilon}$, and $\partial\sigma/\partial T$.
 Typically, the subroutine VUHARD in the Abaqus explicit is responsible for computing these quantities, and its implementation depends on the structure and activation functions of the ANN.}
 
 %----------------------------------------------------------------------------------
@@ -703,29 +706,30 @@ The Fortran subroutine is compiled with double precision directive using the Int
 \subsection{Numerical simulations and comparisons}\label{subsec:Num-sim}
 %----------------------------------------------------------------------------------
 
-To compare the influence of choosing different type of activation functions on the numerical results using the Abaqus explicit software, we have made the choice to simulate the compression test presented in Section~\ref{subsec:ExpTests}.
-We consider therefore a medium-carbon steel, type P20 cylinder in compression with an initial diameter of~$\phi_{0}=10$~mm and a height of~$h_{0}=15$~mm as reported in Figure~\ref{fig:Num-model}, where only the superior half part of cylinder is represented, as the solution is symmetrical on either side of a cutting plane located halfway up the cylinder.
+\textcolor{greencolor}{To compare the influence of choosing different activation functions on the numerical results using Abaqus explicit, we have made the choice to model the compression test presented earlier in~\ref{subsec:ExpTests}.
+We consider therefore a medium-carbon steel, type P20 cylinder in compression with the initial dimensions~$\phi_{0}=10$~mm and~$h_{0}=15$~mm} as reported in Figure~\ref{fig:Num-model}, where only the superior half part of cylinder is represented, as the solution is symmetrical on either side of a cutting plane located halfway up the cylinder.
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.25\columnwidth]{Figures/CyCompression}
 \caption{Half axis-symmetric model for the numerical simulation of the compression of a cylinder.}
 \label{fig:Num-model}
 \end{figure}
-At the end of the compression process, the final height of the cylinder is~$h_f=9$~mm, \ie the displacement of the top edge is $d=6$~mm and the reduction is $40\%$ of the total height.
-The displacement is applied with a constant speed and the simulation time is fixed to $t=1$~s, \ie the strain rate is between $\mdot{\varepsilon}=0.5~\ps$ and $\mdot{\varepsilon}=1~\ps$ during the simulation at the center of the specimen.
+\textcolor{greencolor}{At the end of the process, the height of the cylinder is~$h_f=9$~mm, \ie the top edge displacement is $d=6$~mm and the reduction is $40\%$ of the total height.}
+The displacement is applied with a constant speed and the simulation time is fixed to $t=1$~s, \ie the strain rate is in the \textcolor{greencolor}{range $\mdot{\varepsilon}=[0.5,1.0]~\ps$} at the center of the specimen.
 %The six ANN flow laws will be compared here-after.
-The mesh consists of $600$ axis-symmetric thermomechanical quadrilateral finite elements with 4 nodes and reduced integration (CAX4RT) with 30 elements along the axis direction and 20 elements along the radial direction.
+\textcolor{greencolor}{The mesh comprises 600 axis-symmetric thermomechanical quadrilateral finite elements (CAX4RT) featuring 4 nodes and reduced integration.
+It includes 20 elements along the radial direction and 30 elements along the axis.}
 The element size is $0.25\times0.25~\text{mm}^2$.
 Only reduced integration is available in Abaqus explicit for an axis-symmetric structure.
-The cylinder is between two rigid surfaces and a Coulomb friction law with a friction coefficient $\mu=0.15$ is used.
-A global mass scaling with a value of $M_s=1000$ is used to reduce the computing time by a factor of $31.6$.
+\textcolor{greencolor}{The anvils are modeled as two rigid surfaces and a Coulomb friction law with $\mu=0.15$ is used.}
+\textcolor{greencolor}{To reduce the computing time, a global mass scaling with a value of $M_s=1000$ is used.}
 The initial temperature of the material is set to $T_{0}=1150\celsius$, and we use an explicit adiabatic solver for the simulation of the compression process.
 %The elastic properties of the material are fixed to a Young modulus $E=207~\GPa$ and a Poisson ration $\nu=0.285$.
 %Conforming to the applied boundaries conditions used for the simulation of the compression test, and, the average strain rate during the compression for the center element of the specimen is around~$\mdot{\overline{\varepsilon}^p}=0.8~\ps$.
 All simulations are performed using the 2022 version of the Abaqus explicit solver on the same computer as the one used for the learning of the ANNs in Section~\ref{subsec:train}.
 Simulations are performed with the double precision version of the solver without any parallelization directive to better compare the CPU times.
 
-Figure~\ref{fig:Num-peeqCP} shows a comparison of the equivalent plastic strain $\overline{\varepsilon}^p$ contourplot for the six activation functions tested, at the end of the simulation (when the displacement of the top edge is $d=6$~mm).
+\textcolor{greencolor}{Figure~\ref{fig:Num-peeqCP} shows, at the end of the simulation (when the displacement of the top edge is $d=6$~mm), a comparison of the equivalent plastic strain $\overline{\varepsilon}^p$ contourplot for the six activation functions.}
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.9\columnwidth]{Figures/PeeqHalf}
@@ -734,8 +738,8 @@ Figure~\ref{fig:Num-peeqCP} shows a comparison of the equivalent plastic strain 
 \end{figure}
 %In this figure, only the top half of the cylinders is shown, as the solution is symmetrical on either side of a cutting plane located halfway up the cylinder.
 From this later, we can clearly see that all activation functions gives almost the exact same results and the choice of any of the available ANN has no influence on the values and isovalues contourplot reported in Figure~\ref{fig:Num-peeqCP}.
-The slight difference in the scale of values for each case is due to the value of the plastic deformation in the contact zone between the cylinder and the upper surface at the corner.
-As shown here after, the actual values at the center of the specimen are virtually identical.
+%The slight difference in the scale of values for each case is due to the value of the plastic strain in the contact zone between the cylinder and the upper surface at the corner.
+%As shown here after, the actual values for the central element of the specimen are virtually identical.
 Figure~\ref{fig:Num-misesCP} shows a comparison of the von Mises equivalent stress $\overline{\sigma}$ contourplot.
 \begin{figure}[h!]
 \centering
@@ -744,7 +748,7 @@ Figure~\ref{fig:Num-misesCP} shows a comparison of the von Mises equivalent stre
 \label{fig:Num-misesCP}
 \end{figure}
 In this figure, we can see that the solutions differ slightly both in terms of maximum stress value and stress isovalues distribution.
-Nevertheless, the disparities in values remain minimal and below $1\%$ between the six different models.
+%Nevertheless, the disparities in values remain minimal and below $1\%$ between the six different models.
 
 In order to compare the different models quantitatively, Table~\ref{tab:Simulation} reports the values of the plastic strain $\overline{\varepsilon}^p$, the von Mises equivalent stress $\overline{\sigma}$ and the temperature $T$ for the element located at the center of the specimen at the end of the simulation.
 \begin{table}[h!]
@@ -762,47 +766,49 @@ Exp & 540 & 1~077~954 & 1996 & 0.757 & 85.6 & 1164.1 \\
 \bottomrule
 \end{tabular}
 \end{table}
-From the values reported in this Table, we can see that the models differ a little concerning the equivalent stress, the equivalent plastic strain (below $1\%$) and the temperature (below $0.1\%$).
+\textcolor{greencolor}{From the values reported in this Table, we can see that the models differ a little concerning the equivalent stress (below $1\%$), the equivalent plastic strain (below $1\%$) and the temperature (below $0.02\%$).}
 %In fact the Sigmoid, Tanh and Exp activation functions give almost the same results concerning the plastic strain and temperature results.
 It is important to note that one origin of the differences between the models comes from the fact that in the end of the simulation, the plastic strain $\overline{\varepsilon}^p$ is greater than $0.7$, so the model has to extrapolate the yield stress with respect to the data used for the training phase.
 This increases the discrepancy between the models, since each extrapolates the results from the training domain differently with respect to its internal formulation.
 
-In Table~\ref{tab:Simulation} we also have reported the total number of increments $N_{inc}$ needed to complete the simulation along with the total CPU time.
+In Table~\ref{tab:Simulation} we also have reported the number of increments $N_{inc}$ needed to complete the simulation along with the total CPU time.
 We remark that the number of increment varies from one activation function to another one, since the convergence of the model differ because it takes into account the stress in the computation of the stable time increment.
 From these two, we can calculate the number of increments performed per second and propose a classification from the fastest to the slowest ANN, where: ReLU is the fastest (with 2353 iteration per second) and Softplus is the slowest (with 1200 iteration per second) of the proposed models (two times slower than the ReLU one).
 Those results are directly linked to the complexity of the expression of the activation function and its derivative as introduced in Section~\ref{subsubsec:ANN-act}.
 For example, we can note that a simulation using the Sigmoid activation function requires 1~092~001 increments and the model contains 400 under integrated CAX4RT elements, therefore, we will have 436~800~400 computations of the code presented in Figure~\ref{fig:FortranSigmoid}.
 From those results, we can note that, as expected, the Exp activation function is very efficient in terms of CPU computation time (with 1996 iteration per second) as it is just second after the very light ReLU function, but gives quite good results as reported in Table~\ref{tab:Simulation} which is not the case of the ReLU function.
 
-Figure~\ref{fig:Num-misesTH} shows the evolution of the von Mises equivalent stress for the center of the cylinder, as a function of the displacement of the top edge of the cylinder for all activation functions.
+\textcolor{greencolor}{Figure~\ref{fig:Num-misesTH} shows the evolution of the von Mises stress vs. displacement of the top edge for the center of the cylinder for all activation functions.}
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\columnwidth]{Figures/vonMises}
-\caption{Von Mises stress evolution with the displacement of the top edge of the cylinder for all activation functions.}
+\caption{Von Mises stress vs. displacement of the top edge of the cylinder for all activation functions.}
 \label{fig:Num-misesTH}
 \end{figure}
-The other three activations functions enhancing the same behavior as the Exp and Sigmoid ones %have been removed to simplify the graph.
+%The other three activations functions enhancing the same behavior as the Exp and Sigmoid ones %have been removed to simplify the graph.
 From this later, we can see that all activation functions give almost the same results, while the ReLU enhances a piecewise behavior due to its formulation and the low number of neurons used for the ANN.
 This behavior has an influence on the precision of the ANN flow law, and we suggest avoiding the use of the ReLU activation function in this kind of application.
-Any other type of activation function give quite good results for this application, while among them, the use of the Exp activation function gives precise results and minimum computation time for numerical applications.
+Any other type of activation function give quite good results for this application, while among them, the use of the Exp activation function gives accurate results and minimum computation time for numerical applications.
 
 %----------------------------------------------------------------------------------
-\section{Conclusions and future work}\label{sec:Conclusions}
+\section{Conclusions and major remarks}\label{sec:Conclusions}
 %----------------------------------------------------------------------------------
 
-In this paper, several artificial neural network-based flow laws for thermomechanical modeling of the behavior of a P20 medium-alloy steel have been identified.
-These six laws differ only in the type of activation function used, although they share the same architecture in terms of the number of hidden layers and the number of neurons on each hidden layer.
+\textcolor{greencolor}{In this paper, several ANN based flow laws for thermomechanical simulation of the behavior of a P20 medium-alloy steel have been identified.
+These six laws exhibit distinctions solely in the choice of their activation functions, while maintaining a uniform architectural framework characterized by consistent specifications regarding the quantity of hidden layers and the number of neurons present on each of these hidden layers.}
 In addition to the five classic activation functions (Sigmoid, Tanh, ReLU, Softplus and Swift), we proposed the use, in this paper, of the Exp (exponential) function as an activation function, although this is almost never used in neural network formulations.
-The expressions of the activation functions and their derivatives were used in the neural network writing formalism to calculate the derivatives of the flow stress $\sigma$ with respect to the input variables: strain $\varepsilon$, strain rate $\mdot{\varepsilon}$ and temperature $T$.
+\textcolor{greencolor}{The expressions of the activation functions and their derivatives were used in the neural network writing formalism to calculate the derivatives of~$\sigma$ with respect to~$\varepsilon$, $\mdot{\varepsilon}$ and~$T$.}
 
-Comparison of the ANNs results (in terms of flow stress $\sigma$) with experimental tests carried out on the Gleeble simulator have shown that all five activation functions, with the exception of the ReLU function, give very good results, far superior to those obtained conventionally using formalisms based on analytical flow laws from the literature, such as the Johnson--Cook, Arrhenius or Modified Zerilli--Armstrong models.
-\textcolor{red}{To improve the extrapolation ability of the models, it is recommended to use the Sigmoid and Tanh activation functions. These functions can effectively squash out of bounds values, giving the artificial neural network a more realistic behavior beyond the training bounds.}
+\textcolor{greencolor}{Comparison of the ANNs results (in terms of flow stress $\sigma$) with experiments have shown that all five activation functions, with the exception of the ReLU function, give very good results, far superior to those obtained conventionally using formalisms based on analytical flow laws from the literature, such as the Johnson--Cook, Arrhenius or Zerilli--Armstrong models~\cite{Tize-2023-IEP}.}
+\textcolor{red}{To improve the extrapolation ability of the models, it is recommended to use the Sigmoid and Tanh activation functions.
+These functions can effectively squash out of bounds values, giving the artificial neural network a more realistic behavior beyond the training bounds.}
 
-Based on the equations describing the mathematical formulation of a neural network with 2 hidden layers, and depending on the nature of these activation functions, we have implemented these constitutive laws in the form of a Fortran 77 subroutine for the Abaqus explicit FE code.
-We can note that, the same approach can also be used to write a UHARD routine enabling the same flow laws to be used in the Abaqus standard FE code.
+Based on the equations describing the mathematical formulation of an ANN with two hidden layers, and depending on the nature of these activation functions, we have implemented these constitutive laws in the form of a Fortran 77 subroutine for Abaqus explicit.
+The same approach can also be used to write a UHARD routine enabling the same flow laws to be used in Abaqus standard.
 
 Numerical results obtained from a compression test on a metal cylinder using the Abaqus explicit code have shown that neural network behavior models give very satisfactory results, in line with experimental tests.
-The Exp activation function, which is rarely used in the formulation of artificial neural networks, showed very good results (in agreement with more complex models such as Tanh), while enabling the code user to benefit from the efficiency and ease of implementation of an exponential function. \textcolor{red}{These results are satisfactory insofar as the inputs remain entirely within the model's learning domain, since the extrapolation capabilities of the network based on the exponential function are very limited.}
+The Exp activation function, which is rarely used in the formulation of artificial neural networks, showed very good results (in agreement with more complex models such as Tanh), while enabling the code user to benefit from the efficiency and ease of implementation of an exponential function.
+\textcolor{red}{These results are satisfactory insofar as the inputs remain entirely within the model's learning domain, since the extrapolation capabilities of the network based on the exponential function are very limited.}
 We then obtain results equivalent in terms of solution quality to sigmoid or tanh-type formulations, while having computation times comparable to a ReLU function.
 
 \textcolor{red}{Overall, this study concludes by recommending the use of the sigmoid activation function for the development of flow laws, since it gives very good results in the identification domain, allows us to leave the learning domain with a behavior that is certainly biased, but physically admissible, and offers very good performance in terms of simulation time when implemented in a finite element code.}
@@ -825,20 +831,6 @@ This study emphasizes the valuable impact of neural network-derived flow laws fo
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\authorcontributions{
-%Conceptualization, P.T.M. and O.P.;
-%methodology, O.P.;
-%software, P.T.M. and O.P.;
-%validation, O.P.;
-%formal analysis, O.P.;
-%investigation, P.D.;
-%resources, P.D. and M.J.;
-%data curation, P.T.M. and P.D.;
-%writing---original draft preparation, P.T.M.;
-%writing---review and editing, O.P.;
-%visualization, O.P.;
-%supervision, M.J., A.T. and O.P.;
-%project administration, M.J.;
-%funding acquisition, M.J.
 %All authors have read and agreed to the published version of the manuscript.}
 
 \funding{This research received no external funding.}
@@ -849,7 +841,7 @@ This study emphasizes the valuable impact of neural network-derived flow laws fo
 %
 %Written informed consent for publication must be obtained from participating patients who can be identified (including by the patients themselves). Please state ``Written informed consent has been obtained from the patient(s) to publish this paper'' if applicable.}
 
-\dataavailability{Source files of the numerical simulations and the ANN flow laws are available from~\cite{Pantale-2023-SSF}.}
+\dataavailability{\textcolor{red}{Source files of the numerical simulations and the ANN flow laws are available from~\cite{Pantale-2023-SSF}.}}
 
 \acknowledgments{The author thanks the team of Pr. Mohammad Jahazi from the Ecole Technique Supérieure de Montréal, Canada, for providing the experimental data used in Section~\ref{subsec:ExpTests}.}
 
@@ -887,7 +879,7 @@ VUHARD & Abaqus explicit user subroutine \\
 \textcolor{red}{\section[\appendixname~\thesection]{Python code to compute stress and derivatives\label{sec:Appendix1}}}
 %----------------------------------------------------------------------------------
 
-\textcolor{red}{The implementation using Python of Equations (\ref{eq:ANNi1}) to (\ref{eq:ANNi7}) is proposed in Figure~\ref{fig:PythonStress}, where the arguments of the functions are \var{xi} for the $\overrightarrow{\xi}$ vector, \var{deps} for $\mdot{\varepsilon}$, \var{Act} for the activation function and \var{dAct} for its derivative.}
+\textcolor{red}{The implementation using Python of Equations (\ref{eq:ANNi1}) to (\ref{eq:ANNi7}) is proposed in Figure~\ref{fig:PythonStress}, where the arguments of the function \var{stressAndDerivatives} are \var{xi} for the~$\overrightarrow{\xi}$ vector, \var{deps} for~$\mdot{\varepsilon}$, \var{Act} for the activation function and \var{dAct} for its derivative.}
 \begin{figure}[h!]
 \begin{PythonListing}
 def stressAndDerivatives(xi, deps, Act, dAct):
@@ -903,13 +895,21 @@ def stressAndDerivatives(xi, deps, Act, dAct):
 \end{PythonListing}
 \caption{Python function to compute the flow stress and the derivative vector.\label{fig:PythonStress}}
 \end{figure}
-\textcolor{red}{The network architecture is defined by the numpy arrays \var{w1}, \var{w2}, \var{w}, \var{b1}, \var{b2} and \var{b}.
-The other variables \var{xi0}, \var{Dxi}, \var{sig0} and \var{Dsig} correspond to the quantities $\overrightarrow{\xi}_{0}$, $\Delta\overrightarrow{\xi}$, $\sigma_{0}$ and $\Delta\sigma$ respectively.
-Line~2 in Figure~\ref{fig:PythonStress} correspond to Equation (\ref{eq:ANNi1}). Lines~3 and~4 correspond to Equations (\ref{eq:ANNi2}) and (\ref{eq:ANNi3}) and concerns the first hidden layer, while lines~5 and~6 correspond to Equations (\ref{eq:ANNi4}) and (\ref{eq:ANNi5}) and concerns the second hidden layer. Finally, line~7 computes the flow stress $\sigma$ conforming to Equation (\ref{eq:ANNi6}) and lines~8 and~9 computes the three derivatives of the flow stress conforming to Equation (\ref{eq:ANNi7}). The stress and the three derivatives are returned as a tuple at line~10.}
+\textcolor{red}{The network architecture is defined by the numpy arrays \var{w1}, \var{w2}, \var{w}, \var{b1}, \var{b2} and \var{b} which are global variables in the proposed piece of code.
+The other variables \var{xi0}, \var{Dxi}, \var{sig0} and \var{Dsig} correspond to the quantities~$\overrightarrow{\xi}_{0}$, $\Delta\overrightarrow{\xi}$, $\sigma_{0}$ and $\Delta\sigma$ respectively.}
+
+\textcolor{red}{Line~2 in Figure~\ref{fig:PythonStress} correspond to Equation (\ref{eq:ANNi1}).
+Lines~3 and~4 correspond to Equations (\ref{eq:ANNi2}) and (\ref{eq:ANNi3}) and concerns the first hidden layer, while lines~5 and~6 correspond to Equations (\ref{eq:ANNi4}) and (\ref{eq:ANNi5}) and concerns the second hidden layer.
+Finally, line~7 computes the flow stress $\sigma$ conforming to Equation (\ref{eq:ANNi6}) and lines~8 and~9 computes the three derivatives of the flow stress conforming to Equation (\ref{eq:ANNi7}).
+The stress \var{Sig} and the three derivatives array \var{dSig} are returned as a tuple at line~10.}
 
 %----------------------------------------------------------------------------------
 \textcolor{red}{\section[\appendixname~\thesection]{Fortran 77 subroutines to implement the ANN flow law\label{sec:Appendix2}}}
 %----------------------------------------------------------------------------------
+
+\textcolor{red}{A portion of the Fortran 77 code defining the numerical implementation of the VUHARD routine for Abaqus Explicit is presented in Figure~\ref{fig:FortranStress}.
+The complete source codes for the flow laws corresponding to the six activation functions can be found in the Software Heritage archive~\cite{Pantale-2023-SSF}.
+In Figure~\ref{fig:FortranStress}, the '...' symbols denote a continuation of the code that is not transcribed here due to space constraints in the figure for the sake of conciseness.}
 
 \begin{figure}[!h]
 \begin{FortranListing}
@@ -958,9 +958,9 @@ c Return from the VUHARD subroutine
 \end{FortranListing}
 \caption{Part of the VUHARD Fortran 77 subroutine for the ANN flow law and the exponential activation function.\label{fig:FortranStress}}
 \end{figure}
-\textcolor{red}{
-Depending on the kind of activation function used, some lines differ from one version to the other one, such as the definitions of the activation functions (see line 16 in Figure~\ref{fig:FortranStress}) and the expressions of the internal variables \var{xa} and \var{xb} (see lines 26 and 28 in Figure~\ref{fig:FortranStress}).
-Figure~\ref{fig:FortranSigmoid} show the declaration of the Sigmoid activation function and its derivative as defined by Equation (\ref{eq:act-sig}), while Figure~\ref{fig:FortranSoftplus} show the same part of the code with the use of the Softplus activation function as defined by Equation (\ref{eq:act-softplus}).}
+\textcolor{red}{Depending on the kind of activation function used, some lines differ from one version to the other one, such as the definitions of the activation functions (see line 16 in Figure~\ref{fig:FortranStress}) and the expressions of the internal variables \var{xa} and \var{xb} (see lines 26 and 28 in Figure~\ref{fig:FortranStress}).}
+
+\textcolor{red}{Figure~\ref{fig:FortranSigmoid} show the declaration of the Sigmoid activation function and its derivative as defined by Equation (\ref{eq:act-sig}), while Figure~\ref{fig:FortranSoftplus} show the same part of the code with the use of the Softplus activation function as defined by Equation (\ref{eq:act-softplus}).}
 \begin{figure}[h!]
 \begin{FortranListing}
 c sigmoid activation function (yf11 to yf115)
