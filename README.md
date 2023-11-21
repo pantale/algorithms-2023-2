@@ -1,6 +1,6 @@
-# TITLE
+# Comparing Activation Functions in Machine Learning for Finite Element Simulations in Thermomechanical Forming
 
-This repository contains...
+This repository contains the paper entitled "Comparing Activation Functions in Machine Learning for Finite Element Simulations in Thermomechanical Forming" accepted for publication in MDPI Algorithms 24/11/2023
 
 
 
