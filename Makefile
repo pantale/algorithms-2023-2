@@ -1,4 +1,4 @@
-SOURCE=Article
+SOURCE=Algorithms-2023-2
 
 all:
 	pdflatex -interaction=nonstopmode $(SOURCE).tex
