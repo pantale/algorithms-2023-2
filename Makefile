@@ -2,8 +2,6 @@ SOURCE=Algorithms-2023-2
 
 all:
 	pdflatex -interaction=nonstopmode $(SOURCE).tex
-	bibtex $(SOURCE).aux
-	pdflatex -interaction=nonstopmode $(SOURCE).tex
 	pdflatex -interaction=nonstopmode $(SOURCE).tex
 	pdflatex -synctex=1 -interaction=nonstopmode $(SOURCE).tex
 

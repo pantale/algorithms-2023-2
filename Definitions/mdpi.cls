@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%	MDPI class for LaTeX files	 30 June 2023
+%%%%	MDPI class for LaTeX files	 30 October 2023
 %% %%	For any information please send an e-mail to:
 %% %%		latex@mdpi.com
 %% %%
@@ -21,7 +21,7 @@
 
 %% IDENTIFICATION
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{Definitions/mdpi}[30/06/2023 MDPI paper class]
+\ProvidesClass{Definitions/mdpi}[30/10/2023 MDPI paper class]
 
  %% PRELIMINARY DECLARATIONS
 \LoadClass[10pt,a4paper]{article}
@@ -104,6 +104,7 @@
 \DeclareOption{interestingimages}{\gdef\@arttype{Interesting Images}}
 \DeclareOption{letter}{\gdef\@arttype{Letter}}
 \DeclareOption{meetingreport}{\gdef\@arttype{Meeting Report}}
+\DeclareOption{monograph}{\gdef\@arttype{Monograph}}
 \DeclareOption{newbookreceived}{\gdef\@arttype{New Book Received}}
 \DeclareOption{obituary}{\gdef\@arttype{Obituary}}
 \DeclareOption{opinion}{\gdef\@arttype{Opinion}}
@@ -308,7 +309,8 @@
 % After TeXLive 2021, \AddToHook{begindocument} is needed to make sure that hyperref is loaded last. \ifdef{\AddToHook{begindocument}}{ is needed for backwards-compatibility because \AddToHook{begindocument} did not yet exist in 2020.
 % After TeXLive 2022, \AddToHook{begindocument/before}{} is needed and  \DeclareHookRule{begindocument}{hyperref}{before}{mdpi} needs to be added because of the new version of hyperref.
 \newcommand{\hyperrefpackage}{
-\ifthenelse{\equal{\@arttype}{Book}}{
+\ifthenelse{\equal{\@arttype}{Book} 
+	\OR \equal{\@arttype}{Monograph}}{
 	\RequirePackage[unicode=true,
 	bookmarksopen={true},
 	pdffitwindow=true, 
@@ -318,7 +320,8 @@
 	urlcolor=black, 
 	hyperfootnotes=false, 
 	pdfstartview={FitH},
-	pdfpagemode=UseNone]{hyperref}
+	pdfpagemode=UseNone,
+	pdfpagelabels]{hyperref}
 	}{
 	\ifthenelse{\equal{\@journal}{laws}}{
 	\RequirePackage[unicode=true,
@@ -613,7 +616,8 @@
 %%%% Header and footer on first page
 %% The plain page style needs to be redefined because with \maketitle in the article class, LaTeX applies the the plain page style automatically to the first page.
 \ifthenelse{\equal{\@journal}{preprints} %
-		\OR \equal{\@arttype}{Book}}{%
+		\OR \equal{\@arttype}{Book}
+		\OR \equal{\@arttype}{Monograph}}{%
 	\fancypagestyle{plain}{%
 		\fancyhf{}
 		\ifthenelse{\equal{\@arttype}{Book}}{
@@ -681,7 +685,8 @@
 
 %%%% Maketitle part 1: Logo, Arttype, Title, Author
 \renewcommand{\@maketitle}{
-	\ifthenelse{\equal{\@arttype}{Book}}{}{
+	\ifthenelse{\equal{\@arttype}{Book}
+		\OR \equal{\@arttype}{Monograph}}{}{
 		\ifthenelse{\equal{\@leftcolumnsplit}{\@empty}}{% Default option for the left column
 			\marginnote[\contentleftcolumn]{}[\MyLen] % Bottom aligned
 			}{%
@@ -700,12 +705,14 @@
 		\fontsize{10}{10}\selectfont
 		\noindent\boldmath\bfseries{\@Author}
 		}{%
-		\ifthenelse{\equal{\@arttype}{Book}}{}{%
+		\ifthenelse{\equal{\@arttype}{Book}
+			\OR \equal{\@arttype}{Monograph}}{}{%
 			\vspace*{-1.75cm}
 		}
 		{%0
 		\ifthenelse{\equal{\@journal}{preprints}
-			\OR \equal{\@arttype}{Book}}{}{%
+			\OR \equal{\@arttype}{Book}
+			\OR \equal{\@arttype}{Monograph}}{}{%
 				\ifthenelse{\equal{\@status}{submit}}{%	
 					\hfill \href{https://www.mdpi.com}{%
 					\includegraphics[height=1cm]{Definitions/logo-mdpi.eps}}%
@@ -728,7 +735,8 @@
 		{%1
     		\vspace{14pt}
     		\fontsize{10}{10}\selectfont
-		\ifthenelse{\equal{\@arttype}{Book}}{}{
+		\ifthenelse{\equal{\@arttype}{Book}
+			\OR \equal{\@arttype}{Monograph}}{}{
 			\textit{\@arttype}%
 			}%	
  	   	\par%
@@ -759,7 +767,8 @@
 		\end{flushleft}%
 		}{%
 	}%
-	\ifthenelse{\equal{\@arttype}{Book}}{}{%
+	\ifthenelse{\equal{\@arttype}{Book}
+		\OR \equal{\@arttype}{Monograph}}{}{%
 		\ifthenelse{\equal{\@longauthorlist}{\@empty}}{%
 			\end{adjustwidth}%
 			}{%
@@ -769,6 +778,7 @@
 			}{
 			\marginnote[\contentleftcolumn]{}% Alignment with the affiliations
 		}
+	\ifthenelse{\equal{\@arttype}{Monograph}}{\vspace{-2cm}}{}	
 	}
 
 %%%% Commands for hanging indent
@@ -921,7 +931,8 @@
 
 %%%% Maketitle part 2
 \newcommand{\maketitlen}{ 
-	\ifthenelse{\equal{\@arttype}{Book}}{\vspace{12pt}}{%
+	\ifthenelse{\equal{\@arttype}{Book}
+	\OR \equal{\@arttype}{Monograph}}{\vspace{12pt}}{%
 	\begin{flushleft}
 	\begin{spacing}{1.35}
 	\hyphenpenalty=10000
@@ -1078,7 +1089,8 @@
 }
 %14
 \vspace{4pt}
-\ifthenelse{\equal{\@arttype}{Book}}{}{\hrule}
+\ifthenelse{\equal{\@arttype}{Book}
+\OR \equal{\@arttype}{Monograph}}{}{\hrule}
 \vspace{12pt}
 \normalsize
 }
@@ -1127,8 +1139,13 @@
 %%%% Section headings
 \setcounter{secnumdepth}{4} % Default: 3 in the article class. To get paragraphs numbered and counted, increase the default value of secnumdepth to 4
 
-\titleformat {\section} [block] {\raggedright \fontsize{10}{10}\selectfont\bfseries} {\thesection.\space} {0pt} {}
-\titlespacing {\section} {0pt} {12pt} {3pt}
+\ifthenelse{\equal{\@arttype}{Monograph}}{
+	\titleformat {\section} [block] {\raggedright \fontsize{18}{18}\selectfont\bfseries} {\thesection.\space} {0pt} {}
+	\titlespacing {\section} {0pt} {12pt} {8pt}
+	}{
+	\titleformat {\section} [block] {\raggedright \fontsize{10}{10}\selectfont\bfseries} {\thesection.\space} {0pt} {}
+	\titlespacing {\section} {0pt} {12pt} {3pt}
+}
 
 \titleformat {\subsection} [block] {\raggedright \fontsize{10}{10}\selectfont\itshape} {\thesubsection.\space} {0pt} {}
 \titlespacing {\subsection} {0pt} {12pt} {3pt}
@@ -1170,9 +1187,6 @@
 
 \newcommand{\conflictsofinterest}[1]{%
 \vspace{6pt}\noindent{\fontsize{9}{11.2}\selectfont\textbf{Conflicts of Interest:} {#1}\par}}
-
-\newcommand{\sampleavailability}[1]{%
-\vspace{6pt}\noindent{\fontsize{9}{11.2}\selectfont\textbf{Sample Availability:} {#1}\par}}
 
 \newcommand{\entrylink}[1]{% For journal Encyclopedia
 \vspace{6pt}\noindent{\fontsize{9}{11.2}\selectfont\textbf{Entry Link:} {#1}\par}}
@@ -1236,7 +1250,7 @@
 %
 \gdef\thesection{\@Alph\c@section}%
 \gdef\thesubsection{\@Alph\c@section.\@arabic\c@subsection}%
-%	
+
 \titleformat {\section} [block] {\raggedright\bfseries} {%
 	\ifthenelse{\equal{\@appendixtitles}{yes}}{%
 		\appendixname~\thesection.%
@@ -1304,16 +1318,17 @@
 \setlength{\fulllength}{21 cm - 1.27 cm - 1.27 cm}
 
 %%%% Layout
-\ifthenelse{\equal{\@arttype}{Book}}{%%
+\ifthenelse{\equal{\@arttype}{Book}
+\OR \equal{\@arttype}{Monograph}}{%%
 	\RequirePackage[left=2.05cm,
 					right=2.05cm,
 					top=1.8cm,
-					bottom=2.05cm,
+					bottom=0.75cm,
 					paperwidth=170mm,
 					paperheight=244mm,
 					footskip=20pt,
 					headsep=24pt,
-					includehead, 
+					%includehead, 
 					includefoot]{geometry}
 	}{
 	\RequirePackage[left=5.87cm, %1.27 cm + 0.51 cm + 4.1 cm = 5.87 cm (= 1.27 cm + marginparwidth + marginparsep)
@@ -1329,7 +1344,8 @@
 }
 
 \fancyheadoffset[L]{\extralength} % Header into the margin
-\ifthenelse{\equal{\@arttype}{Book}}{%
+\ifthenelse{\equal{\@arttype}{Book}
+\OR \equal{\@arttype}{Monograph}}{%
 	}{%
 	\fancyfootoffset[L]{\extralength}%
 } % Footer into the margin
@@ -1431,7 +1447,8 @@
 \pagestyle{fancy}
 \lhead{
 	\ifthenelse{\equal{\@journal}{preprints}%
-	\OR \equal{\@arttype}{Book}}{%
+	\OR \equal{\@arttype}{Book}
+	\OR \equal{\@arttype}{Monograph}}{%
 		}{%
 		\fontsize{8}{8}\selectfont%
 		\ifthenelse{\equal{\@status}{submit}}{%
@@ -1458,7 +1475,8 @@
 	}
 	
 \rhead{%
-\ifthenelse{\equal{\@arttype}{Book}}{}{%
+\ifthenelse{\equal{\@arttype}{Book}
+\OR \equal{\@arttype}{Monograph}}{}{%
 	\ifthenelse{\equal{\@arttype}{Supfile}}{%
 		\fontsize{8}{8}\selectfont S\thepage{} of S\pageref*{LastPage}%
 		}{%
@@ -1473,7 +1491,9 @@
 }
 
 \cfoot{
-	\ifthenelse{\equal{\@arttype}{Book}}{%
+	\ifthenelse{\equal{\@arttype}{Book}
+	\OR \equal{\@arttype}{Monograph}
+	}{%
 		\fontsize{8}{8}\selectfont\thepage
 		}{%
 	}
@@ -1529,7 +1549,9 @@
 \def\thebibliography#1{
 \emergencystretch 2em
 \titleformat {\section} [block] {\raggedright \fontsize{10}{10}\selectfont\bfseries} {} {0pt} {}
-\section{\@reftitle}
+\ifthenelse{\equal{\@arttype}{Book} \OR \equal{\@arttype}{Monograph}}{}{%JD% to remove the sectin from the TOC in books
+	\section{\@reftitle}
+}
 \fontsize{9}{11}\selectfont
 \list{{\arabic{enumi}}}{\def\makelabel##1{\hss{##1}}
 \topsep=0\p@
